@@ -2,9 +2,7 @@
 
 CareCircle is a web app that helps caregivers coordinate health care for the people they look after. Caregivers who share the work, such as siblings caring for a parent, can see the same medications, appointments and doctor contacts in one place.
 
-Course project for SOEN 287 (Web Programming), Concordia University, Fall 2026.
-
-**Team member:** _your name_
+**Author**: Yannick Hantaniaina.
 
 ## Goal
 
