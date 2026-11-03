@@ -4,4 +4,4 @@ The course allows AI assistants, but I'm responsible for every line. The final r
 
 | Date | Prompt (short) | What the AI produced | What I changed and why | Wrong, incomplete or insecure? |
 | --- | --- | --- | --- | --- |
-| 2026-10-11 | Write a README overview (product, goal, stack, front-end pages), no usage details yet | Full README: overview, goal, how households/managers/dependents work, stack table (back end marked "planned"), page list, status | _(to fill)_ | Left team name as a placeholder; setup steps intentionally omitted |
+| 2026-10-11 | Write a README overview (product, goal, stack, front-end pages), no usage details yet | Full README: overview, goal, how households/managers/dependents work, stack table (back end marked "planned"), page list, status | Team name to Author. Omitted Course detail. | Left team name as a placeholder; setup steps intentionally omitted |
