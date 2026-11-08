@@ -1,0 +1,34 @@
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.topbar ul {
+    display: flex;
+    list-style: none;
+    gap: 10px;
+}
+.topButton {
+    display: flex;
+    text-align: left;
+    /*background-color: #84D99C;*/ 
+    font-weight: 100;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    gap: 20px;
+    
+}
+.header {
+    padding : 20px;
+    background-color: #946F54;
+}
+
+@media (min-width: 768px){
+    .topbar {}
+}
+
+#pricebox {
+    display: flex;
+    list-style: none;
+    gap: 50px;
+    
+}
