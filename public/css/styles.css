@@ -32,3 +32,22 @@
     gap: 50px;
     
 }
+#about {
+    display: flex;
+    flex-direction: column;
+}
+
+
+@media (min-width:768px){
+    #about {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    overflow-x: auto;
+    align-items: center;
+    gap: 30px;  
+    }
+}
+
+
+    
