@@ -12,18 +12,28 @@
     <body>
         <header class="header">
             <nav class="topbar container">
+                <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
                 <a href="index.html" class="logo"><img src="assets/carecircle-logo.png" alt="CareCircle"></a>
                 <ul class="nav-links" id="nav-links">
                     <li><a href="#about">About</a></li>
                     <li><a href="#tut">How it works</a></li>
                     <li><a href="#pricing">Pricing</a></li>
                     <li><a href="#contact">Contact</a></li>
-                    <li class="nav-login"><a href="login.html">Log In</a></li>
                 </ul>
                 <div class="topButton">
+                    <a href="login.html" class="btn-outline login-btn" aria-label="Log In">
+                        <!-- person icon: shown on phone instead of the words -->
+                        <svg class="login-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/>
+                        </svg>
+                        <span class="login-text">Log In</span>
+                    </a>
                     <a href="register.html" class="btn-outline">Sign Up</a>
-                    <a href="login.html" class="btn-outline login-btn">Log In</a>
-                    <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">☰</button>
                 </div>
             </nav>
         </header>
@@ -133,32 +143,37 @@
                                 <p class="price"><span class="currency">$</span><span class="amount">0</span> <span class="price-period">/ month</span></p>
                                 <a href="register.html" class="price-btn">Start free</a>
                             </div>
-                            <ul class="price-features">
-                                <li>One free household</li>
-                                <li>Dependents Management</li>
-                                <li>Up to 4 members</li>
-                                <li>Medication Checklist</li>
-                                <li>Appointment Reminder</li>
-                                <li>Doctor Card</li>
-                            </ul>
+                            <details class="price-details">
+                                <summary>What's included</summary>
+                                <ul class="price-features">
+                                    <li>One free household</li>
+                                    <li>Dependents Management</li>
+                                    <li>Up to 4 members</li>
+                                    <li>Medication Checklist</li>
+                                    <li>Appointment Reminder</li>
+                                    <li>Doctor Card</li>
+                                </ul>
+                            </details>
                         </li>
                         <li class="price-card featured">
-                            <span class="badge">Best for families</span>
                             <div class="price-top">
-                                <h3>Familial</h3>
+                                <h3>Familial <span class="badge">Best for families</span></h3>
                                 <p class="price-desc">For bigger families who share the caregiving. Adds prescription details.</p>
                                 <p class="price"><span class="currency">$</span><span class="amount">6</span><sup class="cents">.99</sup> <span class="price-period">/ month</span></p>
                                 <a href="register.html" class="price-btn">Choose Familial</a>
                             </div>
-                            <ul class="price-features">
-                                <li>One household</li>
-                                <li>Dependents Management</li>
-                                <li>Up to 8 members</li>
-                                <li>Medication Checklist</li>
-                                <li>Appointment Reminder</li>
-                                <li>Doctor Card</li>
-                                <li>Prescription details on doctor cards</li>
-                            </ul>
+                            <details class="price-details">
+                                <summary>What's included</summary>
+                                <ul class="price-features">
+                                    <li>One household</li>
+                                    <li>Dependents Management</li>
+                                    <li>Up to 8 members</li>
+                                    <li>Medication Checklist</li>
+                                    <li>Appointment Reminder</li>
+                                    <li>Doctor Card</li>
+                                    <li>Prescription details on doctor cards</li>
+                                </ul>
+                            </details>
                         </li>
                         <li class="price-card">
                             <div class="price-top">
@@ -167,15 +182,18 @@
                                 <p class="price"><span class="currency">$</span><span class="amount">10</span><sup class="cents">.99</sup> <span class="price-period">/ month</span></p>
                                 <a href="register.html" class="price-btn">Choose Extended</a>
                             </div>
-                            <ul class="price-features">
-                                <li>Unlimited households</li>
-                                <li>Dependents Management</li>
-                                <li>Unlimited members per household</li>
-                                <li>Medication Checklist</li>
-                                <li>Appointment Reminder</li>
-                                <li>Doctor Card</li>
-                                <li>Prescription details on doctor cards</li>
-                            </ul>
+                            <details class="price-details">
+                                <summary>What's included</summary>
+                                <ul class="price-features">
+                                    <li>Unlimited households</li>
+                                    <li>Dependents Management</li>
+                                    <li>Unlimited members per household</li>
+                                    <li>Medication Checklist</li>
+                                    <li>Appointment Reminder</li>
+                                    <li>Doctor Card</li>
+                                    <li>Prescription details on doctor cards</li>
+                                </ul>
+                            </details>
                         </li>
                     </ul>
                 </div>

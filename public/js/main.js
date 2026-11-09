@@ -20,3 +20,17 @@ navLinks.addEventListener("click", function (event) {
         setMenu(false);
     }
 });
+
+// Pricing: on computer the feature lists are always open.
+// On phone they stay folded under "What's included" so all 3 plans fit on the screen.
+const computerScreen = window.matchMedia("(min-width: 768px)");
+
+function openFeatureLists() {
+    document.querySelectorAll(".price-details").forEach(function (details) {
+        details.open = computerScreen.matches;
+    });
+}
+
+openFeatureLists();
+// run again if the window is resized between phone and computer size
+computerScreen.addEventListener("change", openFeatureLists);

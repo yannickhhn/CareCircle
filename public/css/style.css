@@ -26,9 +26,9 @@
     --space-section: 56px; /* space above and below each section (80px on computer) */
 }
 
-/* the header is sticky, so jump links stop below it instead of under it */
-html {
-    scroll-padding-top: 96px;
+/* the footer's Contact column: a jump link stops below the sticky header */
+#contact {
+    scroll-margin-top: 96px;
 }
 
 * {
@@ -64,7 +64,7 @@ body {
 }
 .logo img {
     display: block;
-    height: 40px;
+    height: 32px; /* 40px on computer */
 }
 .topbar {
     display: flex;
@@ -103,6 +103,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-left: auto; /* pushes Log In and Sign Up to the right */
 }
 .btn-outline {
     display: inline-block; /* transform (used on hover) doesn't work on inline links */
@@ -110,24 +111,63 @@ body {
     border-radius: 6px;
     padding: var(--space-xs) var(--space-md);
 }
-/* phone: Log In lives inside the menu, so this button is hidden */
+/* phone: Log In is a round person icon so everything fits */
 .login-btn {
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
 }
+.login-text {
+    display: none; /* the link's name still comes from aria-label="Log In" */
+}
+
+/* hamburger: 3 thin bars that turn into an X when the menu is open */
 .menu-toggle {
-    padding: var(--space-xs) var(--space-sm);
-    border: 1px solid var(--color-secondary);
-    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    padding: 0 9px;
+    border: none;
+    border-radius: 8px;
     background: none;
-    color: var(--color-text);
-    font-size: 1.25rem;
-    line-height: 1;
     cursor: pointer;
+}
+.menu-toggle:hover {
+    background-color: var(--color-surface);
+}
+.menu-toggle .bar {
+    display: block;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--color-text);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+/* main.js sets aria-expanded="true" when the menu opens.
+   7px = 5px gap + 2px bar, so the top and bottom bars meet in the middle */
+.menu-toggle[aria-expanded="true"] .bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.menu-toggle[aria-expanded="true"] .bar:nth-child(2) {
+    opacity: 0;
+}
+.menu-toggle[aria-expanded="true"] .bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
 }
 
 /* the same space above and below every section of the page */
 main > section {
     padding: var(--space-section) 0;
+    /* when a menu link jumps here, stop 20px lower than the section's top edge:
+       the section's own top padding then sits under the sticky header,
+       so the title lands just below the header instead of after a big gap */
+    scroll-margin-top: 20px;
 }
 
 /* hero: big headline and buttons, illustration under the text on phone */
@@ -159,15 +199,13 @@ main > section {
 .btn,
 .btn-ghost,
 .btn-outline,
-.price-btn,
-.menu-toggle {
+.price-btn {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .btn:hover,
 .btn-ghost:hover,
 .btn-outline:hover,
-.price-btn:hover,
-.menu-toggle:hover {
+.price-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 14px rgba(31, 42, 55, 0.15);
 }
@@ -354,10 +392,10 @@ main > section {
 
 /* half wheel: its centre sits on the card's left edge */
 .tut-wheel {
-    --num-r: 45px; /* distance from the wheel's centre to each number */
+    --num-r: 40px; /* distance from the wheel's centre to each number: about the middle of the visible half */
     position: absolute;
     left: -80px; /* half of its width */
-    bottom: -10px;
+    bottom: 16px; /* fully inside the card, so the number sits in the middle of the half circle */
     width: 160px;
     height: 160px;
     border-radius: 50%;
@@ -386,7 +424,7 @@ main > section {
 
 /* the window shows one step; the track holds all 4 stacked */
 .tut-window {
-    height: 340px;
+    height: 360px;
     overflow: hidden;
 }
 .tut-track {
@@ -400,12 +438,12 @@ main > section {
     height: 20%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* phone: text at the top */
-    /* bottom padding keeps the picture's space empty: 120px picture + 16px gap + 16px margin */
-    padding: var(--space-md) var(--space-md) 152px;
+    justify-content: center; /* phone: text centred in the top part, so short steps don't leave a gap */
+    /* bottom padding keeps the space for the picture and the wheel empty */
+    padding: var(--space-md) var(--space-md) 180px;
     background-repeat: no-repeat;
-    background-size: auto 120px;
-    background-position: center bottom 16px;
+    background-size: auto 160px; /* bigger picture, less empty space around it */
+    background-position: center bottom 12px;
 }
 /* each step's picture lives in its own li, so it moves with its text */
 .tut-track li:nth-child(1) { background-image: url("../assets/steps/step-1.svg"); }
@@ -564,17 +602,26 @@ main > section {
     color: var(--color-white);
 }
 
-/* feature zone: light grey, fills the rest of the card, a check before each feature */
-.price-features {
+/* feature zone: light grey, fills the rest of the card, a check before each feature.
+   On phone it folds under "What's included"; on computer it is always open (main.js) */
+.price-details {
     flex: 1;
+    border-radius: 0 0 var(--radius) var(--radius);
+    background-color: var(--color-surface);
+}
+.price-details summary {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.price-features {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
     margin: 0;
     padding: var(--space-lg);
     list-style: none;
-    border-radius: 0 0 var(--radius) var(--radius);
-    background-color: var(--color-surface);
 }
 .price-features li::before {
     content: "\2713"; /* ✓ written as a code so it shows correctly in any file encoding */
@@ -602,6 +649,72 @@ main > section {
     justify-content: center;
     align-items: center;
     gap: 12px;
+}
+
+/* phone only: compact pricing cards, so all 3 plans fit with little scrolling.
+   Name and price on one line, short description, slim button, features in 2 columns */
+@media (max-width: 767px) {
+    .price-card.featured,
+    .price-card.featured:hover {
+        transform: none;
+    }
+    .price-card.featured {
+        background-color: #E1F6F1; /* pale mint behind the badge too */
+    }
+    #pricebox > ul {
+        gap: 12px;
+    }
+    /* the pill sits right next to the plan name */
+    .badge {
+        position: static;
+        transform: none;
+        margin-left: var(--space-xs);
+        padding: 2px var(--space-sm);
+        font-size: 0.7rem;
+        vertical-align: middle;
+    }
+    .price-top {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: baseline;
+        column-gap: var(--space-sm);
+        padding: var(--space-md);
+    }
+    .price-top h3 {
+        font-size: 1.25rem;
+    }
+    .price {
+        grid-column: 2;
+        grid-row: 1; /* same line as the plan name */
+        margin: 0;
+    }
+    .amount {
+        font-size: 1.5rem;
+    }
+    .currency,
+    .cents,
+    .price-period {
+        font-size: 0.875rem;
+    }
+    .price-desc,
+    .price-btn {
+        grid-column: 1 / -1; /* full width under the name and price */
+    }
+    .price-desc {
+        margin-top: var(--space-xs);
+        font-size: 0.875rem;
+    }
+    .price-btn {
+        margin-top: var(--space-sm);
+        padding: 6px var(--space-md);
+    }
+    .price-features {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-xs) var(--space-md);
+        padding: 0 var(--space-md) var(--space-md);
+        font-size: 0.8125rem;
+    }
 }
 
 /* "Every plan comes with": features in neat columns inside one soft strip */
@@ -809,12 +922,28 @@ main > section {
         border-left: 1px solid var(--color-secondary);
         padding-left: 10px;
     }
-    .nav-login,
+    .logo img {
+        height: 40px;
+    }
     .menu-toggle {
         display: none;
     }
+    /* computer: Log In shows its words instead of the icon */
     .login-btn {
         display: inline-block;
+        width: auto;
+        height: auto;
+        padding: var(--space-xs) var(--space-md);
+        border-radius: 6px;
+    }
+    .login-icon {
+        display: none;
+    }
+    .login-text {
+        display: inline;
+    }
+    .topButton {
+        margin-left: 0;
     }
     .topButton {
         gap: 20px;
@@ -888,7 +1017,7 @@ main > section {
     }
     /* computer: the wheel goes back into the row, left of the text */
     .tut-wheel {
-        --num-r: 85px;
+        --num-r: 72px;
         position: relative;
         left: auto;
         bottom: auto;
@@ -927,6 +1056,9 @@ main > section {
     }
     #pricebox > ul > li {
         flex: 1 1 250px;
+    }
+    .price-details summary {
+        display: none;
     }
     .included-list {
         grid-template-columns: repeat(3, 1fr);
