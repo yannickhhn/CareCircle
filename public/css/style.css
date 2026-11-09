@@ -44,8 +44,14 @@ body {
 
 /* styles for phone (default) */
 .header {
-    padding: 12px;
+    padding: var(--space-sm) 0;
     background-color: var(--color-primary);
+}
+.logo {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--color-text);
+    text-decoration: none;
 }
 .topbar {
     display: flex;
@@ -62,11 +68,24 @@ body {
     margin: 0;
     padding: 0;
 }
+.topbar a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+.topbar li + li {
+    border-left: 1px solid var(--color-text);
+    padding-left: 10px;
+}
 .topButton {
     display: flex;
     text-align: left;
     /*background-color: #84D99C;*/
     gap: 12px;
+}
+.btn-outline {
+    border: 1px solid var(--color-text);
+    border-radius: 6px;
+    padding: var(--space-xs) var(--space-md);
 }
 
 #about {
@@ -122,7 +141,7 @@ body {
 /* styles for computer */
 @media (min-width: 768px) {
     .header {
-        padding: 20px;
+        padding: var(--space-md) 0;
     }
     .topbar {
         flex-wrap: nowrap;
