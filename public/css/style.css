@@ -522,29 +522,118 @@ main > section {
     margin-top: var(--space-sm);
 }
 
+/* footer: brand + 3 link columns, then a thin line and a small bottom row */
 .footer {
+    position: relative;
+    overflow: hidden; /* clips the big circle at the footer's edges */
+    padding: var(--space-xl) 0 var(--space-md);
+    background-color: var(--color-primary); /* same blue as the header line */
+    color: var(--color-text); /* dark text stays readable on the light blue */
+}
+/* big soft circle in the background, partly off the top-right corner */
+.footer::before {
+    content: "";
+    position: absolute;
+    top: -160px;
+    right: -160px;
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+/* keeps the footer content on top of the circle */
+.footer .container {
+    position: relative;
+}
+.footer-top {
     display: flex;
     flex-direction: column;
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    gap: 16px;
-    padding: 16px;
+    gap: var(--space-lg);
+}
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
 }
 .footer-logo {
-    height: 40px;
+    align-self: flex-start;
+    height: 56px;
+    filter: brightness(0); /* turns the white logo black, no extra image needed */
 }
-#legal {
+.footer-motto {
+    margin: 0;
+    padding-left: 8px; /* small indent so it lines up with the logo */
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+.footer-about {
+    max-width: 32ch;
+    margin: 0;
+    padding-left: 8px;
+}
+/* 4 small dots in the palette colours, like the dots in the illustrations */
+.footer-dots {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+    padding-left: 8px;
+}
+.footer-dots span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+.footer-dots span:nth-child(1) { background-color: var(--color-accent); }
+.footer-dots span:nth-child(2) { background-color: var(--color-secondary); }
+.footer-dots span:nth-child(3) { background-color: var(--color-pink); }
+.footer-dots span:nth-child(4) { background-color: var(--color-sand); }
+.footer-cols {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+.footer-col h3 {
+    margin: 0 0 var(--space-sm);
+    font-size: 1.5rem;
+}
+.footer-col ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.footer a {
+    color: var(--color-text);
+    font-weight: 600;
+    text-decoration: none;
+}
+/* underline only on hover, so links still look clickable */
+.footer a:hover {
+    text-decoration: underline;
+}
+/* bottom row: thin line above, small text, centred on phone */
+.footer-bottom {
     display: flex;
     flex-wrap: wrap;
-    background-color: var(--color-secondary);
-    color: var(--color-white);
-    gap: 4vw;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    gap: var(--space-sm) var(--space-lg);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(31, 42, 55, 0.25);
+    font-size: 0.875rem;
 }
-.footer a,
-#legal a {
-    color: var(--color-white);
+.footer-bottom p {
+    margin: 0;
+}
+.footer-legal {
+    display: flex;
+    gap: var(--space-lg);
+}
+.footer-legal a {
+    font-weight: 400;
 }
 
 
@@ -653,10 +742,18 @@ main > section {
         padding: var(--space-lg) var(--space-xl);
     }
 
-    .footer {
+    /* computer: brand left, the 3 columns on the right; bottom row split left/right */
+    .footer-top {
         flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        gap: 5vw;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: var(--space-xl);
+    }
+    .footer-cols {
+        flex-direction: row;
+        gap: var(--space-xl);
+    }
+    .footer-bottom {
+        justify-content: space-between;
     }
 }
