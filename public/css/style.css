@@ -117,7 +117,6 @@ body {
 
 .feature-slider {
     overflow: hidden;
-    border: 2px solid var(--color-secondary);
     border-radius: var(--radius);
     margin-bottom: var(--space-lg);
 }
@@ -196,14 +195,34 @@ body {
     padding: var(--space-sm) var(--space-lg);
 }
 
-/* how it works: half wheel with the step number + text that moves up */
+/* how it works: title + intro, then a half wheel with the step number + text that moves up */
+#tut {
+    margin-top: var(--space-xl);
+}
+.tut-intro h2 {
+    margin-bottom: var(--space-sm);
+}
+/* short mint line under the title */
+.tut-intro h2::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 4px;
+    margin-top: var(--space-sm);
+    border-radius: 2px;
+    background-color: var(--color-accent);
+}
+.tut-intro p {
+    max-width: 40ch;
+    color: var(--color-muted);
+}
+
 .tut-card {
     display: flex;
     flex-direction: column-reverse; /* phone: text on top, wheel below */
     overflow: hidden;
-    border: 2px solid var(--color-secondary);
+    border: 2px solid var(--color-accent);
     border-radius: var(--radius);
-    background-color: var(--color-surface);
 }
 .tut-card:hover .tut-wheel,
 .tut-card:hover .tut-track {
@@ -212,24 +231,24 @@ body {
 
 /* the wheel's centre sits past the left edge, so only one number shows */
 .tut-wheel {
-    --num-r: 60px; /* distance from the wheel's centre to each number */
+    --num-r: 45px; /* distance from the wheel's centre to each number */
     position: relative;
     flex-shrink: 0;
-    width: 200px;
-    height: 200px;
-    margin-left: -125px;
+    width: 140px;
+    height: 140px;
+    margin-left: -90px;
     border-radius: 50%;
-    background-color: var(--color-secondary);
+    background-color: #E1F6F1; /* pale mint, same as slide 1 */
     animation: tut-wheel 16s infinite;
 }
 .tut-wheel span {
     position: absolute;
     top: 50%;
     left: 50%;
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
     line-height: 1;
-    color: var(--color-white);
+    color: var(--color-text);
 }
 /* place the 4 numbers a quarter turn apart around the centre */
 .tut-wheel span:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateX(var(--num-r)); }
@@ -239,7 +258,7 @@ body {
 
 /* the window shows one step; the track holds all 4 stacked */
 .tut-window {
-    height: 240px;
+    height: 200px;
     overflow: hidden;
 }
 .tut-track {
@@ -254,7 +273,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: var(--space-lg);
+    padding: var(--space-md);
 }
 .tut-track h3 {
     margin: 0 0 var(--space-sm);
@@ -366,31 +385,41 @@ body {
         text-align: right;
     }
 
+    /* title + intro on the left, wheel card on the right */
+    #tut {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xl);
+    }
+    .tut-intro {
+        flex: 1;
+    }
     .tut-card {
+        flex: 2;
         flex-direction: row;
         align-items: center;
     }
     .tut-wheel {
-        --num-r: 105px;
-        width: 360px;
-        height: 360px;
-        margin-left: -225px;
+        --num-r: 75px;
+        width: 240px;
+        height: 240px;
+        margin-left: -155px;
     }
     .tut-wheel span {
-        font-size: 4.5rem;
+        font-size: 3.5rem;
     }
     .tut-window {
         flex: 1;
-        height: 360px;
+        height: 240px;
     }
     .tut-track li {
-        padding: var(--space-xl);
+        padding: var(--space-lg);
     }
     .tut-track h3 {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
     .tut-track p {
-        font-size: 1.25rem;
+        font-size: 1.125rem;
     }
 
     #pricebox > ul {
