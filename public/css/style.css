@@ -200,6 +200,11 @@ body {
 #tut {
     margin-top: var(--space-xl);
 }
+/* phone: centred title, mint divider, paragraph in a soft mint box */
+.tut-intro {
+    margin-bottom: var(--space-lg);
+    text-align: center;
+}
 .tut-intro h2 {
     margin-bottom: var(--space-sm);
 }
@@ -209,18 +214,22 @@ body {
     display: block;
     width: 48px;
     height: 4px;
-    margin-top: var(--space-sm);
+    margin: var(--space-sm) auto 0; /* auto centres it */
     border-radius: 2px;
     background-color: var(--color-accent);
 }
 .tut-intro p {
     max-width: 40ch;
+    margin: var(--space-md) auto 0;
+    padding: var(--space-md);
+    border-radius: var(--radius);
+    background-color: #E1F6F1;
     color: var(--color-muted);
 }
 
+/* phone: the wheel is pinned bottom-left, each step fills the whole card */
 .tut-card {
-    display: flex;
-    flex-direction: column-reverse; /* phone: text on top, wheel below */
+    position: relative;
     overflow: hidden;
     border: 2px solid var(--color-accent);
     border-radius: var(--radius);
@@ -233,11 +242,11 @@ body {
 /* the wheel's centre sits past the left edge, so only one number shows */
 .tut-wheel {
     --num-r: 45px; /* distance from the wheel's centre to each number */
-    position: relative;
-    flex-shrink: 0;
+    position: absolute;
+    left: -90px;
+    bottom: 0;
     width: 140px;
     height: 140px;
-    margin-left: -90px;
     border-radius: 50%;
     background-color: #E1F6F1; /* pale mint, same as slide 1 */
     animation: tut-wheel 16s infinite;
@@ -259,7 +268,7 @@ body {
 
 /* the window shows one step; the track holds all 4 stacked */
 .tut-window {
-    height: 200px;
+    height: 340px;
     overflow: hidden;
 }
 .tut-track {
@@ -273,9 +282,18 @@ body {
     height: 25%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: var(--space-md);
+    justify-content: flex-start; /* phone: text at the top */
+    /* bottom padding keeps the picture's space empty: 120px picture + 16px gap + 16px margin */
+    padding: var(--space-md) var(--space-md) 152px;
+    background-repeat: no-repeat;
+    background-size: auto 120px;
+    background-position: center bottom 16px;
 }
+/* each step's picture lives in its own li, so it moves with its text */
+.tut-track li:nth-child(1) { background-image: url("../assets/steps/step-1.svg"); }
+.tut-track li:nth-child(2) { background-image: url("../assets/steps/step-2.svg"); }
+.tut-track li:nth-child(3) { background-image: url("../assets/steps/step-3.svg"); }
+.tut-track li:nth-child(4) { background-image: url("../assets/steps/step-4.svg"); }
 .tut-track h3 {
     margin: 0 0 var(--space-sm);
     font-size: 1.5rem;
@@ -396,14 +414,30 @@ body {
     }
     .tut-intro {
         flex: 1;
+        margin-bottom: 0;
+        text-align: left;
+    }
+    .tut-intro h2::after {
+        margin-left: 0;
+    }
+    .tut-intro p {
+        margin-left: 0;
+        padding: 0;
+        background-color: transparent;
     }
     .tut-card {
+        display: flex;
         flex: 2;
         flex-direction: row;
         align-items: center;
     }
+    /* computer: the wheel goes back into the row, left of the text */
     .tut-wheel {
         --num-r: 75px;
+        position: relative;
+        left: auto;
+        bottom: auto;
+        flex-shrink: 0;
         width: 240px;
         height: 240px;
         margin-left: -155px;
@@ -413,10 +447,14 @@ body {
     }
     .tut-window {
         flex: 1;
-        height: 240px;
+        height: 260px;
     }
+    /* computer: picture on the right, right padding keeps its space empty */
     .tut-track li {
-        padding: var(--space-lg);
+        justify-content: center;
+        padding: var(--space-lg) 240px var(--space-lg) var(--space-lg);
+        background-size: auto 180px;
+        background-position: right 24px center;
     }
     .tut-track h3 {
         font-size: 2rem;
