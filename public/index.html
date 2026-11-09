@@ -6,22 +6,24 @@
         <link href="css/style.css" rel="stylesheet">
         <link rel="icon" href="assets/carecircle-icon.png">
 
-        <!--<script></script> script here after implementing backend-->
+        <script src="js/main.js" defer></script>
         <title>CareCircle</title>
     </head>
     <body>
         <header class="header">
             <nav class="topbar container">
                 <a href="index.html" class="logo"><img src="assets/carecircle-logo.png" alt="CareCircle"></a>
-                <ul>
+                <ul class="nav-links" id="nav-links">
                     <li><a href="#about">About</a></li>
                     <li><a href="#tut">How it works</a></li>
                     <li><a href="#pricing">Pricing</a></li>
                     <li><a href="#contact">Contact</a></li>
+                    <li class="nav-login"><a href="login.html">Log In</a></li>
                 </ul>
                 <div class="topButton">
                     <a href="register.html" class="btn-outline">Sign Up</a>
-                    <a href="login.html" class="btn-outline">Log In</a>
+                    <a href="login.html" class="btn-outline login-btn">Log In</a>
+                    <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">☰</button>
                 </div>
             </nav>
         </header>
@@ -29,11 +31,16 @@
         <main class="container">
             <!--Headline Hero-->
             <section id="hero">
-                <div class="hero-card">
+                <div class="hero-text">
                     <h1>Care for your family, together.</h1>
                     <p>Share a household with your co-parent or siblings, check off doses, and never miss a doctor’s visit again.</p>
-                    <a href="register.html" class="btn">Get Started</a>
+                    <div class="hero-actions">
+                        <a href="register.html" class="btn">Get Started</a>
+                        <a href="#tut" class="btn-ghost">See how it works</a>
+                    </div>
+                    <p class="hero-note">Free for up to 4 people.</p>
                 </div>
+                <img src="assets/hero-3-circle-of-care.svg" alt="" class="hero-art">
             </section>
 
             <section id="about">
@@ -71,7 +78,7 @@
                     </div>
                 </div>
                 <div class="cta">
-                    <a href="register.html" class="btn">Create your household</a>
+                    <a href="register.html" class="btn btn-arrow">Create your household <span aria-hidden="true">→</span></a>
                 </div>
             </section>
 
@@ -104,6 +111,11 @@
                             <li>
                                 <h3>Stay on top of it together</h3>
                                 <p>Check off doses and see upcoming appointments from one shared dashboard, whoever is on duty that day.</p>
+                            </li>
+                            <!-- copy of step 1: step 4 rolls into it, then the loop restarts on the real step 1. Hidden from screen readers -->
+                            <li aria-hidden="true">
+                                <h3>Create your household</h3>
+                                <p>Sign up for free and give your household a name.</p>
                             </li>
                         </ol>
                     </div>
@@ -226,7 +238,7 @@
                             <h3>Contact</h3>
                             <ul>
                                 <li><a href="mailto:support@carecircle.ca">support@carecircle.ca</a></li>
-                                <li>+1 000 000 0000</li>
+                                <li><a href="tel:+12633827036">+1 263 382 7036</a></li>
                                 <li>Montreal, QC</li>
                             </ul>
                         </div>
