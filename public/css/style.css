@@ -424,6 +424,7 @@ body {
         margin-left: 0;
         padding: 0;
         background-color: transparent;
+        text-align: justify; /* straight left and right edges */
     }
     .tut-card {
         display: flex;
