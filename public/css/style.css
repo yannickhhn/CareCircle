@@ -130,15 +130,15 @@ body {
 }
 .feature-slide {
     flex: 0 0 100%;
-    min-height: 360px;
+    min-height: 460px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: var(--space-lg);
+    justify-content: flex-start; /* phone: text at the top */
+    gap: var(--space-md);
     padding: var(--space-lg);
     background-color: var(--color-bg);
-    background-size: contain;
-    background-position: center;
+    background-size: auto 45%; /* phone: small picture in the bottom half */
+    background-position: center bottom 16px;
     background-repeat: no-repeat;
 }
 .feature-slide h3 {
@@ -151,11 +151,9 @@ body {
 }
 .feature-slide p {
     margin: 0;
-    align-self: flex-end;
     max-width: 30ch;
     font-size: 1rem;
     color: var(--color-muted);
-    text-align: right;
 }
 
 /* move one slide to the left about every 4 seconds, then loop */
@@ -198,10 +196,100 @@ body {
     padding: var(--space-sm) var(--space-lg);
 }
 
+/* how it works: half wheel with the step number + text that moves up */
 .tut-card {
     display: flex;
+    flex-direction: column-reverse; /* phone: text on top, wheel below */
+    overflow: hidden;
+    border: 2px solid var(--color-secondary);
+    border-radius: var(--radius);
+    background-color: var(--color-surface);
+}
+.tut-card:hover .tut-wheel,
+.tut-card:hover .tut-track {
+    animation-play-state: paused;
+}
+
+/* the wheel's centre sits past the left edge, so only one number shows */
+.tut-wheel {
+    --num-r: 60px; /* distance from the wheel's centre to each number */
+    position: relative;
+    flex-shrink: 0;
+    width: 200px;
+    height: 200px;
+    margin-left: -125px;
+    border-radius: 50%;
+    background-color: var(--color-secondary);
+    animation: tut-wheel 16s infinite;
+}
+.tut-wheel span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-white);
+}
+/* place the 4 numbers a quarter turn apart around the centre */
+.tut-wheel span:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateX(var(--num-r)); }
+.tut-wheel span:nth-child(2) { transform: translate(-50%, -50%) rotate(90deg) translateX(var(--num-r)); }
+.tut-wheel span:nth-child(3) { transform: translate(-50%, -50%) rotate(180deg) translateX(var(--num-r)); }
+.tut-wheel span:nth-child(4) { transform: translate(-50%, -50%) rotate(270deg) translateX(var(--num-r)); }
+
+/* the window shows one step; the track holds all 4 stacked */
+.tut-window {
+    height: 240px;
+    overflow: hidden;
+}
+.tut-track {
+    height: 400%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    animation: tut-text 16s infinite;
+}
+.tut-track li {
+    height: 25%;
+    display: flex;
     flex-direction: column;
-    gap: 16px;
+    justify-content: center;
+    padding: var(--space-lg);
+}
+.tut-track h3 {
+    margin: 0 0 var(--space-sm);
+    font-size: 1.5rem;
+}
+.tut-track p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--color-muted);
+}
+
+/* both last 16s: a quarter turn and one step up about every 4 seconds */
+@keyframes tut-wheel {
+    0%, 20% { transform: rotate(0deg); }
+    25%, 45% { transform: rotate(-90deg); }
+    50%, 70% { transform: rotate(-180deg); }
+    75%, 100% { transform: rotate(-270deg); }
+}
+@keyframes tut-text {
+    0%, 20% { transform: translateY(0); }
+    25%, 45% { transform: translateY(-25%); }
+    50%, 70% { transform: translateY(-50%); }
+    75%, 100% { transform: translateY(-75%); }
+}
+
+/* no animation for people who turned off motion: scroll the steps instead.
+   This block must come after the .tut rules above, or they would override it */
+@media (prefers-reduced-motion: reduce) {
+    .tut-wheel,
+    .tut-track {
+        animation: none;
+    }
+    .tut-window {
+        overflow-y: auto;
+    }
 }
 
 #pricebox > ul {
@@ -263,21 +351,46 @@ body {
 
     .feature-slide {
         min-height: 480px;
+        justify-content: space-between;
+        gap: var(--space-lg);
         padding: var(--space-xl);
+        background-size: contain;
+        background-position: center;
     }
     .feature-slide h3 {
         font-size: 3rem;
     }
     .feature-slide p {
+        align-self: flex-end;
         font-size: 1.125rem;
+        text-align: right;
     }
 
     .tut-card {
         flex-direction: row;
-        gap: 3vw;
+        align-items: center;
     }
-    .tut-card > div {
+    .tut-wheel {
+        --num-r: 105px;
+        width: 360px;
+        height: 360px;
+        margin-left: -225px;
+    }
+    .tut-wheel span {
+        font-size: 4.5rem;
+    }
+    .tut-window {
         flex: 1;
+        height: 360px;
+    }
+    .tut-track li {
+        padding: var(--space-xl);
+    }
+    .tut-track h3 {
+        font-size: 2.5rem;
+    }
+    .tut-track p {
+        font-size: 1.25rem;
     }
 
     #pricebox > ul {
