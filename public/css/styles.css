@@ -1,53 +1,125 @@
+/* styles for phone (default) */
+.header {
+    padding: 12px;
+    background-color: #82ADD9;
+}
 .topbar {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
 }
 .topbar ul {
     display: flex;
+    flex-wrap: wrap;
     list-style: none;
     gap: 10px;
+    margin: 0;
+    padding: 0;
 }
 .topButton {
     display: flex;
     text-align: left;
-    /*background-color: #84D99C;*/ 
-    font-weight: 100;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    gap: 20px;
-    
-}
-.header {
-    padding : 20px;
-    background-color: #946F54;
+    /*background-color: #84D99C;*/
+    gap: 12px;
 }
 
-@media (min-width: 768px){
-    .topbar {}
-}
-
-#pricebox {
-    display: flex;
-    list-style: none;
-    gap: 50px;
-    
-}
 #about {
     display: flex;
     flex-direction: column;
 }
 
-
-@media (min-width:768px){
-    #about {
+.feature-list {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    overflow-x: auto;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tut-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#pricebox > ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    gap: 20px;
+    padding: 0;
+}
+
+.cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    gap: 30px;  
-    }
+    gap: 12px;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    background-color: #82ADD9;
+    gap: 16px;
+    padding: 16px;
+}
+#legal {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #5C88B5;
+    gap: 4vw;
+    align-items: center;
+    justify-content: center;
 }
 
 
-    
+/* styles for computer */
+@media (min-width: 768px) {
+    .header {
+        padding: 20px;
+    }
+    .topbar {
+        flex-wrap: nowrap;
+    }
+    .topbar ul {
+        flex-wrap: nowrap;
+    }
+    .topButton {
+        gap: 20px;
+    }
+
+    .feature-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 2vw;
+    }
+    .feature-card {
+        flex: 1 1 250px;
+    }
+
+    .tut-card {
+        flex-direction: row;
+        gap: 3vw;
+    }
+    .tut-card > div {
+        flex: 1;
+    }
+
+    #pricebox > ul {
+        flex-direction: row;
+        justify-content: center;
+        gap: 50px;
+    }
+    #pricebox > ul > li {
+        flex: 1 1 250px;
+    }
+
+    .footer {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 5vw;
+    }
+}
