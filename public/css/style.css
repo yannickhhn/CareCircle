@@ -73,7 +73,7 @@ body {
     text-decoration: none;
 }
 .topbar li + li {
-    border-left: 1px solid var(--color-text);
+    border-left: 1px solid var(--color-secondary);
     padding-left: 10px;
 }
 .topButton {
@@ -83,7 +83,7 @@ body {
     gap: 12px;
 }
 .btn-outline {
-    border: 1px solid var(--color-text);
+    border: 1px solid var(--color-secondary);
     border-radius: 6px;
     padding: var(--space-xs) var(--space-md);
 }
@@ -104,8 +104,10 @@ body {
 }
 .hero-card p {
     color: var(--color-muted);
-    max-width: 60ch;
     margin: 0;
+}
+.hero-card .btn {
+    margin-top: var(--space-md);
 }
 
 #about {
@@ -113,10 +115,90 @@ body {
     flex-direction: column;
 }
 
-.feature-list {
+.feature-slider {
+    overflow: hidden;
+    border: 2px solid var(--color-secondary);
+    border-radius: var(--radius);
+    margin-bottom: var(--space-lg);
+}
+.feature-track {
+    display: flex;
+    animation: feature-slide 28s infinite;
+}
+.feature-slider:hover .feature-track {
+    animation-play-state: paused;
+}
+.feature-slide {
+    flex: 0 0 100%;
+    min-height: 360px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    background-color: var(--color-bg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.feature-slide h3 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    max-width: 9ch;
+    text-align: left;
+}
+.feature-slide p {
+    margin: 0;
+    align-self: flex-end;
+    max-width: 30ch;
+    font-size: 1rem;
+    color: var(--color-muted);
+    text-align: right;
+}
+
+/* move one slide to the left about every 4 seconds, then loop */
+@keyframes feature-slide {
+    0%, 12% { transform: translateX(0); }
+    14.29%, 26.29% { transform: translateX(-100%); }
+    28.57%, 40.57% { transform: translateX(-200%); }
+    42.86%, 54.86% { transform: translateX(-300%); }
+    57.14%, 69.14% { transform: translateX(-400%); }
+    71.43%, 83.43% { transform: translateX(-500%); }
+    85.71%, 100% { transform: translateX(-600%); }
+}
+
+/* no animation for people who turned off motion: scroll instead */
+@media (prefers-reduced-motion: reduce) {
+    .feature-track {
+        animation: none;
+    }
+    .feature-slider {
+        overflow-x: auto;
+    }
+}
+
+/* slide backgrounds: add background-image to each slide later */
+.slide-1 {
+    background-color: var(--color-accent);
+    background-image: url("../assets/family.svg");
+    background-size: contain;
+}
+.slide-2 { background-color: var(--color-secondary); }
+.slide-3 { background-color: var(--color-pink); }
+.slide-4 { background-color: var(--color-sand); }
+.slide-5 { background-color: var(--color-primary); }
+.slide-6 { background-color: var(--color-accent); }
+.slide-7 { background-color: var(--color-secondary); }
+
+.btn {
+    display: inline-block;
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+    text-decoration: none;
+    border-radius: 6px;
+    padding: var(--space-sm) var(--space-lg);
 }
 
 .tut-card {
@@ -182,13 +264,15 @@ body {
         gap: 20px;
     }
 
-    .feature-list {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 2vw;
+    .feature-slide {
+        min-height: 480px;
+        padding: var(--space-xl);
     }
-    .feature-card {
-        flex: 1 1 250px;
+    .feature-slide h3 {
+        font-size: 3rem;
+    }
+    .feature-slide p {
+        font-size: 1.125rem;
     }
 
     .tut-card {
