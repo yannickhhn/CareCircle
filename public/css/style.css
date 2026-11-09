@@ -88,7 +88,8 @@ body {
     padding: var(--space-xs) var(--space-md);
 }
 
-#hero {
+/* the same space above and below every section of the page */
+main > section {
     padding: var(--space-xl) 0;
 }
 .hero-card {
@@ -197,9 +198,6 @@ body {
 }
 
 /* how it works: title + intro, then a half wheel with the step number + text that moves up */
-#tut {
-    margin-top: var(--space-xl);
-}
 /* phone: centred title, mint divider, paragraph in a soft mint box */
 .tut-intro {
     margin-bottom: var(--space-lg);
@@ -338,12 +336,190 @@ body {
     padding: 0;
 }
 
+/* pricing cards: top zone (title, price, button) + feature zone */
+.price-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background-color: var(--color-bg);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+/* hover: the card lifts up with a shadow. transform doesn't move anything else on the page */
+.price-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(31, 42, 55, 0.12);
+}
+/* Familial: slightly bigger, mint border */
+.price-card.featured {
+    transform: scale(1.05);
+    border: 2px solid var(--color-accent);
+}
+/* a second transform would replace the scale, so the hover repeats it */
+.price-card.featured:hover {
+    transform: scale(1.05) translateY(-8px);
+}
+
+.price-top {
+    padding: var(--space-lg);
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+.featured .price-top {
+    background-color: #E1F6F1; /* pale mint */
+}
+.price-top h3 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+.price-desc {
+    margin: var(--space-sm) 0 0;
+    color: var(--color-muted);
+}
+/* big number with a small $ at its top-left */
+.price {
+    margin: var(--space-lg) 0 0;
+    line-height: 1;
+}
+.currency {
+    vertical-align: top;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+.amount {
+    font-size: 3.5rem;
+    font-weight: 700;
+}
+/* small cents next to the top of the big number, like the $ */
+.cents {
+    vertical-align: top;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+/* "/ month" sits on the same line as the price */
+.price-period {
+    font-size: 1rem;
+    color: var(--color-muted);
+}
+.price-btn {
+    display: block;
+    margin-top: var(--space-lg);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-secondary);
+    border-radius: 6px;
+    color: var(--color-text);
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+}
+.featured .price-btn {
+    border-color: #4A5FB0;
+    background-color: #4A5FB0;
+    color: var(--color-white);
+}
+
+/* feature zone: light grey, fills the rest of the card, a check before each feature */
+.price-features {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin: 0;
+    padding: var(--space-lg);
+    list-style: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    background-color: var(--color-surface);
+}
+.price-features li::before {
+    content: "\2713"; /* ✓ written as a code so it shows correctly in any file encoding */
+    margin-right: var(--space-sm);
+    font-weight: 700;
+}
+/* "Best option" label centred on the card's top edge */
+.badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: 999px;
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    font-size: 0.875rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
 .cta {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 12px;
+}
+
+/* "Every plan comes with": features in neat columns inside one soft strip */
+.included {
+    margin-top: var(--space-xl);
+}
+.included > h3 {
+    margin: 0 0 var(--space-lg);
+    font-size: 1.5rem;
+    text-align: center;
+}
+.included-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* phone: 2 columns */
+    gap: var(--space-md) var(--space-lg);
+    margin: 0;
+    padding: var(--space-lg);
+    list-style: none;
+    border-radius: var(--radius);
+    background-color: var(--color-surface);
+}
+.included-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-weight: 600;
+}
+/* small mint circle with a check in it */
+.included-list li::before {
+    content: "\2713"; /* ✓ */
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    font-size: 0.875rem;
+}
+
+/* closing banner under the pricing cards */
+.cta-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-xl);
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: var(--radius);
+    background-color: #E1F6F1; /* pale mint */
+    text-align: center;
+}
+.cta-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.cta-text {
+    margin: 0;
+    color: var(--color-muted);
+}
+.cta-banner .btn {
+    margin-top: var(--space-sm);
 }
 
 .footer {
@@ -471,6 +647,10 @@ body {
     }
     #pricebox > ul > li {
         flex: 1 1 250px;
+    }
+    .included-list {
+        grid-template-columns: repeat(3, 1fr);
+        padding: var(--space-lg) var(--space-xl);
     }
 
     .footer {
