@@ -129,14 +129,16 @@ body {
 }
 .feature-slide {
     flex: 0 0 100%;
-    min-height: 460px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* phone: text at the top */
+    justify-content: flex-start; /* phone: centred text at the top */
+    align-items: center;
+    text-align: center;
     gap: var(--space-md);
-    padding: var(--space-lg);
+    /* bottom padding keeps the picture's space empty: 120px picture + 16px gap + 16px margin */
+    padding: var(--space-lg) var(--space-lg) 152px;
     background-color: var(--color-bg);
-    background-size: auto 45%; /* phone: small picture in the bottom half */
+    background-size: auto 120px; /* phone: small picture at the bottom */
     background-position: center bottom 16px;
     background-repeat: no-repeat;
 }
@@ -146,7 +148,6 @@ body {
     font-weight: 700;
     line-height: 1;
     max-width: 9ch;
-    text-align: left;
 }
 .feature-slide p {
     margin: 0;
@@ -371,6 +372,8 @@ body {
     .feature-slide {
         min-height: 480px;
         justify-content: space-between;
+        align-items: stretch;
+        text-align: left;
         gap: var(--space-lg);
         padding: var(--space-xl);
         background-size: contain;
