@@ -1,17 +1,45 @@
 /* base: colours, font, spacing */
+/* light mode colours. Dark mode overrides the same names further down */
 :root {
-    --color-primary: #88C5DB;
-    --color-secondary: #889BDB;
-    --color-accent: #88DBC8;
-    --color-pink: #DB889B;
-    --color-sand: #DBC888;
+    --bg-page: #FFFFFF;
+    --bg-surface: #F4F7FB; /* soft grey zones */
+    --border: #D5DEE8;
+    --text-primary: #1F2A37;
+    --text-secondary: #5B6675;
+    --text-on-accent: #1F2A37; /* text on mint pills */
 
-    --color-text: #1F2A37;
-    --color-muted: #5B6675;
-    --color-bg: #FFFFFF;
-    --color-white: #FFFFFF;
-    --color-surface: #F4F7FB;
-    --color-border: #D5DEE8;
+    /* accents: buttons, icons, dots, checks, borders */
+    --accent-mint: #88DBC8;
+    --accent-sky: #88C5DB;
+    --accent-periwinkle: #889BDB;
+    --accent-rose: #DB889B;
+    --accent-sand: #DBC888;
+
+    /* coloured card backgrounds, each with its own description colour */
+    --card-mint: #E1F6F1;
+    --card-sky: #E1F0F6;
+    --card-periwinkle: #E1E6F6;
+    --card-rose: #F6E1E6;
+    --card-sand: #F6F1E1;
+    --card-mint-text: #5B6675;
+    --card-sky-text: #5B6675;
+    --card-periwinkle-text: #5B6675;
+    --card-rose-text: #5B6675;
+    --card-sand-text: #5B6675;
+
+    /* single-purpose colours */
+    --btn-primary-bg: var(--accent-mint);
+    --btn-primary-text: var(--text-on-accent);
+    --gradient-top: #FBEFF2;
+    --footer-bg: var(--accent-sky);
+    --footer-text: var(--text-primary);
+    --footer-border: transparent;
+    --footer-logo-filter: brightness(0);
+    --footer-circle: rgba(255, 255, 255, 0.2);
+    --footer-line: rgba(31, 42, 55, 0.25);
+    --shadow-sm: rgba(31, 42, 55, 0.08);
+    --shadow-md: rgba(31, 42, 55, 0.15);
+    --price-band: var(--bg-surface); /* behind the pricing features */
 
     --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
@@ -24,6 +52,53 @@
     --radius: 12px;
     --max-width: 1100px;
     --space-section: 56px; /* space above and below each section (80px on computer) */
+}
+
+/* dark mode ("Ink" palette): turned on by the theme button in the header,
+   which puts data-theme="dark" on <html> (see main.js) */
+:root[data-theme="dark"] {
+    --bg-page: #121418;
+    --bg-surface: var(--card-periwinkle);
+    --border: #323A50;
+    --text-primary: #E8ECF4;
+    --text-secondary: #A3ABBF;
+    --text-on-accent: #121418;
+
+    --accent-mint: #84CDBC;
+    --accent-sky: #84B9CD;
+    --accent-periwinkle: #8495CD;
+    --accent-rose: #CD8495;
+    --accent-sand: #CDBC84;
+
+    --card-mint: #24423B;
+    --card-sky: #243A42;
+    --card-periwinkle: #242B42;
+    --card-rose: #42242B;
+    --card-sand: #47301F; /* trying a warmer sand (was #423B24) */
+    --card-mint-text: #B8EADF;
+    --card-sky-text: #B8DDEA;
+    --card-periwinkle-text: #B8C3EA;
+    --card-rose-text: #EAB8C3;
+    --card-sand-text: #EADFB8;
+
+    --btn-primary-bg: var(--accent-mint);
+    --btn-primary-text: var(--text-on-accent);
+    --gradient-top: var(--bg-page); /* no gradient: plain page colour */
+    --footer-bg: var(--card-sky); /* a bit blue, not black */
+    --footer-text: var(--card-sky-text);
+    --footer-border: var(--border);
+    --footer-logo-filter: none; /* white logo */
+    --footer-circle: rgba(255, 255, 255, 0.05);
+    --footer-line: rgba(232, 236, 244, 0.2);
+    --shadow-sm: rgba(0, 0, 0, 0.3);
+    --shadow-md: rgba(0, 0, 0, 0.45);
+    --price-band: rgba(0, 0, 0, 0.2); /* a darker band inside each coloured card */
+    --glow-mint: rgba(132, 205, 188, 0.14); /* accent mint, very faint */
+    --glow-periwinkle: rgba(132, 149, 205, 0.14); /* accent periwinkle, very faint */
+    /* glows around the cards: the accents at 25% */
+    --card-glow-mint: rgba(132, 205, 188, 0.25);
+    --card-glow-sky: rgba(132, 185, 205, 0.25);
+    --card-glow-periwinkle: rgba(132, 149, 205, 0.25);
 }
 
 /* the footer's Contact column: a jump link stops below the sticky header */
@@ -39,10 +114,10 @@ body {
     margin: 0;
     font-family: var(--font-main);
     line-height: 1.5;
-    color: var(--color-text);
-    background-color: var(--color-bg);
+    color: var(--text-primary);
+    background-color: var(--bg-page);
     /* very light pink at the top, fading to white by the middle of the page */
-    background-image: linear-gradient(180deg, #FBEFF2 0%, var(--color-bg) 50%);
+    background-image: linear-gradient(180deg, var(--gradient-top) 0%, var(--bg-page) 50%);
 }
 
 .container {
@@ -58,9 +133,9 @@ body {
     top: 0;
     z-index: 100; /* above everything else on the page */
     padding: var(--space-sm) 0;
-    background-color: var(--color-bg);
-    border-bottom: 4px solid var(--color-primary);
-    box-shadow: 0 2px 8px rgba(31, 42, 55, 0.06);
+    background-color: var(--bg-page);
+    border-bottom: 4px solid var(--accent-sky);
+    box-shadow: 0 2px 8px var(--shadow-sm);
 }
 .logo img {
     display: block;
@@ -73,7 +148,7 @@ body {
     gap: 10px;
 }
 .topbar a {
-    color: var(--color-text);
+    color: var(--text-primary);
     text-decoration: none;
 }
 
@@ -88,8 +163,8 @@ body {
     margin: 0;
     padding: var(--space-sm) var(--space-md) var(--space-md);
     list-style: none;
-    background-color: var(--color-bg);
-    box-shadow: 0 8px 16px rgba(31, 42, 55, 0.08);
+    background-color: var(--bg-page);
+    box-shadow: 0 8px 16px var(--shadow-sm);
 }
 .nav-links.open {
     display: flex; /* main.js adds the "open" class */
@@ -102,27 +177,52 @@ body {
 .topButton {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-left: auto; /* pushes Log In and Sign Up to the right */
+    gap: var(--space-sm);
+    margin-left: auto; /* pushes the buttons to the right */
 }
 .btn-outline {
     display: inline-block; /* transform (used on hover) doesn't work on inline links */
-    border: 1px solid var(--color-secondary);
+    border: 1px solid var(--accent-periwinkle);
     border-radius: 6px;
-    padding: var(--space-xs) var(--space-md);
+    padding: var(--space-xs) var(--space-sm); /* phone: slimmer so the header fits */
+    white-space: nowrap; /* "Sign Up" never breaks onto two lines */
 }
 /* phone: Log In is a round person icon so everything fits */
 .login-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     padding: 0;
     border-radius: 50%;
 }
 .login-text {
     display: none; /* the link's name still comes from aria-label="Log In" */
+}
+
+/* theme button: moon in light mode, sun in dark mode */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; /* 36px on computer */
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--accent-periwinkle);
+    border-radius: 50%;
+    background: none;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+.icon-sun {
+    display: none;
+}
+:root[data-theme="dark"] .icon-sun {
+    display: block;
+}
+:root[data-theme="dark"] .icon-moon {
+    display: none;
 }
 
 /* hamburger: 3 thin bars that turn into an X when the menu is open */
@@ -140,13 +240,13 @@ body {
     cursor: pointer;
 }
 .menu-toggle:hover {
-    background-color: var(--color-surface);
+    background-color: var(--bg-surface);
 }
 .menu-toggle .bar {
     display: block;
     height: 2px;
     border-radius: 2px;
-    background-color: var(--color-text);
+    background-color: var(--text-primary);
     transition: transform 0.25s ease, opacity 0.25s ease;
 }
 /* main.js sets aria-expanded="true" when the menu opens.
@@ -159,6 +259,17 @@ body {
 }
 .menu-toggle[aria-expanded="true"] .bar:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
+}
+
+/* very small phones (under 360px): shrink the logo and ☰ a little so the header fits */
+@media (max-width: 359px) {
+    .logo img {
+        height: 24px;
+    }
+    .menu-toggle {
+        width: 34px;
+        padding: 0 7px;
+    }
 }
 
 /* the same space above and below every section of the page */
@@ -186,7 +297,7 @@ main > section {
     max-width: 45ch;
     margin: 0;
     font-size: 1.125rem;
-    color: var(--color-muted);
+    color: var(--text-secondary);
 }
 .hero-actions {
     display: flex;
@@ -199,15 +310,17 @@ main > section {
 .btn,
 .btn-ghost,
 .btn-outline,
-.price-btn {
+.price-btn,
+.theme-toggle {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .btn:hover,
 .btn-ghost:hover,
 .btn-outline:hover,
-.price-btn:hover {
+.price-btn:hover,
+.theme-toggle:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 14px rgba(31, 42, 55, 0.15);
+    box-shadow: 0 6px 14px var(--shadow-md);
 }
 
 /* arrow on a button nudges right on hover */
@@ -222,10 +335,10 @@ main > section {
 .btn-ghost {
     display: inline-block;
     padding: var(--space-sm) var(--space-lg);
-    border: 1px solid var(--color-secondary);
+    border: 1px solid var(--accent-periwinkle);
     border-radius: 6px;
-    background-color: var(--color-bg);
-    color: var(--color-text);
+    background-color: var(--bg-page);
+    color: var(--text-primary);
     font-weight: bold;
     text-decoration: none;
 }
@@ -233,7 +346,7 @@ main > section {
 .hero-text .hero-note {
     margin: var(--space-md) 0 0;
     font-size: 0.875rem;
-    color: var(--color-muted);
+    color: var(--text-secondary);
 }
 .hero-art {
     width: 100%;
@@ -270,7 +383,7 @@ main > section {
     gap: var(--space-md);
     /* bottom padding keeps the picture's space empty: 120px picture + 16px gap + 16px margin */
     padding: var(--space-lg) var(--space-lg) 152px;
-    background-color: var(--color-bg);
+    background-color: var(--bg-page);
     background-size: auto 120px; /* phone: small picture at the bottom */
     background-position: center bottom 16px;
     background-repeat: no-repeat;
@@ -286,7 +399,7 @@ main > section {
     margin: 0;
     max-width: 30ch;
     font-size: 1rem;
-    color: var(--color-muted);
+    color: var(--text-secondary);
 }
 
 /* move one slide to the left about every 4 seconds, then loop */
@@ -310,19 +423,26 @@ main > section {
     }
 }
 
+/* descriptions inside a coloured slide use that card's text colour */
+.slide-1 p, .slide-6 p { color: var(--card-mint-text); }
+.slide-2 p, .slide-7 p { color: var(--card-periwinkle-text); }
+.slide-3 p { color: var(--card-rose-text); }
+.slide-4 p { color: var(--card-sand-text); }
+.slide-5 p { color: var(--card-sky-text); }
+
 /* slide backgrounds: soft colour + illustration */
-.slide-1 { background-color: #E1F6F1; background-image: url("../assets/slides/slide-1.svg"); }
-.slide-2 { background-color: #E1E6F6; background-image: url("../assets/slides/slide-2.svg"); }
-.slide-3 { background-color: #F6E1E6; background-image: url("../assets/slides/slide-3.svg"); }
-.slide-4 { background-color: #F6F1E1; background-image: url("../assets/slides/slide-4.svg"); }
-.slide-5 { background-color: #E1F0F6; background-image: url("../assets/slides/slide-5.svg"); }
-.slide-6 { background-color: #E1F6F1; background-image: url("../assets/slides/slide-6.svg"); }
-.slide-7 { background-color: #E1E6F6; background-image: url("../assets/slides/slide-7.svg"); }
+.slide-1 { background-color: var(--card-mint); background-image: url("../assets/slides/slide-1.svg"); }
+.slide-2 { background-color: var(--card-periwinkle); background-image: url("../assets/slides/slide-2.svg"); }
+.slide-3 { background-color: var(--card-rose); background-image: url("../assets/slides/slide-3.svg"); }
+.slide-4 { background-color: var(--card-sand); background-image: url("../assets/slides/slide-4.svg"); }
+.slide-5 { background-color: var(--card-sky); background-image: url("../assets/slides/slide-5.svg"); }
+.slide-6 { background-color: var(--card-mint); background-image: url("../assets/slides/slide-6.svg"); }
+.slide-7 { background-color: var(--card-periwinkle); background-image: url("../assets/slides/slide-7.svg"); }
 
 .btn {
     display: inline-block;
-    background-color: #4A5FB0;
-    color: var(--color-white);
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
     font-weight: bold;
     text-decoration: none;
     border-radius: 6px;
@@ -346,7 +466,7 @@ main > section {
     height: 4px;
     margin-top: var(--space-sm);
     border-radius: 2px;
-    background-color: var(--color-accent);
+    background-color: var(--accent-mint);
 }
 
 .tut-intro {
@@ -364,22 +484,22 @@ main > section {
     height: 4px;
     margin: var(--space-sm) auto 0; /* auto centres it */
     border-radius: 2px;
-    background-color: var(--color-accent);
+    background-color: var(--accent-mint);
 }
 .tut-intro p {
     max-width: 40ch;
     margin: var(--space-md) auto 0;
     padding: var(--space-md);
     border-radius: var(--radius);
-    background-color: #E1F6F1;
-    color: var(--color-muted);
+    background-color: var(--card-mint);
+    color: var(--card-mint-text);
 }
 
 /* phone: the wheel is pinned bottom-left, each step fills the whole card */
 .tut-card {
     position: relative;
     overflow: hidden;
-    border: 2px solid var(--color-accent);
+    border: 2px solid var(--accent-mint);
     border-radius: var(--radius);
     animation: tut-border 16s infinite; /* border colour changes with each step */
 }
@@ -399,7 +519,7 @@ main > section {
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    background-color: #E1F6F1; /* pale mint, same as slide 1 */
+    background-color: var(--card-mint); /* step 1 colour; the animation changes it per step */
     animation: tut-wheel 16s infinite;
 }
 .tut-wheel span {
@@ -409,7 +529,7 @@ main > section {
     font-size: 2rem;
     font-weight: 700;
     line-height: 1;
-    color: var(--color-text);
+    color: var(--text-primary);
     animation: tut-num 16s infinite; /* only the current number is visible */
 }
 /* place the 4 numbers a quarter turn apart around the centre */
@@ -451,6 +571,11 @@ main > section {
 .tut-track li:nth-child(3) { background-image: url("../assets/steps/step-3.svg"); }
 .tut-track li:nth-child(4) { background-image: url("../assets/steps/step-4.svg"); }
 .tut-track li:nth-child(5) { background-image: url("../assets/steps/step-1.svg"); }
+.tut-track li:nth-child(1) p,
+.tut-track li:nth-child(5) p { color: var(--card-mint-text); }
+.tut-track li:nth-child(2) p { color: var(--card-periwinkle-text); }
+.tut-track li:nth-child(3) p { color: var(--card-rose-text); }
+.tut-track li:nth-child(4) p { color: var(--card-sand-text); }
 .tut-track h3 {
     margin: 0 0 var(--space-sm);
     font-size: 1.5rem;
@@ -458,7 +583,7 @@ main > section {
 .tut-track p {
     margin: 0;
     font-size: 1rem;
-    color: var(--color-muted);
+    color: var(--text-secondary);
 }
 
 /* all last 16s: a quarter turn and one step up about every 4 seconds.
@@ -466,18 +591,18 @@ main > section {
 /* at 100% everything rolls on to "step 1 again" (a full turn, the copied step,
    mint), which looks exactly like 0%, so the loop restarts without a jump */
 @keyframes tut-wheel {
-    0%, 20% { transform: rotate(0deg); background-color: #E1F6F1; }
-    25%, 45% { transform: rotate(-90deg); background-color: #E1E6F6; }
-    50%, 70% { transform: rotate(-180deg); background-color: #F6E1E6; }
-    75%, 95% { transform: rotate(-270deg); background-color: #F6F1E1; }
-    100% { transform: rotate(-360deg); background-color: #E1F6F1; }
+    0%, 20% { transform: rotate(0deg); background-color: var(--card-mint); }
+    25%, 45% { transform: rotate(-90deg); background-color: var(--card-periwinkle); }
+    50%, 70% { transform: rotate(-180deg); background-color: var(--card-rose); }
+    75%, 95% { transform: rotate(-270deg); background-color: var(--card-sand); }
+    100% { transform: rotate(-360deg); background-color: var(--card-mint); }
 }
 @keyframes tut-border {
-    0%, 20% { border-color: var(--color-accent); }
-    25%, 45% { border-color: var(--color-secondary); }
-    50%, 70% { border-color: var(--color-pink); }
-    75%, 95% { border-color: var(--color-sand); }
-    100% { border-color: var(--color-accent); }
+    0%, 20% { border-color: var(--accent-mint); }
+    25%, 45% { border-color: var(--accent-periwinkle); }
+    50%, 70% { border-color: var(--accent-rose); }
+    75%, 95% { border-color: var(--accent-sand); }
+    100% { border-color: var(--accent-mint); }
 }
 @keyframes tut-text {
     0%, 20% { transform: translateY(0); }
@@ -493,13 +618,76 @@ main > section {
     100% { opacity: 1; }
 }
 
+/* ---------- dark mode only: coloured "Ink" cards like the palette samples ---------- */
+/* page background: two soft glows at the top (mint left, periwinkle right)
+   that fade into the dark page, instead of the light-mode pink gradient */
+:root[data-theme="dark"] body {
+    background-image:
+        radial-gradient(900px 600px at 5% 100px, var(--glow-mint), transparent 70%),
+        radial-gradient(900px 600px at 95% 100px, var(--glow-periwinkle), transparent 70%);
+    background-repeat: no-repeat;
+}
+
+/* hero picture: a copy whose sand circle is #47301F */
+:root[data-theme="dark"] .hero-art {
+    content: url("../assets/hero-3-circle-of-care-dark.svg");
+}
+
+/* header logo: same colour logo, but a copy whose lettering is light (#E8ECF4) */
+:root[data-theme="dark"] .logo img {
+    content: url("../assets/carecircle-logo-light-text.png");
+}
+
+/* "How it works": the card is filled with its step's colour, no border,
+   and the half wheel is the dark page colour so it stands out */
+:root[data-theme="dark"] .tut-card {
+    border-color: transparent;
+    background-color: var(--card-mint); /* step 1, used when the animation is off */
+    animation-name: tut-fill;
+}
+:root[data-theme="dark"] .tut-wheel {
+    background-color: var(--bg-page);
+    animation-name: tut-turn; /* turns only, no colour change */
+}
+@keyframes tut-fill {
+    0%, 20% { background-color: var(--card-mint); }
+    25%, 45% { background-color: var(--card-periwinkle); }
+    50%, 70% { background-color: var(--card-rose); }
+    75%, 95% { background-color: var(--card-sand); }
+    100% { background-color: var(--card-mint); }
+}
+
+/* glow on hover: buttons glow softly in their colour while they lift */
+:root[data-theme="dark"] .btn:hover {
+    box-shadow: 0 6px 14px var(--shadow-md), 0 0 20px var(--card-glow-mint);
+}
+:root[data-theme="dark"] .btn-ghost:hover,
+:root[data-theme="dark"] .btn-outline:hover,
+:root[data-theme="dark"] .price-btn:hover,
+:root[data-theme="dark"] .theme-toggle:hover {
+    box-shadow: 0 6px 14px var(--shadow-md), 0 0 20px var(--card-glow-periwinkle);
+}
+/* the featured plan's button is mint, so it glows mint */
+:root[data-theme="dark"] .featured .price-btn:hover {
+    box-shadow: 0 6px 14px var(--shadow-md), 0 0 20px var(--card-glow-mint);
+}
+@keyframes tut-turn {
+    0%, 20% { transform: rotate(0deg); }
+    25%, 45% { transform: rotate(-90deg); }
+    50%, 70% { transform: rotate(-180deg); }
+    75%, 95% { transform: rotate(-270deg); }
+    100% { transform: rotate(-360deg); }
+}
+
 /* no animation for people who turned off motion: scroll the steps instead.
    This block must come after the .tut rules above, or they would override it */
 @media (prefers-reduced-motion: reduce) {
     .tut-card,
     .tut-wheel,
     .tut-wheel span,
-    .tut-track {
+    .tut-track,
+    :root[data-theme="dark"] .tut-card,
+    :root[data-theme="dark"] .tut-wheel {
         animation: none;
     }
     /* without the animation, show only 01 and drop the copied step */
@@ -525,20 +713,20 @@ main > section {
     position: relative;
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
-    background-color: var(--color-bg);
+    background-color: var(--bg-page);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 /* hover: the card lifts up with a shadow. transform doesn't move anything else on the page */
 .price-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(31, 42, 55, 0.12);
+    box-shadow: 0 12px 24px var(--shadow-md);
 }
 /* Familial: slightly bigger, mint border */
 .price-card.featured {
     transform: scale(1.05);
-    border: 2px solid var(--color-accent);
+    border: 2px solid var(--accent-mint);
 }
 /* a second transform would replace the scale, so the hover repeats it */
 .price-card.featured:hover {
@@ -550,7 +738,10 @@ main > section {
     border-radius: var(--radius) var(--radius) 0 0;
 }
 .featured .price-top {
-    background-color: #E1F6F1; /* pale mint */
+    background-color: var(--card-mint); /* pale mint */
+}
+.featured .price-desc {
+    color: var(--card-mint-text);
 }
 .price-top h3 {
     margin: 0;
@@ -558,7 +749,7 @@ main > section {
 }
 .price-desc {
     margin: var(--space-sm) 0 0;
-    color: var(--color-muted);
+    color: var(--text-secondary);
 }
 /* big number with a small $ at its top-left */
 .price {
@@ -583,23 +774,23 @@ main > section {
 /* "/ month" sits on the same line as the price */
 .price-period {
     font-size: 1rem;
-    color: var(--color-muted);
+    color: var(--text-secondary);
 }
 .price-btn {
     display: block;
     margin-top: var(--space-lg);
     padding: var(--space-sm) var(--space-md);
-    border: 1px solid var(--color-secondary);
+    border: 1px solid var(--accent-periwinkle);
     border-radius: 6px;
-    color: var(--color-text);
+    color: var(--text-primary);
     font-weight: 700;
     text-align: center;
     text-decoration: none;
 }
 .featured .price-btn {
-    border-color: #4A5FB0;
-    background-color: #4A5FB0;
-    color: var(--color-white);
+    border-color: var(--btn-primary-bg);
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
 }
 
 /* feature zone: light grey, fills the rest of the card, a check before each feature.
@@ -607,7 +798,7 @@ main > section {
 .price-details {
     flex: 1;
     border-radius: 0 0 var(--radius) var(--radius);
-    background-color: var(--color-surface);
+    background-color: var(--price-band);
 }
 .price-details summary {
     padding: var(--space-sm) var(--space-md);
@@ -636,8 +827,8 @@ main > section {
     transform: translate(-50%, -50%);
     padding: var(--space-xs) var(--space-md);
     border-radius: 999px;
-    background-color: var(--color-accent);
-    color: var(--color-text);
+    background-color: var(--accent-mint);
+    color: var(--text-on-accent);
     font-size: 0.875rem;
     font-weight: 700;
     white-space: nowrap;
@@ -651,6 +842,27 @@ main > section {
     gap: 12px;
 }
 
+/* dark mode only: each plan is a coloured Ink card with no border */
+:root[data-theme="dark"] .price-card {
+    border-color: transparent;
+}
+/* glow on hover: the card lifts and glows in its own colour */
+:root[data-theme="dark"] .price-card:hover {
+    box-shadow: 0 12px 24px var(--shadow-md), 0 0 48px var(--glow-color);
+}
+/* --glow-color is set per card, so one rule above works for all three */
+:root[data-theme="dark"] #pricebox > ul > li:nth-child(1) { --glow-color: var(--card-glow-sky); }
+:root[data-theme="dark"] #pricebox > ul > li:nth-child(2) { --glow-color: var(--card-glow-mint); }
+:root[data-theme="dark"] #pricebox > ul > li:nth-child(3) { --glow-color: var(--card-glow-periwinkle); }
+:root[data-theme="dark"] #pricebox > ul > li:nth-child(1) { background-color: var(--card-sky); }
+:root[data-theme="dark"] #pricebox > ul > li:nth-child(2) { background-color: var(--card-mint); }
+:root[data-theme="dark"] #pricebox > ul > li:nth-child(3) { background-color: var(--card-periwinkle); }
+:root[data-theme="dark"] .price-top {
+    background-color: transparent; /* the card colour shows through */
+}
+:root[data-theme="dark"] #pricebox > ul > li:nth-child(1) .price-desc { color: var(--card-sky-text); }
+:root[data-theme="dark"] #pricebox > ul > li:nth-child(3) .price-desc { color: var(--card-periwinkle-text); }
+
 /* phone only: compact pricing cards, so all 3 plans fit with little scrolling.
    Name and price on one line, short description, slim button, features in 2 columns */
 @media (max-width: 767px) {
@@ -659,7 +871,7 @@ main > section {
         transform: none;
     }
     .price-card.featured {
-        background-color: #E1F6F1; /* pale mint behind the badge too */
+        background-color: var(--card-mint); /* pale mint behind the badge too */
     }
     #pricebox > ul {
         gap: 12px;
@@ -734,7 +946,7 @@ main > section {
     padding: var(--space-lg);
     list-style: none;
     border-radius: var(--radius);
-    background-color: var(--color-surface);
+    background-color: var(--bg-surface);
 }
 .included-list li {
     display: flex;
@@ -752,7 +964,8 @@ main > section {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background-color: var(--color-accent);
+    background-color: var(--accent-mint);
+    color: var(--text-on-accent);
     font-size: 0.875rem;
 }
 
@@ -765,7 +978,7 @@ main > section {
     margin-top: var(--space-xl);
     padding: var(--space-xl) var(--space-lg);
     border-radius: var(--radius);
-    background-color: #E1F6F1; /* pale mint */
+    background-color: var(--card-mint); /* pale mint */
     text-align: center;
 }
 .cta-title {
@@ -775,7 +988,7 @@ main > section {
 }
 .cta-text {
     margin: 0;
-    color: var(--color-muted);
+    color: var(--card-mint-text);
 }
 .cta-banner .btn {
     margin-top: var(--space-sm);
@@ -786,8 +999,9 @@ main > section {
     position: relative;
     overflow: hidden; /* clips the big circle at the footer's edges */
     padding: var(--space-xl) 0 var(--space-md);
-    background-color: var(--color-primary); /* same blue as the header line */
-    color: var(--color-text); /* dark text stays readable on the light blue */
+    border-top: 1px solid var(--footer-border); /* only visible in dark mode */
+    background-color: var(--footer-bg); /* same blue as the header line */
+    color: var(--footer-text); /* dark text stays readable on the light blue */
 }
 /* big soft circle in the background, partly off the top-right corner */
 .footer::before {
@@ -798,7 +1012,7 @@ main > section {
     width: 480px;
     height: 480px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: var(--footer-circle);
 }
 /* keeps the footer content on top of the circle */
 .footer .container {
@@ -817,7 +1031,7 @@ main > section {
 .footer-logo {
     align-self: flex-start;
     height: 56px;
-    filter: brightness(0); /* turns the white logo black, no extra image needed */
+    filter: var(--footer-logo-filter); /* light mode: turns the white logo black. Dark mode: stays white */
 }
 .footer-motto {
     margin: 0;
@@ -842,10 +1056,10 @@ main > section {
     height: 12px;
     border-radius: 50%;
 }
-.footer-dots span:nth-child(1) { background-color: var(--color-accent); }
-.footer-dots span:nth-child(2) { background-color: var(--color-secondary); }
-.footer-dots span:nth-child(3) { background-color: var(--color-pink); }
-.footer-dots span:nth-child(4) { background-color: var(--color-sand); }
+.footer-dots span:nth-child(1) { background-color: var(--accent-mint); }
+.footer-dots span:nth-child(2) { background-color: var(--accent-periwinkle); }
+.footer-dots span:nth-child(3) { background-color: var(--accent-rose); }
+.footer-dots span:nth-child(4) { background-color: var(--accent-sand); }
 .footer-cols {
     display: flex;
     flex-direction: column;
@@ -864,7 +1078,7 @@ main > section {
     list-style: none;
 }
 .footer a {
-    color: var(--color-text);
+    color: var(--footer-text);
     font-weight: 600;
     text-decoration: none;
 }
@@ -881,7 +1095,7 @@ main > section {
     gap: var(--space-sm) var(--space-lg);
     margin-top: var(--space-xl);
     padding-top: var(--space-md);
-    border-top: 1px solid rgba(31, 42, 55, 0.25);
+    border-top: 1px solid var(--footer-line);
     font-size: 0.875rem;
 }
 .footer-bottom p {
@@ -919,7 +1133,7 @@ main > section {
         font-weight: 400;
     }
     .nav-links li + li {
-        border-left: 1px solid var(--color-secondary);
+        border-left: 1px solid var(--accent-periwinkle);
         padding-left: 10px;
     }
     .logo img {
@@ -927,6 +1141,13 @@ main > section {
     }
     .menu-toggle {
         display: none;
+    }
+    .btn-outline {
+        padding: var(--space-xs) var(--space-md);
+    }
+    .theme-toggle {
+        width: 36px;
+        height: 36px;
     }
     /* computer: Log In shows its words instead of the icon */
     .login-btn {
@@ -1007,6 +1228,7 @@ main > section {
         margin-left: 0;
         padding: 0;
         background-color: transparent;
+        color: var(--text-secondary); /* no mint box on computer, so normal text colour */
         text-align: justify; /* straight left and right edges */
     }
     .tut-card {
