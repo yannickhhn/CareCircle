@@ -656,6 +656,14 @@ main > section {
         radial-gradient(900px 600px at 95% 100px, var(--glow-periwinkle), transparent 70%);
     background-repeat: no-repeat;
 }
+/* phone: the big glows overlapped into one blob, so use two smaller ones, one per corner */
+@media (max-width: 767px) {
+    :root[data-theme="dark"] body {
+        background-image:
+            radial-gradient(320px 260px at 0% 40px, var(--glow-mint), transparent 70%),
+            radial-gradient(320px 260px at 100% 40px, var(--glow-periwinkle), transparent 70%);
+    }
+}
 
 /* hero picture: a copy whose sand circle is #47301F */
 :root[data-theme="dark"] .hero-art {

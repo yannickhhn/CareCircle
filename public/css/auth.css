@@ -6,6 +6,7 @@
     --error-text: #B5485F; /* deeper rose: about 5:1 on white, readable as small text */
     --error-border: var(--accent-rose); /* the palette rose, for the field border */
     --focus-ring: #4A5FB0; /* strong blue, easy to see around a focused field or button */
+    --submit-glow: rgba(136, 219, 200, 0.55); /* soft mint light around the main button on hover */
 }
 
 /* page: logo on top, card centred below it */
@@ -31,6 +32,8 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     background-color: var(--bg-page);
+    /* soft gradient: white at the top fading to pale periwinkle at the bottom */
+    background-image: linear-gradient(180deg, var(--bg-page) 40%, var(--card-periwinkle) 100%);
     box-shadow: 0 12px 32px var(--shadow-sm);
 }
 .auth-card h1 {
@@ -134,6 +137,10 @@
     font-weight: 700;
     cursor: pointer;
 }
+/* hover: lifts (from style.css) with a soft light around it */
+.auth-submit:hover {
+    box-shadow: 0 6px 14px var(--shadow-md), 0 0 24px var(--submit-glow);
+}
 .auth-submit:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -167,6 +174,50 @@
 .auth-page button:focus-visible {
     outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
+}
+
+/* light/dark button: fixed in the top right corner */
+.auth-theme {
+    position: fixed;
+    top: var(--space-md);
+    right: var(--space-md);
+}
+
+/* ---------- dark mode (the theme button puts data-theme="dark" on <html>) ---------- */
+:root[data-theme="dark"] {
+    --error-text: var(--card-rose-text); /* light rose: readable on the dark card */
+    --focus-ring: var(--accent-periwinkle);
+    --submit-glow: rgba(132, 205, 188, 0.4); /* night mint */
+}
+/* logo with light lettering, same as the landing page header */
+:root[data-theme="dark"] .auth-logo img {
+    content: url("../assets/carecircle-logo-light-text.png");
+}
+/* the card is a periwinkle Ink card with no border; fields stay dark */
+:root[data-theme="dark"] .auth-card {
+    border-color: transparent;
+    background-color: var(--card-periwinkle);
+    /* periwinkle at the top fading into sky at the bottom */
+    background-image: linear-gradient(160deg, var(--card-periwinkle) 30%, var(--card-sky) 100%);
+    box-shadow: none;
+}
+:root[data-theme="dark"] .auth-tagline,
+:root[data-theme="dark"] .field-hint,
+:root[data-theme="dark"] .auth-switch {
+    color: var(--card-periwinkle-text);
+}
+:root[data-theme="dark"] .field input {
+    border-color: var(--border);
+}
+/* the rule above is more specific than the error border, so the error needs its own dark rule */
+:root[data-theme="dark"] .field input[aria-invalid="true"] {
+    border-color: var(--error-border);
+}
+:root[data-theme="dark"] .toggle-password {
+    color: var(--card-periwinkle-text);
+}
+:root[data-theme="dark"] .toggle-password:hover {
+    background-color: var(--card-periwinkle);
 }
 
 /* computer: a bit more room inside the card */
