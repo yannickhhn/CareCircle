@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Create your account · CareCircle</title>
+        <link rel="icon" href="assets/carecircle-icon.png">
+        <link href="css/style.css" rel="stylesheet">
+        <link href="css/auth.css" rel="stylesheet">
+    </head>
+    <body class="auth-page">
+        <main class="auth-main">
+            <!-- Logo: takes the visitor back to the landing page -->
+            <a href="index.html" class="auth-logo">
+                <img src="assets/carecircle-logo.png" alt="CareCircle home">
+            </a>
+
+            <section class="auth-card" aria-labelledby="register-title">
+                <h1 id="register-title">Create your account</h1>
+                <p class="auth-tagline">Start caring for your family together, in a few minutes.</p>
+
+                <!-- method="post": if JavaScript ever fails, the password is never put in the page address -->
+                <form id="register-form" method="post">
+                    <div class="field">
+                        <label for="first-name">First name</label>
+                        <input type="text" id="first-name" name="firstName"
+                               autocomplete="given-name" required
+                               aria-describedby="first-name-error">
+                        <p class="field-error" id="first-name-error" aria-live="polite"></p>
+                    </div>
+
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email"
+                               autocomplete="email" required
+                               aria-describedby="email-error">
+                        <p class="field-error" id="email-error" aria-live="polite"></p>
+                    </div>
+
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <!-- the requirement is shown before typing, not only after an error -->
+                        <p class="field-hint" id="password-rules">At least 8 characters.</p>
+                        <div class="password-wrap">
+                            <input type="password" id="password" name="password"
+                                   autocomplete="new-password" required minlength="8"
+                                   aria-describedby="password-rules password-error">
+                            <button type="button" class="toggle-password"
+                                    aria-controls="password" aria-pressed="false">Show</button>
+                        </div>
+                        <p class="field-error" id="password-error" aria-live="polite"></p>
+                    </div>
+
+                    <div class="field">
+                        <label for="confirm-password">Confirm password</label>
+                        <div class="password-wrap">
+                            <input type="password" id="confirm-password" name="confirmPassword"
+                                   autocomplete="new-password" required
+                                   aria-describedby="confirm-password-error">
+                            <button type="button" class="toggle-password"
+                                    aria-controls="confirm-password" aria-pressed="false">Show</button>
+                        </div>
+                        <p class="field-error" id="confirm-password-error" aria-live="polite"></p>
+                    </div>
+
+                    <button type="submit" class="btn auth-submit">Create account</button>
+
+                    <!-- general messages for the whole form (for example "Looks good!") -->
+                    <p class="form-status" id="form-status" role="status"></p>
+                </form>
+
+                <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
+            </section>
+        </main>
+    </body>
+</html>
