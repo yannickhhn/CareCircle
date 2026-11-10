@@ -41,6 +41,21 @@
     --shadow-md: rgba(31, 42, 55, 0.15);
     --price-band: var(--bg-surface); /* behind the pricing features */
 
+    /* "How it works" step colours: border, card fill and wheel for steps 1 to 4.
+       Dark mode only changes these values, so the animations never restart */
+    --step1-border: var(--accent-mint);
+    --step2-border: var(--accent-periwinkle);
+    --step3-border: var(--accent-rose);
+    --step4-border: var(--accent-sand);
+    --step1-fill: transparent;
+    --step2-fill: transparent;
+    --step3-fill: transparent;
+    --step4-fill: transparent;
+    --step1-wheel: var(--card-mint);
+    --step2-wheel: var(--card-periwinkle);
+    --step3-wheel: var(--card-rose);
+    --step4-wheel: var(--card-sand);
+
     --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
     --space-xs: 4px;
@@ -93,6 +108,19 @@
     --shadow-sm: rgba(0, 0, 0, 0.3);
     --shadow-md: rgba(0, 0, 0, 0.45);
     --price-band: rgba(0, 0, 0, 0.2); /* a darker band inside each coloured card */
+    /* "How it works": no border, the card is filled with the step colour, the wheel is the page colour */
+    --step1-border: transparent;
+    --step2-border: transparent;
+    --step3-border: transparent;
+    --step4-border: transparent;
+    --step1-fill: var(--card-mint);
+    --step2-fill: var(--card-periwinkle);
+    --step3-fill: var(--card-rose);
+    --step4-fill: var(--card-sand);
+    --step1-wheel: var(--bg-page);
+    --step2-wheel: var(--bg-page);
+    --step3-wheel: var(--bg-page);
+    --step4-wheel: var(--bg-page);
     --glow-mint: rgba(132, 205, 188, 0.14); /* accent mint, very faint */
     --glow-periwinkle: rgba(132, 149, 205, 0.14); /* accent periwinkle, very faint */
     /* glows around the cards: the accents at 25% */
@@ -499,9 +527,10 @@ main > section {
 .tut-card {
     position: relative;
     overflow: hidden;
-    border: 2px solid var(--accent-mint);
+    border: 2px solid var(--step1-border);
     border-radius: var(--radius);
-    animation: tut-border 16s infinite; /* border colour changes with each step */
+    background-color: var(--step1-fill); /* step 1, used when the animation is off */
+    animation: tut-card 16s infinite; /* border and fill change with each step */
 }
 .tut-card:hover,
 .tut-card:hover .tut-wheel,
@@ -519,7 +548,7 @@ main > section {
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    background-color: var(--card-mint); /* step 1 colour; the animation changes it per step */
+    background-color: var(--step1-wheel); /* step 1 colour; the animation changes it per step */
     animation: tut-wheel 16s infinite;
 }
 .tut-wheel span {
@@ -591,18 +620,18 @@ main > section {
 /* at 100% everything rolls on to "step 1 again" (a full turn, the copied step,
    mint), which looks exactly like 0%, so the loop restarts without a jump */
 @keyframes tut-wheel {
-    0%, 20% { transform: rotate(0deg); background-color: var(--card-mint); }
-    25%, 45% { transform: rotate(-90deg); background-color: var(--card-periwinkle); }
-    50%, 70% { transform: rotate(-180deg); background-color: var(--card-rose); }
-    75%, 95% { transform: rotate(-270deg); background-color: var(--card-sand); }
-    100% { transform: rotate(-360deg); background-color: var(--card-mint); }
+    0%, 20% { transform: rotate(0deg); background-color: var(--step1-wheel); }
+    25%, 45% { transform: rotate(-90deg); background-color: var(--step2-wheel); }
+    50%, 70% { transform: rotate(-180deg); background-color: var(--step3-wheel); }
+    75%, 95% { transform: rotate(-270deg); background-color: var(--step4-wheel); }
+    100% { transform: rotate(-360deg); background-color: var(--step1-wheel); }
 }
-@keyframes tut-border {
-    0%, 20% { border-color: var(--accent-mint); }
-    25%, 45% { border-color: var(--accent-periwinkle); }
-    50%, 70% { border-color: var(--accent-rose); }
-    75%, 95% { border-color: var(--accent-sand); }
-    100% { border-color: var(--accent-mint); }
+@keyframes tut-card {
+    0%, 20% { border-color: var(--step1-border); background-color: var(--step1-fill); }
+    25%, 45% { border-color: var(--step2-border); background-color: var(--step2-fill); }
+    50%, 70% { border-color: var(--step3-border); background-color: var(--step3-fill); }
+    75%, 95% { border-color: var(--step4-border); background-color: var(--step4-fill); }
+    100% { border-color: var(--step1-border); background-color: var(--step1-fill); }
 }
 @keyframes tut-text {
     0%, 20% { transform: translateY(0); }
@@ -638,25 +667,6 @@ main > section {
     content: url("../assets/carecircle-logo-light-text.png");
 }
 
-/* "How it works": the card is filled with its step's colour, no border,
-   and the half wheel is the dark page colour so it stands out */
-:root[data-theme="dark"] .tut-card {
-    border-color: transparent;
-    background-color: var(--card-mint); /* step 1, used when the animation is off */
-    animation-name: tut-fill;
-}
-:root[data-theme="dark"] .tut-wheel {
-    background-color: var(--bg-page);
-    animation-name: tut-turn; /* turns only, no colour change */
-}
-@keyframes tut-fill {
-    0%, 20% { background-color: var(--card-mint); }
-    25%, 45% { background-color: var(--card-periwinkle); }
-    50%, 70% { background-color: var(--card-rose); }
-    75%, 95% { background-color: var(--card-sand); }
-    100% { background-color: var(--card-mint); }
-}
-
 /* glow on hover: buttons glow softly in their colour while they lift */
 :root[data-theme="dark"] .btn:hover {
     box-shadow: 0 6px 14px var(--shadow-md), 0 0 20px var(--card-glow-mint);
@@ -671,13 +681,6 @@ main > section {
 :root[data-theme="dark"] .featured .price-btn:hover {
     box-shadow: 0 6px 14px var(--shadow-md), 0 0 20px var(--card-glow-mint);
 }
-@keyframes tut-turn {
-    0%, 20% { transform: rotate(0deg); }
-    25%, 45% { transform: rotate(-90deg); }
-    50%, 70% { transform: rotate(-180deg); }
-    75%, 95% { transform: rotate(-270deg); }
-    100% { transform: rotate(-360deg); }
-}
 
 /* no animation for people who turned off motion: scroll the steps instead.
    This block must come after the .tut rules above, or they would override it */
@@ -685,9 +688,7 @@ main > section {
     .tut-card,
     .tut-wheel,
     .tut-wheel span,
-    .tut-track,
-    :root[data-theme="dark"] .tut-card,
-    :root[data-theme="dark"] .tut-wheel {
+    .tut-track {
         animation: none;
     }
     /* without the animation, show only 01 and drop the copied step */
