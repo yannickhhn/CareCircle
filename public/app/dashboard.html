@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Home · CareCircle</title>
+        <!-- this page is inside app/, so "../" goes up one folder to reach the shared files -->
+        <link rel="icon" href="../assets/carecircle-icon.png">
+        <link href="../css/style.css" rel="stylesheet">
+        <link href="../css/dashboard.css" rel="stylesheet">
+        <script src="../js/theme.js" defer></script>
+    </head>
+    <body class="app-page">
+        <!-- Sidebar: the same on every page inside app/. Icons only; the hidden text is read by screen readers -->
+        <nav class="sidebar" aria-label="Main">
+            <a href="dashboard.html" class="sidebar-logo">
+                <img src="../assets/carecircle-icon.png" alt="CareCircle home" width="40" height="40">
+            </a>
+
+            <ul class="sidebar-links">
+                <li>
+                    <!-- aria-current="page" marks the page we are on -->
+                    <a href="dashboard.html" aria-current="page">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19z"/>
+                            <path d="M12 17.5c-2.6-1.8-3.4-2.9-3.4-4.1a1.7 1.7 0 0 1 3.4-.6 1.7 1.7 0 0 1 3.4.6c0 1.2-.8 2.3-3.4 4.1z"/>
+                        </svg>
+                        <span class="visually-hidden">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="medications.html">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="2.5" y="8.5" width="19" height="7" rx="3.5" transform="rotate(-45 12 12)"/>
+                            <path d="M9.5 9.5l5 5"/>
+                        </svg>
+                        <span class="visually-hidden">Medications</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="appointments.html">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="5" width="18" height="16" rx="2.5"/>
+                            <path d="M3 10h18M8 3v4M16 3v4"/>
+                            <rect x="7.5" y="13.5" width="3.5" height="3.5" rx="0.8"/>
+                        </svg>
+                        <span class="visually-hidden">Appointments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="doctors.html">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M6 3H5v5a4 4 0 0 0 8 0V3h-1"/>
+                            <path d="M9 12v2.5a4.5 4.5 0 0 0 9 0V13"/>
+                            <circle cx="18" cy="11" r="2"/>
+                        </svg>
+                        <span class="visually-hidden">Doctor cards</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Bottom group, kept apart from the main links like in the wireframe -->
+            <ul class="sidebar-bottom">
+                <li>
+                    <!-- TODO: settings.html isn't built yet -->
+                    <a href="settings.html">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                        <span class="visually-hidden">Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <!-- same light/dark button as the other pages: theme.js finds it by its class -->
+                    <button type="button" class="theme-toggle" aria-label="Switch to dark mode">
+                        <svg class="icon-moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+                        </svg>
+                        <svg class="icon-sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="4"/>
+                            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+                        </svg>
+                    </button>
+                </li>
+                <li>
+                    <!-- no real login yet, so Log out just goes back to the login page -->
+                    <a href="../login.html">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <path d="M16 17l5-5-5-5M21 12H9"/>
+                        </svg>
+                        <span class="visually-hidden">Log out</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 4b: the main area goes here -->
+    </body>
+</html>
