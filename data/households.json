@@ -1,0 +1,126 @@
+{
+    "managers": [
+        { "id": "m1", "firstName": "Mark", "email": "mark.smith@example.com" },
+        { "id": "m2", "firstName": "Julie", "email": "julie.smith@example.com" },
+        { "id": "m3", "firstName": "David", "email": "david.brown@example.com" },
+        { "id": "m4", "firstName": "Lisa", "email": "lisa.brown@example.com" },
+        { "id": "m5", "firstName": "Anna", "email": "anna.miller@example.com" },
+        { "id": "m6", "firstName": "Sam", "email": "sam.miller@example.com" },
+        { "id": "m7", "firstName": "Kate", "email": "kate.taylor@example.com" }
+    ],
+    "households": [
+        {
+            "id": "h1",
+            "name": "Smith household",
+            "plan": "economic",
+            "managerIds": ["m1", "m2"],
+            "dependents": [
+                {
+                    "id": "d1",
+                    "name": "Emma Smith",
+                    "birthYear": 2019,
+                    "notes": "Allergic to peanuts.",
+                    "medications": [
+                        { "id": "med1", "name": "Vitamin D drops", "dose": "1 drop", "time": "08:00", "lastTaken": "2026-11-12" }
+                    ],
+                    "appointments": [
+                        { "id": "a1", "date": "2026-11-03", "time": "10:30", "with": "Dr. Green", "place": "Maple Family Clinic" },
+                        { "id": "a2", "date": "2026-12-01", "time": "09:00", "with": "Dr. Green", "place": "Maple Family Clinic" }
+                    ],
+                    "doctor": { "name": "Dr. Sarah Green", "specialty": "Pediatrician", "phone": "514-555-0101", "clinic": "Maple Family Clinic" }
+                }
+            ]
+        },
+        {
+            "id": "h2",
+            "name": "Brown household",
+            "plan": "familial",
+            "managerIds": ["m3", "m4"],
+            "dependents": [
+                {
+                    "id": "d2",
+                    "name": "Lucas Brown",
+                    "birthYear": 2012,
+                    "notes": "Uses an inhaler before sports.",
+                    "medications": [
+                        { "id": "med2", "name": "Asthma inhaler", "dose": "2 puffs", "time": "07:30", "lastTaken": "2026-11-11" }
+                    ],
+                    "appointments": [
+                        { "id": "a3", "date": "2026-11-20", "time": "15:45", "with": "Dr. White", "place": "City Lung Clinic" }
+                    ],
+                    "doctor": { "name": "Dr. Paul White", "specialty": "Respirologist", "phone": "514-555-0102", "clinic": "City Lung Clinic" }
+                },
+                {
+                    "id": "d3",
+                    "name": "Mia Brown",
+                    "birthYear": 2016,
+                    "notes": "",
+                    "medications": [],
+                    "appointments": [
+                        { "id": "a4", "date": "2026-11-18", "time": "13:00", "with": "Dr. Hill", "place": "Smile Dental" }
+                    ],
+                    "doctor": { "name": "Dr. Amy Hill", "specialty": "Dentist", "phone": "514-555-0103", "clinic": "Smile Dental" }
+                },
+                {
+                    "id": "d4",
+                    "name": "Leo Brown",
+                    "birthYear": 2021,
+                    "notes": "Ear infection, finishing antibiotics.",
+                    "medications": [
+                        { "id": "med3", "name": "Amoxicillin syrup", "dose": "5 ml", "time": "08:00", "lastTaken": "2026-11-12" },
+                        { "id": "med4", "name": "Amoxicillin syrup", "dose": "5 ml", "time": "20:00", "lastTaken": "2026-11-11" }
+                    ],
+                    "appointments": [
+                        { "id": "a5", "date": "2026-11-09", "time": "11:00", "with": "Dr. Lee", "place": "Park Kids Clinic" },
+                        { "id": "a6", "date": "2026-11-23", "time": "11:00", "with": "Dr. Lee", "place": "Park Kids Clinic" }
+                    ],
+                    "doctor": { "name": "Dr. Jane Lee", "specialty": "Pediatrician", "phone": "514-555-0104", "clinic": "Park Kids Clinic" }
+                }
+            ]
+        },
+        {
+            "id": "h3",
+            "name": "Miller household",
+            "plan": "extended",
+            "managerIds": ["m5", "m6"],
+            "dependents": [
+                {
+                    "id": "d5",
+                    "name": "Lily Miller",
+                    "birthYear": 2018,
+                    "notes": "Wears glasses.",
+                    "medications": [],
+                    "appointments": [
+                        { "id": "a7", "date": "2026-11-27", "time": "16:00", "with": "Dr. Wood", "place": "Clear View Optometry" }
+                    ],
+                    "doctor": { "name": "Dr. Tom Wood", "specialty": "Optometrist", "phone": "514-555-0105", "clinic": "Clear View Optometry" }
+                }
+            ]
+        },
+        {
+            "id": "h4",
+            "name": "Grandma Rose's household",
+            "plan": "extended",
+            "managerIds": ["m5", "m7"],
+            "dependents": [
+                {
+                    "id": "d6",
+                    "name": "Rose Taylor",
+                    "birthYear": 1948,
+                    "notes": "Prefers morning appointments. Hard of hearing on the left side.",
+                    "medications": [
+                        { "id": "med5", "name": "Metformin", "dose": "500 mg", "time": "08:00", "lastTaken": "2026-11-12" },
+                        { "id": "med6", "name": "Metformin", "dose": "500 mg", "time": "18:00", "lastTaken": "2026-11-11" },
+                        { "id": "med7", "name": "Blood pressure pill", "dose": "1 tablet", "time": "08:00", "lastTaken": "2026-11-12" }
+                    ],
+                    "appointments": [
+                        { "id": "a8", "date": "2026-11-05", "time": "09:30", "with": "Dr. Ford", "place": "Oak Medical Centre" },
+                        { "id": "a9", "date": "2026-11-17", "time": "09:00", "with": "Dr. Ford", "place": "Oak Medical Centre" },
+                        { "id": "a10", "date": "2026-12-08", "time": "10:00", "with": "Dr. Clark", "place": "Oak Eye Clinic" }
+                    ],
+                    "doctor": { "name": "Dr. John Ford", "specialty": "Family doctor", "phone": "514-555-0106", "clinic": "Oak Medical Centre" }
+                }
+            ]
+        }
+    ]
+}
