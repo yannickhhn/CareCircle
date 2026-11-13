@@ -67,7 +67,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [ ] PDF report submitted (Dec 3)
 
 ## Current status
-In progress: app/dashboard.html, one page for the demo (sidebar, header and medications section done)
+In progress: app/dashboard.html, one page for the demo (sidebar, header, medications and appointments sections done)
 Blockers: none
-Next step: appointments section, then household section, then dashboard.css (sidebar on computer, bottom bar on phone)
+Next step: household section, then dashboard.css (sidebar on computer, bottom bar on phone)
 Decision: one dashboard page until the demo; separate pages (doctors, etc.) after

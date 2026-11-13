@@ -226,7 +226,128 @@
                 </div>
             </section>
 
-            <!-- next: #appointments section, then #household section -->
+            <!-- ===== Appointments ===== -->
+            <section id="appointments" class="app-section" aria-labelledby="appointments-title">
+                <div class="section-head">
+                    <h2 id="appointments-title">Appointments</h2>
+                    <button type="button" class="add-btn" aria-controls="appt-form-panel">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        <span class="visually-hidden">Add an appointment</span>
+                    </button>
+                </div>
+
+                <div class="section-body">
+                    <!-- Left: the cards. Sample cards for now; JavaScript will build and sort them (soonest first) -->
+                    <div class="appt-lists">
+                        <h3>Upcoming</h3>
+                        <ul class="appt-grid" id="appt-upcoming">
+                            <li class="appt-card">
+                                <h4 class="appt-who">Mia</h4>
+                                <p class="appt-when"><time datetime="2026-11-18T13:00">Wed 18 Nov · 1:00 PM</time></p>
+                                <p class="appt-reason">Dentist</p>
+                                <p class="appt-place">Smile Dental<br>45 Oak Avenue</p>
+                                <!-- preparation notes: one bullet per line typed in the form -->
+                                <ul class="appt-notes">
+                                    <li>Bring her retainer</li>
+                                </ul>
+                            </li>
+                            <li class="appt-card">
+                                <h4 class="appt-who">Lucas</h4>
+                                <p class="appt-when"><time datetime="2026-11-20T15:45">Fri 20 Nov · 3:45 PM</time></p>
+                                <p class="appt-reason">Lung checkup</p>
+                                <p class="appt-place">City Lung Clinic<br>200 Park Road</p>
+                                <ul class="appt-notes">
+                                    <li>Bring the inhaler</li>
+                                    <li>No sports before</li>
+                                </ul>
+                            </li>
+                            <li class="appt-card">
+                                <h4 class="appt-who">Leo</h4>
+                                <p class="appt-when"><time datetime="2026-11-23T11:00">Mon 23 Nov · 11:00 AM</time></p>
+                                <p class="appt-reason">Ear follow-up</p>
+                                <p class="appt-place">Park Kids Clinic<br>12 Lake Street</p>
+                            </li>
+                        </ul>
+
+                        <h3>Completed</h3>
+                        <ul class="appt-grid" id="appt-completed">
+                            <li class="appt-card is-completed">
+                                <!-- avatar in the corner: the manager who went -->
+                                <span class="avatar">
+                                    <span aria-hidden="true">D</span>
+                                    <span class="visually-hidden">David went</span>
+                                </span>
+                                <h4 class="appt-who">Leo</h4>
+                                <p class="appt-when"><time datetime="2026-11-09T11:00">Mon 9 Nov · 11:00 AM</time></p>
+                                <p class="appt-reason">Ear infection</p>
+                                <p class="appt-place">Park Kids Clinic<br>12 Lake Street</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Right panel: the Add form (from the wireframe) -->
+                    <aside class="side-panel" id="appt-form-panel" aria-labelledby="appt-form-title">
+                        <h3 id="appt-form-title">Add an appointment</h3>
+                        <form id="appt-form" method="post">
+                            <div class="field">
+                                <label for="appt-for">For who?</label>
+                                <select id="appt-for" name="dependentId" required aria-describedby="appt-for-error">
+                                    <option value="">Choose a person</option>
+                                    <option value="d2">Lucas</option>
+                                    <option value="d3">Mia</option>
+                                    <option value="d4">Leo</option>
+                                </select>
+                                <p class="field-error" id="appt-for-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="field">
+                                <label for="appt-reason">Reason</label>
+                                <input type="text" id="appt-reason" name="reason" required maxlength="60"
+                                       placeholder="e.g. Dentist" aria-describedby="appt-reason-error">
+                                <p class="field-error" id="appt-reason-error" aria-live="polite"></p>
+                            </div>
+
+                            <!-- date and time side by side (done in CSS) -->
+                            <div class="field-row">
+                                <div class="field">
+                                    <label for="appt-date">Date</label>
+                                    <input type="date" id="appt-date" name="date" required
+                                           aria-describedby="appt-date-error">
+                                    <p class="field-error" id="appt-date-error" aria-live="polite"></p>
+                                </div>
+                                <div class="field">
+                                    <label for="appt-time">Time</label>
+                                    <input type="time" id="appt-time" name="time" required
+                                           aria-describedby="appt-time-error">
+                                    <p class="field-error" id="appt-time-error" aria-live="polite"></p>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label for="appt-address">Address</label>
+                                <input type="text" id="appt-address" name="address" required maxlength="120"
+                                       aria-describedby="appt-address-error">
+                                <p class="field-error" id="appt-address-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="field">
+                                <label for="appt-notes">Notes <span class="optional">(optional, one per line)</span></label>
+                                <textarea id="appt-notes" name="notes" rows="3" maxlength="300"
+                                          placeholder="e.g. No food after midnight"></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn">Add</button>
+                                <button type="reset" class="btn-text">Cancel</button>
+                            </div>
+                        </form>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- next: #household section -->
         </main>
     </body>
 </html>
