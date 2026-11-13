@@ -1,0 +1,9 @@
+[
+    { "id": "m1", "firstName": "Mark", "email": "mark.smith@example.com" },
+    { "id": "m2", "firstName": "Julie", "email": "julie.smith@example.com" },
+    { "id": "m3", "firstName": "David", "email": "david.brown@example.com" },
+    { "id": "m4", "firstName": "Lisa", "email": "lisa.brown@example.com" },
+    { "id": "m5", "firstName": "Anna", "email": "anna.miller@example.com" },
+    { "id": "m6", "firstName": "Sam", "email": "sam.miller@example.com" },
+    { "id": "m7", "firstName": "Kate", "email": "kate.taylor@example.com" }
+]

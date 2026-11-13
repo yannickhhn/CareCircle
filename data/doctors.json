@@ -1,0 +1,9 @@
+[
+    { "id": "doc1", "householdId": "h1", "dependentId": "d1", "name": "Dr. Sarah Green", "role": "Pediatrician", "email": "sarah.green@example.com", "phone": "514-555-0101", "address": "Maple Family Clinic, 30 Pine Street" },
+    { "id": "doc2", "householdId": "h2", "dependentId": "d2", "name": "Dr. Paul White", "role": "Respirologist", "email": "paul.white@example.com", "phone": "514-555-0102", "address": "City Lung Clinic, 200 Park Road" },
+    { "id": "doc3", "householdId": "h2", "dependentId": "d3", "name": "Dr. Amy Hill", "role": "Dentist", "email": "amy.hill@example.com", "phone": "514-555-0103", "address": "Smile Dental, 45 Oak Avenue" },
+    { "id": "doc4", "householdId": "h2", "dependentId": "d4", "name": "Dr. Jane Lee", "role": "Pediatrician", "email": "jane.lee@example.com", "phone": "514-555-0104", "address": "Park Kids Clinic, 12 Lake Street" },
+    { "id": "doc5", "householdId": "h3", "dependentId": "d5", "name": "Dr. Tom Wood", "role": "Optometrist", "email": "tom.wood@example.com", "phone": "514-555-0105", "address": "Clear View Optometry, 8 River Road" },
+    { "id": "doc6", "householdId": "h4", "dependentId": "d6", "name": "Dr. John Ford", "role": "Family doctor", "email": "john.ford@example.com", "phone": "514-555-0106", "address": "Oak Medical Centre, 77 Elm Street" },
+    { "id": "doc7", "householdId": "h4", "dependentId": "d6", "name": "Dr. Ben Clark", "role": "Eye doctor", "email": "ben.clark@example.com", "phone": "514-555-0107", "address": "Oak Eye Clinic, 79 Elm Street" }
+]

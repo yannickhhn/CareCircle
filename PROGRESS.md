@@ -21,9 +21,10 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Dashboard CSS (sidebar on computer, bottom bar on phone, sticky mint header, forms)
 
 ### Mon Nov 16: interactive dashboard
-- [ ] Update households.json with the new fields
+- [x] Split data into managers, households, medications, appointments, doctors JSON files (linked by ids)
 - [ ] Lists drawn from sample data with JavaScript
 - [ ] Daily medication check-off
+- [ ] Side panel Add forms work (medication, appointment, dependent, invite), with validation
 - [ ] Data saved in localStorage
 - [ ] Free-tier limits shown in the UI
 
@@ -70,5 +71,5 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 ## Current status
 In progress: nothing (dashboard HTML and CSS finished)
 Blockers: none
-Next step: update households.json with the new fields (reason, address, notes, givenBy, givenAt, repeat)
+Next step: dashboard JavaScript (lists from the JSON files, check-off, Add forms, free-tier limit). Needs Live Server to read JSON
 Decision: one dashboard page until the demo; separate pages (doctors, etc.) after

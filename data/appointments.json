@@ -1,0 +1,12 @@
+[
+    { "id": "a1", "householdId": "h1", "dependentId": "d1", "reason": "Checkup", "date": "2026-11-03", "time": "10:30", "address": "Maple Family Clinic, 30 Pine Street", "notes": [], "attendedBy": "m1" },
+    { "id": "a2", "householdId": "h1", "dependentId": "d1", "reason": "Vaccines", "date": "2026-12-01", "time": "09:00", "address": "Maple Family Clinic, 30 Pine Street", "notes": ["Bring the vaccination booklet"], "attendedBy": null },
+    { "id": "a3", "householdId": "h2", "dependentId": "d2", "reason": "Lung checkup", "date": "2026-11-20", "time": "15:45", "address": "City Lung Clinic, 200 Park Road", "notes": ["Bring the inhaler", "No sports before"], "attendedBy": null },
+    { "id": "a4", "householdId": "h2", "dependentId": "d3", "reason": "Dentist", "date": "2026-11-18", "time": "13:00", "address": "Smile Dental, 45 Oak Avenue", "notes": ["Bring her retainer"], "attendedBy": null },
+    { "id": "a5", "householdId": "h2", "dependentId": "d4", "reason": "Ear infection", "date": "2026-11-09", "time": "11:00", "address": "Park Kids Clinic, 12 Lake Street", "notes": [], "attendedBy": "m3" },
+    { "id": "a6", "householdId": "h2", "dependentId": "d4", "reason": "Ear follow-up", "date": "2026-11-23", "time": "11:00", "address": "Park Kids Clinic, 12 Lake Street", "notes": [], "attendedBy": null },
+    { "id": "a7", "householdId": "h3", "dependentId": "d5", "reason": "Eye exam", "date": "2026-11-27", "time": "16:00", "address": "Clear View Optometry, 8 River Road", "notes": ["Bring her glasses"], "attendedBy": null },
+    { "id": "a8", "householdId": "h4", "dependentId": "d6", "reason": "Diabetes checkup", "date": "2026-11-05", "time": "09:30", "address": "Oak Medical Centre, 77 Elm Street", "notes": [], "attendedBy": "m7" },
+    { "id": "a9", "householdId": "h4", "dependentId": "d6", "reason": "Blood test", "date": "2026-11-17", "time": "09:00", "address": "Oak Medical Centre, 77 Elm Street", "notes": ["No food after midnight", "Bring the medication list"], "attendedBy": null },
+    { "id": "a10", "householdId": "h4", "dependentId": "d6", "reason": "Eye exam", "date": "2026-12-08", "time": "10:00", "address": "Oak Eye Clinic, 79 Elm Street", "notes": [], "attendedBy": null }
+]

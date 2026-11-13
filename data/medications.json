@@ -1,0 +1,9 @@
+[
+    { "id": "med1", "householdId": "h1", "dependentId": "d1", "name": "Vitamin D drops", "dose": "1 drop", "time": "08:00", "repeat": "daily", "note": "", "givenBy": "m2", "givenAt": "2026-11-12T08:10" },
+    { "id": "med2", "householdId": "h2", "dependentId": "d2", "name": "Asthma inhaler", "dose": "2 puffs", "time": "07:30", "repeat": "daily", "note": "Before school", "givenBy": "m3", "givenAt": "2026-11-11T07:35" },
+    { "id": "med3", "householdId": "h2", "dependentId": "d4", "name": "Amoxicillin syrup", "dose": "5 ml", "time": "08:00", "repeat": "daily", "note": "Shake well", "givenBy": "m4", "givenAt": "2026-11-12T08:05" },
+    { "id": "med4", "householdId": "h2", "dependentId": "d4", "name": "Amoxicillin syrup", "dose": "5 ml", "time": "20:00", "repeat": "daily", "note": "Shake well", "givenBy": "m3", "givenAt": "2026-11-11T20:02" },
+    { "id": "med5", "householdId": "h4", "dependentId": "d6", "name": "Metformin", "dose": "500 mg", "time": "08:00", "repeat": "daily", "note": "With breakfast", "givenBy": "m7", "givenAt": "2026-11-12T08:15" },
+    { "id": "med6", "householdId": "h4", "dependentId": "d6", "name": "Metformin", "dose": "500 mg", "time": "18:00", "repeat": "daily", "note": "With dinner", "givenBy": "m5", "givenAt": "2026-11-11T18:05" },
+    { "id": "med7", "householdId": "h4", "dependentId": "d6", "name": "Blood pressure pill", "dose": "1 tablet", "time": "08:00", "repeat": "daily", "note": "", "givenBy": "m7", "givenAt": "2026-11-12T08:15" }
+]
