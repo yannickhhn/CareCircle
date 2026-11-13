@@ -103,6 +103,8 @@
             <!-- Header: which household we're looking at. JavaScript will fill these in from the data (sample text for now) -->
             <header class="app-header">
                 <h1 id="household-name">Brown household</h1>
+                <!-- TODO (Monday): only shown to managers with more than one household; switches which one is displayed -->
+                <button type="button" class="btn-outline" id="switch-household">Switch household</button>
                 <p class="plan-line">Familial · 5 of 8 members</p>
                 <p class="today"><time datetime="2026-11-12">Thursday, November 12</time></p>
             </header>
@@ -347,7 +349,107 @@
                 </div>
             </section>
 
-            <!-- next: #household section -->
+            <!-- ===== Household ===== -->
+            <section id="household" class="app-section" aria-labelledby="household-title">
+                <div class="section-head">
+                    <h2 id="household-title">Household</h2>
+                    <p class="plan-line">Familial · 5 of 8 members</p>
+                </div>
+
+                <div class="section-body">
+                    <!-- Left: who is in the household. Sample people for now; JavaScript will build the lists -->
+                    <div class="member-lists">
+                        <h3>Managers</h3>
+                        <ul class="member-list" id="manager-list">
+                            <li class="member-row">
+                                <span class="avatar" aria-hidden="true">D</span>
+                                <span class="member-name">David</span>
+                                <span class="member-detail">david.brown@example.com</span>
+                            </li>
+                            <li class="member-row">
+                                <span class="avatar" aria-hidden="true">L</span>
+                                <span class="member-name">Lisa</span>
+                                <span class="member-detail">lisa.brown@example.com</span>
+                            </li>
+                        </ul>
+
+                        <h3>Dependents</h3>
+                        <ul class="member-list" id="dependent-list">
+                            <li class="member-row">
+                                <span class="avatar" aria-hidden="true">L</span>
+                                <span class="member-name">Lucas</span>
+                                <span class="member-detail">Born 2012</span>
+                                <!-- the hidden name tells screen readers which person the button is for -->
+                                <button type="button" class="btn-text">Edit<span class="visually-hidden"> Lucas</span></button>
+                                <button type="button" class="delete-btn">Remove<span class="visually-hidden"> Lucas</span></button>
+                            </li>
+                            <li class="member-row">
+                                <span class="avatar" aria-hidden="true">M</span>
+                                <span class="member-name">Mia</span>
+                                <span class="member-detail">Born 2016</span>
+                                <button type="button" class="btn-text">Edit<span class="visually-hidden"> Mia</span></button>
+                                <button type="button" class="delete-btn">Remove<span class="visually-hidden"> Mia</span></button>
+                            </li>
+                            <li class="member-row">
+                                <span class="avatar" aria-hidden="true">L</span>
+                                <span class="member-name">Leo</span>
+                                <span class="member-detail">Born 2021</span>
+                                <button type="button" class="btn-text">Edit<span class="visually-hidden"> Leo</span></button>
+                                <button type="button" class="delete-btn">Remove<span class="visually-hidden"> Leo</span></button>
+                            </li>
+                        </ul>
+
+                        <!-- free-tier limit: "hidden" until JavaScript finds the household is full, then the forms get disabled -->
+                        <p class="plan-full" id="plan-full" hidden>Your plan is full (8 of 8). Upgrade to add more people.</p>
+                    </div>
+
+                    <!-- Right panel: two small forms -->
+                    <aside class="side-panel" aria-label="Add people to the household">
+                        <h3 id="dependent-form-title">Add a dependent</h3>
+                        <form id="dependent-form" method="post" aria-labelledby="dependent-form-title">
+                            <div class="field">
+                                <label for="dep-name">Name</label>
+                                <input type="text" id="dep-name" name="name" required maxlength="40"
+                                       aria-describedby="dep-name-error">
+                                <p class="field-error" id="dep-name-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="field">
+                                <label for="dep-birth-year">Birth year</label>
+                                <input type="number" id="dep-birth-year" name="birthYear" required
+                                       min="1900" max="2026" aria-describedby="dep-birth-year-error">
+                                <p class="field-error" id="dep-birth-year-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="field">
+                                <label for="dep-notes">Notes <span class="optional">(optional)</span></label>
+                                <textarea id="dep-notes" name="notes" rows="2" maxlength="200"
+                                          placeholder="e.g. Allergic to peanuts"></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn">Add</button>
+                                <button type="reset" class="btn-text">Cancel</button>
+                            </div>
+                        </form>
+
+                        <h3 id="invite-form-title">Invite a co-manager</h3>
+                        <!-- no email is sent: the person is added by their email address -->
+                        <form id="invite-form" method="post" aria-labelledby="invite-form-title">
+                            <div class="field">
+                                <label for="invite-email">Their email</label>
+                                <input type="email" id="invite-email" name="email" required
+                                       autocomplete="off" aria-describedby="invite-email-error">
+                                <p class="field-error" id="invite-email-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn">Invite</button>
+                            </div>
+                        </form>
+                    </aside>
+                </div>
+            </section>
         </main>
     </body>
 </html>
