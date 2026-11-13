@@ -18,10 +18,10 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Live validation on register and login: email format, password rules
 - [x] Sample households.json (4 households, one per plan plus a second Extended one)
 - [x] Static household dashboard page HTML (app/dashboard.html: sidebar, header, medications, appointments, household)
-- [ ] Dashboard CSS (sidebar on computer, bottom bar on phone)
+- [x] Dashboard CSS (sidebar on computer, bottom bar on phone, sticky mint header, forms)
 
 ### Mon Nov 16: interactive dashboard
-- [ ] Static household dashboard page (finish)
+- [ ] Update households.json with the new fields
 - [ ] Lists drawn from sample data with JavaScript
 - [ ] Daily medication check-off
 - [ ] Data saved in localStorage
@@ -68,7 +68,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [ ] PDF report submitted (Dec 3)
 
 ## Current status
-In progress: dashboard.css (6a layout and 6b sections done; 6c forms and side panel next)
+In progress: nothing (dashboard HTML and CSS finished)
 Blockers: none
-Next step: dashboard.css (sidebar on computer, bottom bar on phone, icon colours), then update households.json with the new fields (reason, address, notes, givenBy, givenAt, repeat)
+Next step: update households.json with the new fields (reason, address, notes, givenBy, givenAt, repeat)
 Decision: one dashboard page until the demo; separate pages (doctors, etc.) after

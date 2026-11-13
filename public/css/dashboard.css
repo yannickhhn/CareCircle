@@ -442,8 +442,113 @@
 }
 
 
+/* ---------- 6c: forms and side panel ---------- */
+
+/* phone: the list first, the side panel under it (it becomes a pop-up with JavaScript later) */
+.section-body {
+    margin-top: var(--space-md);
+}
+.side-panel {
+    margin-top: var(--space-lg);
+    padding: var(--space-lg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--bg-page);
+}
+.side-panel h3 {
+    margin: 0 0 var(--space-md);
+    font-size: 1.125rem;
+}
+/* the Household panel has two forms: space before the second title */
+.side-panel form + h3 {
+    margin-top: var(--space-xl);
+}
+.side-panel form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* auth.css only styles <input>: dropdowns and text boxes get the same look here */
+.field select,
+.field textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 1rem; /* 16px: phones don't zoom in */
+}
+.field select {
+    height: 44px;
+    padding: 0 var(--space-sm);
+}
+.field textarea {
+    padding: var(--space-sm) var(--space-md);
+    resize: vertical; /* can be made taller, not wider */
+}
+.field select:focus,
+.field textarea:focus {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 1px;
+}
+.field select[aria-invalid="true"] {
+    border: 2px solid var(--error-border);
+}
+/* "(optional)" next to a label */
+.optional {
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* date and time side by side */
+.field-row {
+    display: flex;
+    gap: var(--space-md);
+}
+.field-row .field {
+    flex: 1;
+    min-width: 0; /* lets the two inputs shrink on a narrow phone */
+}
+
+/* Add / Cancel buttons */
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+.form-actions .btn {
+    border: none; /* .btn was made for links; a <button> has a border by default */
+}
+.form-actions .btn-text {
+    text-decoration: none;
+}
+
+/* dark mode: same fix auth.css uses for inputs */
+:root[data-theme="dark"] .field select,
+:root[data-theme="dark"] .field textarea {
+    border-color: var(--border);
+}
+:root[data-theme="dark"] .field select[aria-invalid="true"] {
+    border-color: var(--error-border);
+}
+
+
 /* ---------- computer ---------- */
 @media (min-width: 768px) {
+    /* list on the left, side panel on the right (300px), like the wireframe */
+    .section-body {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: var(--space-xl);
+        align-items: start; /* the panel keeps its own height */
+    }
+    .side-panel {
+        margin-top: 0;
+    }
+
     .app-header h1 {
         font-size: 2rem;
     }
@@ -451,6 +556,17 @@
     .app-header {
         margin: 0 calc(-1 * var(--space-xl));
         padding: var(--space-md) var(--space-xl);
+        height: 136px; /* fixed, so the jump below can match it exactly */
+    }
+    /* a sidebar jump puts the section's top line right behind the header's bottom line (136 - 1),
+       so there's no gap and no double line */
+    .app-section {
+        scroll-margin-top: 135px;
+    }
+    /* the first section has no top padding, so it adds its 24px margin (135 + 24)
+       and lands where it sits when the page loads */
+    .app-header + .app-section {
+        scroll-margin-top: 159px;
     }
     /* a thin line before the time, like the divider in the wireframe */
     .med-row time {
