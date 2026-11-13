@@ -11,25 +11,18 @@
         <script src="../js/theme.js" defer></script>
     </head>
     <body class="app-page">
-        <!-- Sidebar: the same on every page inside app/. Icons only; the hidden text is read by screen readers -->
+        <!-- Sidebar: left side on computer, fixed bar at the bottom on phone (done in CSS).
+             Icons only; the hidden text is read by screen readers.
+             Everything is on this one page for now, so each link jumps to a section with # -->
         <nav class="sidebar" aria-label="Main">
-            <a href="dashboard.html" class="sidebar-logo">
-                <img src="../assets/carecircle-icon.png" alt="CareCircle home" width="40" height="40">
+            <!-- "#top" always scrolls back to the top of the page -->
+            <a href="#top" class="sidebar-logo">
+                <img src="../assets/carecircle-icon.png" alt="CareCircle, back to top" width="40" height="40">
             </a>
 
             <ul class="sidebar-links">
                 <li>
-                    <!-- aria-current="page" marks the page we are on -->
-                    <a href="dashboard.html" aria-current="page">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19z"/>
-                            <path d="M12 17.5c-2.6-1.8-3.4-2.9-3.4-4.1a1.7 1.7 0 0 1 3.4-.6 1.7 1.7 0 0 1 3.4.6c0 1.2-.8 2.3-3.4 4.1z"/>
-                        </svg>
-                        <span class="visually-hidden">Home</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="medications.html">
+                    <a href="#medications">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <rect x="2.5" y="8.5" width="19" height="7" rx="3.5" transform="rotate(-45 12 12)"/>
                             <path d="M9.5 9.5l5 5"/>
@@ -38,7 +31,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="appointments.html">
+                    <a href="#appointments">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <rect x="3" y="5" width="18" height="16" rx="2.5"/>
                             <path d="M3 10h18M8 3v4M16 3v4"/>
@@ -48,7 +41,17 @@
                     </a>
                 </li>
                 <li>
-                    <a href="doctors.html">
+                    <a href="#household">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19z"/>
+                            <path d="M12 17.5c-2.6-1.8-3.4-2.9-3.4-4.1a1.7 1.7 0 0 1 3.4-.6 1.7 1.7 0 0 1 3.4.6c0 1.2-.8 2.3-3.4 4.1z"/>
+                        </svg>
+                        <span class="visually-hidden">Household</span>
+                    </a>
+                </li>
+                <!-- TODO: doctor cards come after the demo; "hidden" keeps this link off the page until then -->
+                <li hidden>
+                    <a href="#doctors">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M6 3H5v5a4 4 0 0 0 8 0V3h-1"/>
                             <path d="M9 12v2.5a4.5 4.5 0 0 0 9 0V13"/>
@@ -96,6 +99,134 @@
             </ul>
         </nav>
 
-        <!-- 4b: the main area goes here -->
+        <main class="app-main">
+            <!-- Header: which household we're looking at. JavaScript will fill these in from the data (sample text for now) -->
+            <header class="app-header">
+                <h1 id="household-name">Brown household</h1>
+                <p class="plan-line">Familial · 5 of 8 members</p>
+                <p class="today"><time datetime="2026-11-12">Thursday, November 12</time></p>
+            </header>
+
+            <!-- ===== Medications ===== -->
+            <section id="medications" class="app-section" aria-labelledby="medications-title">
+                <div class="section-head">
+                    <h2 id="medications-title">Medication checklist</h2>
+                    <!-- (+) opens the Add form: always visible on computer, a pop-up on phone (later, with JS) -->
+                    <button type="button" class="add-btn" aria-controls="med-form-panel">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        <span class="visually-hidden">Add a medication</span>
+                    </button>
+                </div>
+
+                <p class="warning-banner">Please double check before administering.</p>
+
+                <div class="section-body">
+                    <!-- Left: the lists. Sample rows for now; JavaScript will build them from the data -->
+                    <div class="med-lists">
+                        <h3>Upcoming</h3>
+                        <ul class="med-list" id="med-upcoming">
+                            <!-- overdue: its time has passed and it hasn't been given, so it goes first -->
+                            <li class="med-row is-overdue">
+                                <input type="checkbox" id="dose-med2">
+                                <label for="dose-med2">
+                                    <span class="med-who">Lucas</span>
+                                    <span class="med-name">Asthma inhaler · 2 puffs</span>
+                                </label>
+                                <span class="badge-overdue">Overdue</span>
+                                <time datetime="2026-11-12T07:30">7:30 AM <span>Thu 12 Nov</span></time>
+                                <button type="button" class="delete-btn">Delete</button>
+                            </li>
+                            <li class="med-row">
+                                <input type="checkbox" id="dose-med4">
+                                <label for="dose-med4">
+                                    <span class="med-who">Leo</span>
+                                    <span class="med-name">Amoxicillin syrup · 5 ml</span>
+                                </label>
+                                <time datetime="2026-11-12T20:00">8:00 PM <span>Thu 12 Nov</span></time>
+                                <button type="button" class="delete-btn">Delete</button>
+                            </li>
+                        </ul>
+
+                        <h3>Filled</h3>
+                        <ul class="med-list" id="med-filled">
+                            <li class="med-row is-filled">
+                                <!-- avatar: first letter of who the dose was for (the name is already written next to it) -->
+                                <span class="avatar" aria-hidden="true">L</span>
+                                <input type="checkbox" id="dose-med3" checked>
+                                <label for="dose-med3">
+                                    <span class="med-who">Leo</span>
+                                    <span class="med-name">Amoxicillin syrup · 5 ml</span>
+                                </label>
+                                <time datetime="2026-11-12T08:00">8:00 AM <span>Thu 12 Nov</span></time>
+                                <span class="given-by">By Lisa</span>
+                                <button type="button" class="delete-btn">Delete</button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Right panel: the Add form (from the wireframe; no file upload for now) -->
+                    <aside class="side-panel" id="med-form-panel" aria-labelledby="med-form-title">
+                        <h3 id="med-form-title">Add a medication</h3>
+                        <form id="med-form" method="post">
+                            <div class="field">
+                                <label for="med-for">For who?</label>
+                                <select id="med-for" name="dependentId" required aria-describedby="med-for-error">
+                                    <option value="">Choose a person</option>
+                                    <option value="d2">Lucas</option>
+                                    <option value="d3">Mia</option>
+                                    <option value="d4">Leo</option>
+                                </select>
+                                <p class="field-error" id="med-for-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="field">
+                                <label for="med-name">Medication name</label>
+                                <input type="text" id="med-name" name="name" required maxlength="60"
+                                       aria-describedby="med-name-error">
+                                <p class="field-error" id="med-name-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="field">
+                                <label for="med-dose">Dose</label>
+                                <input type="text" id="med-dose" name="dose" required maxlength="30"
+                                       placeholder="e.g. 500 mg" aria-describedby="med-dose-error">
+                                <p class="field-error" id="med-dose-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="field">
+                                <label for="med-time">Time</label>
+                                <input type="time" id="med-time" name="time" required
+                                       aria-describedby="med-time-error">
+                                <p class="field-error" id="med-time-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="field">
+                                <label for="med-repeat">Repeat</label>
+                                <select id="med-repeat" name="repeat">
+                                    <option value="daily">Every day</option>
+                                    <option value="weekly">Every week</option>
+                                    <option value="none">Only once</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label for="med-note">Note <span class="optional">(optional)</span></label>
+                                <textarea id="med-note" name="note" rows="3" maxlength="200"></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn">Add</button>
+                                <!-- type="reset" empties the form; on phone it will also close the pop-up -->
+                                <button type="reset" class="btn-text">Cancel</button>
+                            </div>
+                        </form>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- next: #appointments section, then #household section -->
+        </main>
     </body>
 </html>
