@@ -68,7 +68,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [ ] PDF report submitted (Dec 3)
 
 ## Current status
-In progress: nothing (dashboard HTML finished)
+In progress: dashboard.css (6a layout and 6b sections done; 6c forms and side panel next)
 Blockers: none
-Next step: dashboard.css (sidebar on computer, bottom bar on phone, icon colours), then update households.json with the new fields (reason, address, notes, given by, repeat)
+Next step: dashboard.css (sidebar on computer, bottom bar on phone, icon colours), then update households.json with the new fields (reason, address, notes, givenBy, givenAt, repeat)
 Decision: one dashboard page until the demo; separate pages (doctors, etc.) after

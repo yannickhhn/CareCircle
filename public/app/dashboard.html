@@ -7,6 +7,8 @@
         <!-- this page is inside app/, so "../" goes up one folder to reach the shared files -->
         <link rel="icon" href="../assets/carecircle-icon.png">
         <link href="../css/style.css" rel="stylesheet">
+        <!-- auth.css: reuses the form field styles from the login and register pages -->
+        <link href="../css/auth.css" rel="stylesheet">
         <link href="../css/dashboard.css" rel="stylesheet">
         <script src="../js/theme.js" defer></script>
     </head>
@@ -63,18 +65,10 @@
             </ul>
 
             <!-- Bottom group, kept apart from the main links like in the wireframe -->
+            <!-- order from top to bottom: theme, settings, log out -->
             <ul class="sidebar-bottom">
-                <li>
-                    <!-- TODO: settings.html isn't built yet -->
-                    <a href="settings.html">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <circle cx="12" cy="12" r="3"/>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                        </svg>
-                        <span class="visually-hidden">Settings</span>
-                    </a>
-                </li>
-                <li>
+                <!-- "bar-top": on phone this moves to the top of the page instead of the bottom bar -->
+                <li class="bar-top">
                     <!-- same light/dark button as the other pages: theme.js finds it by its class -->
                     <button type="button" class="theme-toggle" aria-label="Switch to dark mode">
                         <svg class="icon-moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -87,6 +81,17 @@
                     </button>
                 </li>
                 <li>
+                    <!-- TODO: settings.html isn't built yet -->
+                    <a href="settings.html">
+                        <!-- 20px: a little smaller than the other icons -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                        <span class="visually-hidden">Settings</span>
+                    </a>
+                </li>
+                <li class="bar-top bar-top-logout">
                     <!-- no real login yet, so Log out just goes back to the login page -->
                     <a href="../login.html">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -103,9 +108,10 @@
             <!-- Header: which household we're looking at. JavaScript will fill these in from the data (sample text for now) -->
             <header class="app-header">
                 <h1 id="household-name">Brown household</h1>
+                <p class="plan-line">Familial</p>
                 <!-- TODO (Monday): only shown to managers with more than one household; switches which one is displayed -->
                 <button type="button" class="btn-outline" id="switch-household">Switch household</button>
-                <p class="plan-line">Familial · 5 of 8 members</p>
+                <p class="member-count">5 members</p>
                 <p class="today"><time datetime="2026-11-12">Thursday, November 12</time></p>
             </header>
 
@@ -162,7 +168,18 @@
                                     <span class="med-name">Amoxicillin syrup · 5 ml</span>
                                 </label>
                                 <time datetime="2026-11-12T08:00">8:00 AM <span>Thu 12 Nov</span></time>
-                                <span class="given-by">By Lisa</span>
+                                <!-- who ticked the box and when (JavaScript will use the logged-in manager and the current time) -->
+                                <span class="given-by">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <circle cx="12" cy="12" r="9"/>
+                                        <path d="M8 12.5l2.7 2.7L16 9.8"/>
+                                    </svg>
+                                    <span class="visually-hidden">Given by</span>
+                                    Lisa
+                                    <span aria-hidden="true">·</span>
+                                    <span class="visually-hidden">at</span>
+                                    <time datetime="2026-11-12T08:05">8:05 AM</time>
+                                </span>
                                 <button type="button" class="delete-btn">Delete</button>
                             </li>
                         </ul>
@@ -353,7 +370,7 @@
             <section id="household" class="app-section" aria-labelledby="household-title">
                 <div class="section-head">
                     <h2 id="household-title">Household</h2>
-                    <p class="plan-line">Familial · 5 of 8 members</p>
+                    <p class="plan-line">Familial · 5 members</p>
                 </div>
 
                 <div class="section-body">

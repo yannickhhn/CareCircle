@@ -1,0 +1,498 @@
+/* Dashboard (app/dashboard.html).
+   Loaded after style.css and auth.css, so it reuses their colours, spacing, buttons and form fields.
+   Phone styles first; the computer layout is in the media query at the bottom. */
+
+/* ---------- 6a: layout and sidebar ---------- */
+
+/* hides text on screen but screen readers still read it (the icon labels) */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* phone: the sidebar is a bar fixed along the bottom of the screen */
+.sidebar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10; /* stays above the page content */
+    display: flex;
+    align-items: center;
+    height: 64px;
+    padding: 0 var(--space-sm);
+    background-color: var(--bg-page);
+    border-top: 1px solid var(--border);
+}
+.sidebar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+/* pill, calendar and house share most of the bar, the gear gets the rest */
+.sidebar-links {
+    display: flex;
+    flex: 3;
+    justify-content: space-around;
+}
+.sidebar-bottom {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+/* every icon link: a 44px square, big enough to tap */
+.sidebar-links a,
+.sidebar-bottom a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+    transition: background-color 0.2s ease;
+}
+.sidebar-links a:hover,
+.sidebar-bottom a:hover {
+    background-color: var(--bg-surface);
+}
+.sidebar a:focus-visible,
+.sidebar button:focus-visible {
+    outline: 3px solid var(--focus-ring); /* --focus-ring comes from auth.css */
+    outline-offset: 2px;
+}
+
+/* icon colours from the palette (the icons use currentColor, so they take the link's colour) */
+.sidebar-links a[href="#medications"] {
+    color: var(--accent-mint);
+}
+.sidebar-links a[href="#appointments"],
+.sidebar-links a[href="#doctors"] {
+    color: var(--accent-sky);
+}
+.sidebar-links a[href="#household"] {
+    color: var(--accent-periwinkle);
+}
+
+/* phone: logo top left, theme button and Log out top right (they scroll away with the page) */
+.sidebar-logo {
+    position: absolute;
+    top: var(--space-md);
+    left: var(--space-md);
+}
+.sidebar-logo img {
+    display: block;
+}
+.bar-top {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+}
+/* Log out sits to the left of the theme button */
+.bar-top-logout {
+    right: 64px;
+}
+/* the theme button: a little bigger than on the landing page, to match the other icons */
+.sidebar .theme-toggle {
+    width: 40px;
+    height: 40px;
+}
+
+/* main area: room at the top for the logo strip and at the bottom for the bar */
+.app-main {
+    padding: 80px var(--space-md) 96px;
+}
+
+
+/* ---------- 6b: sections and content ---------- */
+
+/* buttons don't take the page font by default */
+.app-main button {
+    font: inherit;
+    cursor: pointer;
+}
+
+/* dashboard colours: plain page (no gradient), mint header */
+.app-page {
+    --gradient-top: var(--bg-page); /* same colour at both ends of the gradient = no gradient */
+    --header-bg: var(--card-mint);
+}
+/* dark mode: plain header too, like the rest of the site */
+:root[data-theme="dark"] .app-page {
+    --header-bg: var(--bg-page);
+}
+
+/* page header: "Brown household  Familial" with the Switch button on the right,
+   then the member count and the date, each on its own line */
+.app-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline; /* "Familial" sits on the same text line as the title */
+    gap: var(--space-xs) var(--space-md);
+    /* stays at the top of the screen while scrolling */
+    position: sticky;
+    top: 0;
+    z-index: 5; /* above the cards, below the sidebar (10) */
+    /* the negative margin stretches the background over the side padding of <main> */
+    margin: 0 calc(-1 * var(--space-md));
+    padding: var(--space-md);
+    background-color: var(--header-bg); /* without a background the page shows through */
+    border-bottom: 1px solid var(--border);
+}
+.app-header h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 1.2;
+}
+.app-header .plan-line {
+    margin: 0;
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+}
+#switch-household {
+    margin-left: auto; /* pushes the button to the far right */
+    background: none;
+    color: var(--text-primary);
+}
+.app-header .member-count,
+.app-header .today {
+    flex-basis: 100%; /* each on its own line */
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+/* each section: a line above it and space between sections */
+.app-section {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border);
+    scroll-margin-top: 160px; /* a sidebar jump stops below the sticky header */
+}
+/* the first section sits right under the header's bottom line: no line of its own and less space */
+.app-header + .app-section {
+    margin-top: var(--space-lg);
+    padding-top: 0;
+    border-top: none;
+}
+/* section title on the left, (+) button or plan line on the right */
+.section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+}
+.section-head h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+.section-head .plan-line {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+/* the round (+) button, lifts on hover like the other buttons */
+.add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--accent-periwinkle);
+    border-radius: 50%;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.add-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px var(--shadow-md);
+}
+.app-main button:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+/* "Please double check before administering." */
+.warning-banner {
+    /* plain grey text under the title, like the date in the header */
+    margin: var(--space-xs) 0 0;
+    color: var(--text-secondary);
+}
+
+/* small titles inside a section: Upcoming, Filled, Completed, Managers, Dependents */
+.med-lists h3,
+.appt-lists h3,
+.member-lists h3 {
+    margin: var(--space-lg) 0 var(--space-sm);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--border);
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+/* remove the bullets from the lists of rows and cards */
+.med-list,
+.appt-grid,
+.member-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* round avatar with a first letter */
+.avatar {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--card-periwinkle);
+    color: var(--card-periwinkle-text);
+    font-weight: 700;
+}
+
+/* red-ish text button used for Delete and Remove */
+.delete-btn {
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: none;
+    color: var(--error-text); /* from auth.css */
+}
+.delete-btn:hover {
+    background-color: var(--card-rose);
+}
+/* plain text button used for Edit and Cancel */
+.btn-text {
+    padding: var(--space-xs) var(--space-sm);
+    border: none;
+    background: none;
+    color: var(--focus-ring); /* the strong blue: readable as text */
+    text-decoration: underline;
+}
+
+/* --- medication rows --- */
+.med-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+/* one row: items wrap onto a second line on a small screen (the time goes under the name) */
+.med-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm) var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--bg-page);
+}
+.med-row input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    accent-color: var(--accent-mint); /* colour of the tick box when checked */
+    cursor: pointer;
+}
+.med-row label {
+    display: flex;
+    flex: 1 1 12rem; /* takes the free space, wraps the rest below when narrow */
+    flex-direction: column;
+    cursor: pointer;
+}
+.med-who {
+    font-weight: 700;
+}
+.med-name {
+    color: var(--text-secondary);
+}
+.med-row time {
+    font-weight: 600;
+}
+.med-row time span {
+    display: block; /* the date goes under the hour */
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+/* overdue: pale rose row, rose edge and a rose badge */
+.med-row.is-overdue {
+    border-left: 4px solid var(--accent-rose);
+    background-color: var(--card-rose);
+}
+.badge-overdue {
+    padding: 2px 10px;
+    border-radius: 999px;
+    background-color: var(--accent-rose);
+    color: var(--text-on-accent);
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+/* filled: pale mint row with a mint edge */
+.med-row.is-filled {
+    border-left: 4px solid var(--accent-mint);
+    background-color: var(--card-mint);
+}
+/* "✓ Lisa · 8:05 AM": who gave the dose and when */
+.given-by {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 2px 10px;
+    border: 1px solid var(--accent-mint);
+    border-radius: 999px;
+    background-color: var(--bg-page);
+    font-size: 0.875rem;
+}
+/* the time inside the pill: no divider line and normal weight (unlike the scheduled time) */
+.med-row .given-by time {
+    padding-left: 0;
+    border-left: none;
+    font-weight: 400;
+}
+
+/* --- appointment cards --- */
+/* as many 220px+ columns as fit, wrapping onto new lines */
+.appt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-md);
+}
+.appt-card {
+    position: relative; /* lets the avatar sit in the corner */
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-md);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--accent-sky);
+    border-radius: var(--radius);
+    background-color: var(--bg-page);
+}
+.appt-card p {
+    margin: 0;
+}
+.appt-who {
+    margin: 0;
+    font-size: 1.125rem;
+}
+.appt-when {
+    font-weight: 600;
+}
+.appt-place {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+/* preparation notes in a soft sky box, like the wireframe */
+.appt-notes {
+    margin: var(--space-sm) 0 0;
+    padding: var(--space-sm) var(--space-md) var(--space-sm) 1.75rem;
+    border-radius: 8px;
+    background-color: var(--card-sky);
+    color: var(--card-sky-text);
+}
+/* completed: grey card, avatar of who went in the top right corner */
+.appt-card.is-completed {
+    border-top-color: var(--border);
+    background-color: var(--bg-surface);
+}
+.appt-card .avatar {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+}
+
+/* --- household members --- */
+.member-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm) var(--space-md);
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--border);
+}
+.member-name {
+    font-weight: 700;
+}
+.member-detail {
+    flex: 1; /* pushes Edit and Remove to the right */
+    color: var(--text-secondary);
+}
+/* free-tier limit reached */
+.plan-full {
+    margin: var(--space-md) 0 0;
+    padding: var(--space-sm) var(--space-md);
+    border-left: 4px solid var(--accent-rose);
+    border-radius: var(--radius);
+    background-color: var(--card-rose);
+    color: var(--card-rose-text);
+    font-weight: 600;
+}
+
+
+/* ---------- computer ---------- */
+@media (min-width: 768px) {
+    .app-header h1 {
+        font-size: 2rem;
+    }
+    /* <main> has wider side padding on computer, so the header stretches further */
+    .app-header {
+        margin: 0 calc(-1 * var(--space-xl));
+        padding: var(--space-md) var(--space-xl);
+    }
+    /* a thin line before the time, like the divider in the wireframe */
+    .med-row time {
+        padding-left: var(--space-md);
+        border-left: 1px solid var(--border);
+    }
+
+    /* the sidebar becomes a column fixed on the left */
+    .sidebar {
+        top: 0;
+        right: auto;
+        flex-direction: column;
+        width: 72px;
+        height: auto;
+        padding: var(--space-md) 0;
+        border-top: none;
+        border-right: 1px solid var(--border);
+    }
+    .sidebar-links,
+    .sidebar-bottom {
+        flex: none;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+    .sidebar-links {
+        margin-top: var(--space-lg);
+    }
+    /* pushes Settings, theme and Log out to the bottom, like the wireframe */
+    .sidebar-bottom {
+        margin-top: auto;
+    }
+    /* logo, theme and Log out go back into the sidebar */
+    .sidebar-logo,
+    .bar-top {
+        position: static;
+    }
+
+    /* main area starts after the 72px sidebar */
+    .app-main {
+        margin-left: 72px;
+        /* no top padding: the mint header touches the top of the screen (it has its own padding) */
+        padding: 0 var(--space-xl) var(--space-xl);
+    }
+}
