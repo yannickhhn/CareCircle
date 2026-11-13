@@ -37,8 +37,9 @@
     box-shadow: 0 12px 32px var(--shadow-sm);
 }
 .auth-card h1 {
-    margin: 0;
+    margin: 1vw;
     font-size: 1.75rem;
+    text-align: center;
 }
 .auth-tagline {
     margin: var(--space-xs) 0 var(--space-lg);
