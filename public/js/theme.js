@@ -2,6 +2,7 @@
 const themeButton = document.querySelector(".theme-toggle");
 const root = document.documentElement;
 
+// Applies light or dark mode, updates the button label and remembers the choice
 function setTheme(theme) {
     root.setAttribute("data-theme", theme);
     themeButton.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
@@ -12,6 +13,7 @@ function setTheme(theme) {
     }
 }
 
+// On load: start with the saved theme, or light mode
 let savedTheme = null;
 try {
     savedTheme = localStorage.getItem("theme");
@@ -19,6 +21,7 @@ try {
 }
 setTheme(savedTheme === "dark" ? "dark" : "light");
 
+// The moon/sun button switches between light and dark
 themeButton.addEventListener("click", function () {
     const isDark = root.getAttribute("data-theme") === "dark";
     setTheme(isDark ? "light" : "dark");

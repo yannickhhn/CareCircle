@@ -3,6 +3,7 @@ const DATA_URL = "../../data/";
 const data = {};
 const CURRENT_HOUSEHOLD_ID = "h1";
 
+// Fetches one JSON file from data/ and returns its contents, or throws if it can't be loaded
 async function loadJSON(fileName) {
     const response = await fetch(DATA_URL + fileName);
     if (!response.ok) {
@@ -11,14 +12,14 @@ async function loadJSON(fileName) {
     return response.json();
 }
 
-// Dates: "2026-11-16" in local time
+// Returns a date as "2026-11-16" in local time (toISOString uses UTC and can be a day off)
 function toDateString(date) {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     return date.getFullYear() + "-" + month + "-" + day;
 }
 
-// Header: household name, plan, member count and today's date
+// Fills the header with the household's name, plan, member count and today's date
 function renderHeader(household) {
     const plan = household.plan.charAt(0).toUpperCase() + household.plan.slice(1);
     const memberCount = household.managerIds.length + household.dependents.length;
@@ -33,6 +34,7 @@ function renderHeader(household) {
     time.textContent = today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 }
 
+// Loads all the data, finds the current household and draws the dashboard
 async function loadData() {
     try {
         data.managers = await loadJSON("managers.json");

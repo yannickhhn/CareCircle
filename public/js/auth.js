@@ -1,6 +1,7 @@
 // Show/hide password
 const toggleButtons = document.querySelectorAll(".toggle-password");
 
+// Each Show/Hide button switches its password field between hidden and visible text
 toggleButtons.forEach(function (button) {
     const input = document.getElementById(button.getAttribute("aria-controls"));
 
@@ -16,23 +17,27 @@ toggleButtons.forEach(function (button) {
 
 // Form validation
 
+// Returns true if the email looks like name@site.domain
 function isValidEmail(email) {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(email);
 }
 
+// Shows a message under the field and marks it invalid (red border)
 function showError(input, message) {
     const errorBox = document.getElementById(input.id + "-error");
     errorBox.textContent = message;
     input.setAttribute("aria-invalid", "true");
 }
 
+// Removes the field's message and its invalid mark
 function clearError(input) {
     const errorBox = document.getElementById(input.id + "-error");
     errorBox.textContent = "";
     input.removeAttribute("aria-invalid");
 }
 
+// Checks one field against its rules, shows or clears its error, and returns true if valid
 function validateField(input) {
     const value = input.value.trim();
     let message = "";
@@ -65,11 +70,12 @@ const confirmInput = document.getElementById("confirm-password"); // null on the
 form.noValidate = true;
 
 inputs.forEach(function (input) {
+    // Checks a field when the user leaves it
     input.addEventListener("blur", function () {
         validateField(input);
     });
 
-    // re-check while typing once a field shows an error
+    // Re-checks while typing once a field shows an error; a new password re-checks the confirm field
     input.addEventListener("input", function () {
         if (input.getAttribute("aria-invalid") === "true") {
             validateField(input);
@@ -80,7 +86,7 @@ inputs.forEach(function (input) {
     });
 });
 
-// Submit
+// Submit: checks every field and puts the cursor on the first wrong one
 form.addEventListener("submit", function (event) {
     // no server route yet
     event.preventDefault();
