@@ -280,8 +280,6 @@
                         <h3>Dependents</h3>
                         <ul class="member-list" id="dependent-list"></ul>
 
-                        <!-- Plan full message: shown when the free-tier limit is reached -->
-                        <p class="plan-full" id="plan-full" hidden>Your plan is full (8 of 8). Upgrade to add more people.</p>
                     </div>
 
                     <aside class="side-panel popup-panel" id="household-form-panel" aria-label="Add people to the household">
@@ -308,6 +306,9 @@
                                           placeholder="e.g. Allergic to peanuts"></textarea>
                             </div>
 
+                            <!-- Plan full message: shown when someone tries to add a dependent to a full household -->
+                            <p class="plan-full" id="plan-full" role="alert" hidden></p>
+
                             <div class="form-actions">
                                 <button type="submit" class="btn">Add</button>
                                 <button type="reset" class="btn-text">Cancel</button>
@@ -319,13 +320,14 @@
                         <form id="invite-form" method="post" aria-labelledby="invite-form-title">
                             <div class="field">
                                 <label for="invite-email">Their email</label>
-                                <input type="email" id="invite-email" name="email" required
+                                <input type="email" id="invite-email" name="email" required maxlength="100"
                                        autocomplete="off" aria-describedby="invite-email-error">
                                 <p class="field-error" id="invite-email-error" aria-live="polite"></p>
                             </div>
 
                             <div class="form-actions">
                                 <button type="submit" class="btn">Invite</button>
+                                <button type="reset" class="btn-text">Cancel</button>
                             </div>
                         </form>
                     </aside>

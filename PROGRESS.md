@@ -31,7 +31,12 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Daily medication check-off (in memory until saving exists)
 - [x] Appointments: Upcoming and Overdue (past ones stay until deleted), no Completed section
 - [x] Medication Add form with validation (dropdown from the household, required, max length, time format, dependent must belong to the household)
-- [ ] Rest of the front end: appointment, dependent and invite forms; Delete/Edit/Remove buttons; free-tier limit; (+) pop-ups on phone; localStorage
+- [x] Phone layout fixed (top strip with logo and settings, bottom bar with sections; settings at the bottom of the sidebar on computer)
+- [x] (+) buttons open the Add forms as pop-ups on phone (medications, appointments, household)
+- [x] Appointment form, dependent Add and Edit, invite a co-manager (shared validation)
+- [x] Free-tier limit: message only when adding a dependent or inviting into a full household (Economic 4, Familial 8, Extended unlimited)
+- [x] Delete and Remove buttons hidden until saving exists
+- [ ] Still to do: doctor cards, Switch household, localStorage, back end plan (written)
 
 ### Tue Nov 17: finish the front end
 - [ ] Every button and form on the dashboard works (front end only)

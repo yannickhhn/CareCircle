@@ -359,6 +359,8 @@ function validateField(input, household) {
         message = "This date has already passed.";
     } else if (input.type === "number" && (!/^\d+$/.test(value) || Number(value) < Number(input.min) || Number(value) > Number(input.max))) {
         message = "Enter a year between " + input.min + " and " + input.max + ".";
+    } else if (input.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        message = "Enter an email like name@example.com.";
     }
 
     if (message === "") {
@@ -471,6 +473,20 @@ function refreshPeople(household) {
     fillDependentSelect(document.getElementById("appt-for"), household);
 }
 
+const PLAN_LIMITS = { economic: 4, familial: 8, extended: Infinity };
+
+// Returns true if the household has reached its plan's member limit (managers + dependents)
+function isHouseholdFull(household) {
+    const memberCount = household.managerIds.length + household.dependents.length;
+    return memberCount >= PLAN_LIMITS[household.plan];
+}
+
+// Returns the "plan is full" message for this household's plan
+function planFullMessage(household) {
+    const limit = PLAN_LIMITS[household.plan];
+    return "Your plan is full (" + limit + " of " + limit + " members). Upgrade to add more people.";
+}
+
 let editingDependent = null;
 
 // Dependent form: adds a new dependent, or saves changes to the one being edited
@@ -492,14 +508,22 @@ function setUpDependentForm(household) {
     // Cancel: clears the errors and goes back to "Add a dependent"
     form.addEventListener("reset", function () {
         fields.forEach(clearFieldError);
+        document.getElementById("plan-full").hidden = true;
         editingDependent = null;
         title.textContent = "Add a dependent";
         submitButton.textContent = "Add";
     });
 
-    // Add or Save: checks every field, then adds or updates the dependent and redraws
+    // Add or Save: blocks adding to a full household, checks every field, then adds or updates the dependent and redraws
     form.addEventListener("submit", function (event) {
         event.preventDefault();
+        if (!editingDependent && isHouseholdFull(household)) {
+            const planFull = document.getElementById("plan-full");
+            planFull.textContent = planFullMessage(household);
+            planFull.hidden = false;
+            return;
+        }
+
         const allValid = fields.map(function (input) {
             return validateField(input, household);
         });
@@ -532,6 +556,56 @@ function startEditDependent(dependent) {
     const addButton = document.querySelector('[aria-controls="household-form-panel"]');
     setPanelOpen(addButton, document.getElementById("household-form-panel"), true);
     document.getElementById("dep-name").focus();
+}
+
+// Invite form: adds a manager to this household by email, creating their manager entry if they're new
+function setUpInviteForm(household) {
+    const form = document.getElementById("invite-form");
+    const emailInput = document.getElementById("invite-email");
+    form.noValidate = true;
+
+    // Re-checks the email while it is being fixed
+    emailInput.addEventListener("input", function () {
+        if (emailInput.getAttribute("aria-invalid") === "true") {
+            validateField(emailInput, household);
+        }
+    });
+
+    // Cancel: clears the error along with the field
+    form.addEventListener("reset", function () {
+        clearFieldError(emailInput);
+    });
+
+    // Invite: blocks a full household, checks the email, then finds or creates the manager and adds them to the household
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (isHouseholdFull(household)) {
+            showFieldError(emailInput, planFullMessage(household));
+            emailInput.focus();
+            return;
+        }
+        if (!validateField(emailInput, household)) {
+            emailInput.focus();
+            return;
+        }
+
+        const email = fieldValue("invite-email").toLowerCase();
+        let manager = data.managers.find(function (m) {
+            return m.email.toLowerCase() === email;
+        });
+        if (manager && household.managerIds.includes(manager.id)) {
+            showFieldError(emailInput, "This person is already a manager of this household.");
+            emailInput.focus();
+            return;
+        }
+        if (!manager) {
+            manager = { id: "m" + Date.now(), firstName: email.split("@")[0], email: email };
+            data.managers.push(manager);
+        }
+        household.managerIds.push(manager.id);
+        form.reset();
+        refreshPeople(household);
+    });
 }
 
 // Opens or closes an Add form pop-up and updates its (+) button for screen readers
@@ -577,6 +651,7 @@ async function loadData() {
         setUpMedForm(household);
         setUpApptForm(household);
         setUpDependentForm(household);
+        setUpInviteForm(household);
         setUpAddButtons();
     } catch (error) {
         console.error(error);
