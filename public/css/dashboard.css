@@ -247,6 +247,10 @@
 .delete-btn:hover {
     filter: brightness(0.9);
 }
+/* Hidden until saving exists (localStorage, then the server) */
+.delete-btn {
+    display: none;
+}
 .btn-text {
     padding: var(--space-xs) var(--space-sm);
     border: none;
@@ -426,6 +430,25 @@
     border-radius: var(--radius);
     background-color: var(--bg-page);
 }
+/* Add forms: pop-up from the bottom on phone */
+.popup-panel {
+    display: none;
+}
+@media (max-width: 767px) {
+    .popup-panel.is-open {
+        display: block;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 20;
+        max-height: 85vh;
+        overflow-y: auto;
+        margin: 0;
+        border-radius: var(--radius) var(--radius) 0 0;
+        box-shadow: 0 -8px 24px var(--shadow-md);
+    }
+}
 .side-panel h3 {
     margin: 0 0 var(--space-md);
     font-size: 1.125rem;
@@ -517,6 +540,12 @@
     }
     .side-panel {
         margin-top: 0;
+    }
+    .popup-panel {
+        display: block;
+    }
+    .add-btn {
+        display: none;
     }
 
     .app-header h1 {

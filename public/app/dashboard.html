@@ -105,7 +105,7 @@
             <section id="medications" class="app-section" aria-labelledby="medications-title">
                 <div class="section-head">
                     <h2 id="medications-title">Medication checklist</h2>
-                    <button type="button" class="add-btn" aria-controls="med-form-panel">
+                    <button type="button" class="add-btn" aria-controls="med-form-panel" aria-expanded="false">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                             <path d="M12 5v14M5 12h14"/>
                         </svg>
@@ -127,7 +127,7 @@
                     </div>
 
                     <!-- Add medication form: each field has its own error message spot for validation -->
-                    <aside class="side-panel" id="med-form-panel" aria-labelledby="med-form-title">
+                    <aside class="side-panel popup-panel" id="med-form-panel" aria-labelledby="med-form-title">
                         <h3 id="med-form-title">Add a medication</h3>
                         <form id="med-form" method="post">
                             <div class="field">
@@ -184,7 +184,7 @@
             <section id="appointments" class="app-section" aria-labelledby="appointments-title">
                 <div class="section-head">
                     <h2 id="appointments-title">Appointments</h2>
-                    <button type="button" class="add-btn" aria-controls="appt-form-panel">
+                    <button type="button" class="add-btn" aria-controls="appt-form-panel" aria-expanded="false">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                             <path d="M12 5v14M5 12h14"/>
                         </svg>
@@ -204,17 +204,12 @@
                     </div>
 
                     <!-- Add appointment form: date and time side by side -->
-                    <aside class="side-panel" id="appt-form-panel" aria-labelledby="appt-form-title">
+                    <aside class="side-panel popup-panel" id="appt-form-panel" aria-labelledby="appt-form-title">
                         <h3 id="appt-form-title">Add an appointment</h3>
                         <form id="appt-form" method="post">
                             <div class="field">
                                 <label for="appt-for">For who?</label>
-                                <select id="appt-for" name="dependentId" required aria-describedby="appt-for-error">
-                                    <option value="">Choose a person</option>
-                                    <option value="d2">Lucas</option>
-                                    <option value="d3">Mia</option>
-                                    <option value="d4">Leo</option>
-                                </select>
+                                <select id="appt-for" name="dependentId" required aria-describedby="appt-for-error"></select>
                                 <p class="field-error" id="appt-for-error" aria-live="polite"></p>
                             </div>
 
@@ -267,6 +262,12 @@
                 <div class="section-head">
                     <h2 id="household-title">Household</h2>
                     <p class="plan-line"></p>
+                    <button type="button" class="add-btn" aria-controls="household-form-panel" aria-expanded="false">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        <span class="visually-hidden">Add a dependent or invite a co-manager</span>
+                    </button>
                 </div>
 
                 <div class="section-body">
@@ -283,7 +284,7 @@
                         <p class="plan-full" id="plan-full" hidden>Your plan is full (8 of 8). Upgrade to add more people.</p>
                     </div>
 
-                    <aside class="side-panel" aria-label="Add people to the household">
+                    <aside class="side-panel popup-panel" id="household-form-panel" aria-label="Add people to the household">
                         <!-- Add dependent form -->
                         <h3 id="dependent-form-title">Add a dependent</h3>
                         <form id="dependent-form" method="post" aria-labelledby="dependent-form-title">

@@ -289,10 +289,11 @@ function renderHousehold(household) {
     household.dependents.forEach(function (dependent) {
         const firstName = dependent.name.split(" ")[0];
         const row = createMemberRow(firstName, "Born " + dependent.birthYear);
-        row.append(
-            createRowButton("btn-outline", "Edit", firstName),
-            createRowButton("delete-btn", "Remove", firstName)
-        );
+        const editButton = createRowButton("btn-outline", "Edit", firstName);
+        editButton.addEventListener("click", function () {
+            startEditDependent(dependent);
+        });
+        row.append(editButton, createRowButton("delete-btn", "Remove", firstName));
         dependentList.appendChild(row);
     });
 }
@@ -339,19 +340,25 @@ function clearFieldError(input) {
     input.removeAttribute("aria-invalid");
 }
 
-// Checks one medication form field, shows or clears its error, and returns true if valid
-function validateMedField(input, household) {
+// Checks one form field, shows or clears its error, and returns true if valid
+function validateField(input, household) {
     const value = input.value.trim();
     let message = "";
 
     if (value === "") {
         message = "This field is required.";
-    } else if (input.id === "med-for" && !household.dependents.some(function (d) { return d.id === value; })) {
+    } else if (input.name === "dependentId" && !household.dependents.some(function (d) { return d.id === value; })) {
         message = "Choose someone from this household.";
     } else if (input.maxLength > 0 && value.length > input.maxLength) {
         message = "Use at most " + input.maxLength + " characters.";
-    } else if (input.id === "med-time" && !/^\d{2}:\d{2}$/.test(value)) {
+    } else if (input.type === "time" && !/^\d{2}:\d{2}$/.test(value)) {
         message = "Enter a time like 08:00.";
+    } else if (input.type === "date" && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        message = "Enter a date like 2026-11-20.";
+    } else if (input.type === "date" && value < toDateString(new Date())) {
+        message = "This date has already passed.";
+    } else if (input.type === "number" && (!/^\d+$/.test(value) || Number(value) < Number(input.min) || Number(value) > Number(input.max))) {
+        message = "Enter a year between " + input.min + " and " + input.max + ".";
     }
 
     if (message === "") {
@@ -362,22 +369,26 @@ function validateMedField(input, household) {
     return false;
 }
 
-// Sets up the Add medication form: fills the dropdown and handles typing, Cancel and Add
-function setUpMedForm(household) {
-    const form = document.getElementById("med-form");
-    const forSelect = document.getElementById("med-for");
-    const nameInput = document.getElementById("med-name");
-    const doseInput = document.getElementById("med-dose");
-    const timeInput = document.getElementById("med-time");
-    const fields = [forSelect, nameInput, doseInput, timeInput];
+// Returns a form field's value without spaces at both ends
+function fieldValue(id) {
+    return document.getElementById(id).value.trim();
+}
 
-    fillDependentSelect(forSelect, household);
+// Sets up an Add form (its first field is the "For who?" dropdown): re-checks fields while they are fixed,
+// clears errors on Cancel, and on Add calls save() only if every field is valid, then empties the form
+function setUpAddForm(formId, fieldIds, household, save) {
+    const form = document.getElementById(formId);
+    const fields = fieldIds.map(function (id) {
+        return document.getElementById(id);
+    });
+
+    fillDependentSelect(fields[0], household);
     form.noValidate = true;
 
     // Re-checks a field while it is being fixed
     form.addEventListener("input", function (event) {
         if (event.target.getAttribute("aria-invalid") === "true") {
-            validateMedField(event.target, household);
+            validateField(event.target, household);
         }
     });
 
@@ -386,13 +397,13 @@ function setUpMedForm(household) {
         fields.forEach(clearFieldError);
     });
 
-    // Add: checks every field, then saves the medication, redraws the list and empties the form
+    // Add: checks every field, then saves and empties the form
     form.addEventListener("submit", function (event) {
         event.preventDefault();
 
         let firstWrong = null;
         fields.forEach(function (input) {
-            if (!validateMedField(input, household) && firstWrong === null) {
+            if (!validateField(input, household) && firstWrong === null) {
                 firstWrong = input;
             }
         });
@@ -401,20 +412,149 @@ function setUpMedForm(household) {
             return;
         }
 
+        save();
+        form.reset();
+    });
+}
+
+// Add medication form: saves a new medication that hasn't been given yet
+function setUpMedForm(household) {
+    setUpAddForm("med-form", ["med-for", "med-name", "med-dose", "med-time"], household, function () {
         data.medications.push({
             id: "med" + Date.now(),
             householdId: household.id,
-            dependentId: forSelect.value,
-            name: nameInput.value.trim(),
-            dose: doseInput.value.trim(),
-            time: timeInput.value,
-            repeat: document.getElementById("med-repeat").value,
-            note: document.getElementById("med-note").value.trim().slice(0, 200),
+            dependentId: fieldValue("med-for"),
+            name: fieldValue("med-name"),
+            dose: fieldValue("med-dose"),
+            time: fieldValue("med-time"),
+            repeat: fieldValue("med-repeat"),
+            note: fieldValue("med-note").slice(0, 200),
             givenBy: null,
             givenAt: null
         });
         renderMedications(household);
+    });
+}
+
+// Add appointment form: saves a new appointment, with one note per non-empty line
+function setUpApptForm(household) {
+    setUpAddForm("appt-form", ["appt-for", "appt-reason", "appt-date", "appt-time", "appt-address"], household, function () {
+        const notes = fieldValue("appt-notes").slice(0, 300).split("\n")
+            .map(function (line) {
+                return line.trim();
+            })
+            .filter(function (line) {
+                return line !== "";
+            });
+
+        data.appointments.push({
+            id: "a" + Date.now(),
+            householdId: household.id,
+            dependentId: fieldValue("appt-for"),
+            reason: fieldValue("appt-reason"),
+            date: fieldValue("appt-date"),
+            time: fieldValue("appt-time"),
+            address: fieldValue("appt-address"),
+            notes: notes
+        });
+        renderAppointments(household);
+    });
+}
+
+// Redraws everything that shows the household's people: header count, lists, rows, cards and both dropdowns
+function refreshPeople(household) {
+    renderHeader(household);
+    renderHousehold(household);
+    renderMedications(household);
+    renderAppointments(household);
+    fillDependentSelect(document.getElementById("med-for"), household);
+    fillDependentSelect(document.getElementById("appt-for"), household);
+}
+
+let editingDependent = null;
+
+// Dependent form: adds a new dependent, or saves changes to the one being edited
+function setUpDependentForm(household) {
+    const form = document.getElementById("dependent-form");
+    const title = document.getElementById("dependent-form-title");
+    const submitButton = form.querySelector('button[type="submit"]');
+    const fields = [document.getElementById("dep-name"), document.getElementById("dep-birth-year")];
+    document.getElementById("dep-birth-year").max = new Date().getFullYear();
+    form.noValidate = true;
+
+    // Re-checks a field while it is being fixed
+    form.addEventListener("input", function (event) {
+        if (event.target.getAttribute("aria-invalid") === "true") {
+            validateField(event.target, household);
+        }
+    });
+
+    // Cancel: clears the errors and goes back to "Add a dependent"
+    form.addEventListener("reset", function () {
+        fields.forEach(clearFieldError);
+        editingDependent = null;
+        title.textContent = "Add a dependent";
+        submitButton.textContent = "Add";
+    });
+
+    // Add or Save: checks every field, then adds or updates the dependent and redraws
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const allValid = fields.map(function (input) {
+            return validateField(input, household);
+        });
+        const firstWrong = fields[allValid.indexOf(false)];
+        if (firstWrong) {
+            firstWrong.focus();
+            return;
+        }
+
+        const person = editingDependent || { id: "d" + Date.now() };
+        person.name = fieldValue("dep-name");
+        person.birthYear = Number(fieldValue("dep-birth-year"));
+        person.notes = fieldValue("dep-notes").slice(0, 200);
+        if (!editingDependent) {
+            household.dependents.push(person);
+        }
         form.reset();
+        refreshPeople(household);
+    });
+}
+
+// Edit button: fills the dependent form with this person, switches it to "Save" and opens it on phone
+function startEditDependent(dependent) {
+    editingDependent = dependent;
+    document.getElementById("dep-name").value = dependent.name;
+    document.getElementById("dep-birth-year").value = dependent.birthYear;
+    document.getElementById("dep-notes").value = dependent.notes;
+    document.getElementById("dependent-form-title").textContent = "Edit " + dependent.name.split(" ")[0];
+    document.querySelector('#dependent-form button[type="submit"]').textContent = "Save";
+    const addButton = document.querySelector('[aria-controls="household-form-panel"]');
+    setPanelOpen(addButton, document.getElementById("household-form-panel"), true);
+    document.getElementById("dep-name").focus();
+}
+
+// Opens or closes an Add form pop-up and updates its (+) button for screen readers
+function setPanelOpen(button, panel, isOpen) {
+    panel.classList.toggle("is-open", isOpen);
+    button.setAttribute("aria-expanded", isOpen);
+    if (isOpen) {
+        panel.querySelector("select, input").focus();
+    }
+}
+
+// Each (+) button opens its panel; Cancel or a successful Add in any of its forms (both reset the form) closes it
+function setUpAddButtons() {
+    document.querySelectorAll(".add-btn").forEach(function (button) {
+        const panel = document.getElementById(button.getAttribute("aria-controls"));
+        button.addEventListener("click", function () {
+            setPanelOpen(button, panel, !panel.classList.contains("is-open"));
+        });
+        panel.querySelectorAll("form").forEach(function (form) {
+            form.addEventListener("reset", function () {
+                setPanelOpen(button, panel, false);
+            });
+        });
     });
 }
 
@@ -435,6 +575,9 @@ async function loadData() {
         renderAppointments(household);
         renderHousehold(household);
         setUpMedForm(household);
+        setUpApptForm(household);
+        setUpDependentForm(household);
+        setUpAddButtons();
     } catch (error) {
         console.error(error);
     }
