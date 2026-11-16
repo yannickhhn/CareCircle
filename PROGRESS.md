@@ -1,7 +1,12 @@
 # CareCircle progress
 
-Last updated: 2026-11-12
-Next deadline: Thursday Nov 19, milestone demo (working front end plus authentication skeleton)
+Last updated: 2026-11-16
+Next deadline: Tuesday Nov 17, 6 pm, milestone (working front end plus authentication skeleton). Moved up from Nov 19.
+
+Plan for the short deadline:
+- Mon Nov 16: lists from the JSON, med check-off, medication Add form with validation
+- Tue Nov 17 (before 6 pm): Flask serves the pages, register/login with hashed passwords, quick rehearsal
+- Moved to after the milestone: localStorage, the other Add forms, free-tier limit message
 
 ## Milestones
 
@@ -33,7 +38,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [ ] Register and login with hashed passwords (skeleton)
 - [ ] Short progress demo rehearsed
 
-### Thu Nov 19: Milestone demo, graded 5% (HARD)
+### Tue Nov 17, 6 pm: Milestone, graded 5% (HARD, moved up from Nov 19)
 - [ ] Working front end plus authentication skeleton
 
 ### After the demo (dates to set)
