@@ -5,8 +5,7 @@ Next deadline: Tuesday Nov 17, 6 pm, milestone (working front end plus authentic
 
 Plan for the short deadline:
 - Mon Nov 16: lists from the JSON, med check-off, medication Add form with validation
-- Tue Nov 17 (before 6 pm): Flask serves the pages, register/login with hashed passwords, quick rehearsal
-- Moved to after the milestone: localStorage, the other Add forms, free-tier limit message
+- Tue Nov 17 (before 6 pm): finish the front end (every button and form works), write the back end plan, quick rehearsal
 
 ## Milestones
 
@@ -32,15 +31,15 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Daily medication check-off (in memory until saving exists)
 - [x] Appointments: Upcoming and Overdue (past ones stay until deleted), no Completed section
 - [x] Medication Add form with validation (dropdown from the household, required, max length, time format, dependent must belong to the household)
-- [ ] Moved after the milestone: appointment, dependent and invite forms; Delete/Edit/Remove buttons; localStorage; free-tier limit message
+- [ ] Rest of the front end: appointment, dependent and invite forms; Delete/Edit/Remove buttons; free-tier limit; (+) pop-ups on phone; localStorage
 
-### Tue Nov 17: Flask auth skeleton (Flask lecture Nov 17)
-- [ ] Flask server serves the pages
-- [ ] Register and login with hashed passwords (skeleton)
+### Tue Nov 17: finish the front end
+- [ ] Every button and form on the dashboard works (front end only)
+- [ ] Back end skeleton: written plan of how the server, storage and login would work (no Flask code yet, Flask not taught)
 - [ ] Short progress demo rehearsed
 
 ### Tue Nov 17, 6 pm: Milestone, graded 5% (HARD, moved up from Nov 19)
-- [ ] Working front end plus authentication skeleton
+- [ ] Fully functional front end plus back end skeleton (plan)
 
 ### After the demo (dates to set)
 - [ ] Static pages: dependent profile, medications, appointments, doctor card

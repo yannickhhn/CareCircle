@@ -12,19 +12,13 @@
     border: 0;
 }
 
-/* Sidebar (phone: bottom bar) */
+/* Sidebar (phone: top strip with logo and settings, bottom bar with the sections) */
 .sidebar {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 10;
     display: flex;
     align-items: center;
-    height: 64px;
-    padding: 0 var(--space-sm);
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-md);
     background-color: var(--bg-page);
-    border-top: 1px solid var(--border);
 }
 .sidebar ul {
     margin: 0;
@@ -32,14 +26,22 @@
     list-style: none;
 }
 .sidebar-links {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
     display: flex;
-    flex: 3;
     justify-content: space-around;
+    align-items: center;
+    height: 64px;
+    background-color: var(--bg-page);
+    border-top: 1px solid var(--border);
 }
 .sidebar-bottom {
     display: flex;
-    flex: 1;
-    justify-content: center;
+    align-items: center;
+    gap: var(--space-xs);
 }
 
 .sidebar-links a,
@@ -75,22 +77,8 @@
     color: var(--accent-periwinkle);
 }
 
-/* Top strip on phone */
-.sidebar-logo {
-    position: absolute;
-    top: var(--space-md);
-    left: var(--space-md);
-}
 .sidebar-logo img {
     display: block;
-}
-.bar-top {
-    position: absolute;
-    top: var(--space-md);
-    right: var(--space-md);
-}
-.bar-top-logout {
-    right: 64px;
 }
 .sidebar .theme-toggle {
     width: 40px;
@@ -99,7 +87,7 @@
 
 /* Main area */
 .app-main {
-    padding: 80px var(--space-md) 96px;
+    padding: 0 var(--space-md) 96px;
 }
 
 
@@ -141,21 +129,21 @@
     font-size: 1.75rem;
     line-height: 1.2;
 }
-.app-header .plan-line {
-    margin: 0;
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-}
 #switch-household {
     margin-left: auto;
     background: none;
     color: var(--text-primary);
 }
-.app-header .member-count,
+.app-header .plan-line,
 .app-header .today {
     flex-basis: 100%;
     margin: 0;
     color: var(--text-secondary);
+    
+}
+
+.app-header .today{
+    font-weight: bolder;
 }
 
 .app-section {
@@ -554,31 +542,34 @@
 
     /* Sidebar (computer: left column) */
     .sidebar {
+        position: fixed;
         top: 0;
-        right: auto;
+        bottom: 0;
+        left: 0;
+        z-index: 10;
         flex-direction: column;
+        justify-content: flex-start;
         width: 72px;
-        height: auto;
         padding: var(--space-md) 0;
-        border-top: none;
         border-right: 1px solid var(--border);
     }
     .sidebar-links,
     .sidebar-bottom {
-        flex: none;
         flex-direction: column;
         align-items: center;
         gap: var(--space-sm);
     }
     .sidebar-links {
+        position: static;
+        height: auto;
+        border-top: none;
+    }
+    /* .sidebar in front so these beat ".sidebar ul { margin: 0 }" */
+    .sidebar .sidebar-links {
         margin-top: var(--space-lg);
     }
-    .sidebar-bottom {
+    .sidebar .sidebar-bottom {
         margin-top: auto;
-    }
-    .sidebar-logo,
-    .bar-top {
-        position: static;
     }
 
     .app-main {

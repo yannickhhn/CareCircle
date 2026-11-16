@@ -38,8 +38,7 @@ function renderHeader(household) {
     const today = new Date();
 
     document.getElementById("household-name").textContent = household.name;
-    document.querySelector(".app-header .plan-line").textContent = plan;
-    document.querySelector(".app-header .member-count").textContent = memberCount + " members";
+    document.querySelector(".app-header .plan-line").textContent = plan + " · " + memberCount + " members";
 
     const time = document.querySelector(".app-header time");
     time.dateTime = toDateString(today);
