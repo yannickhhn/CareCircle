@@ -26,9 +26,14 @@ function toTimeString(date) {
     return hours + ":" + minutes;
 }
 
+// Returns text with its first letter in capitals ("familial" becomes "Familial")
+function capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 // Fills the header with the household's name, plan, member count and today's date
 function renderHeader(household) {
-    const plan = household.plan.charAt(0).toUpperCase() + household.plan.slice(1);
+    const plan = capitalize(household.plan);
     const memberCount = household.managerIds.length + household.dependents.length;
     const today = new Date();
 
@@ -265,6 +270,51 @@ function createPlace(address) {
     return place;
 }
 
+// Draws the household section: plan line, managers with their email, and dependents with Edit and Remove
+function renderHousehold(household) {
+    const memberCount = household.managerIds.length + household.dependents.length;
+    document.querySelector("#household .plan-line").textContent =
+        capitalize(household.plan) + " · " + memberCount + " members";
+
+    const managerList = document.getElementById("manager-list");
+    managerList.textContent = "";
+    household.managerIds.forEach(function (managerId) {
+        const manager = data.managers.find(function (m) {
+            return m.id === managerId;
+        });
+        managerList.appendChild(createMemberRow(manager.firstName, manager.email));
+    });
+
+    const dependentList = document.getElementById("dependent-list");
+    dependentList.textContent = "";
+    household.dependents.forEach(function (dependent) {
+        const firstName = dependent.name.split(" ")[0];
+        const row = createMemberRow(firstName, "Born " + dependent.birthYear);
+        row.append(
+            createRowButton("btn-outline", "Edit", firstName),
+            createRowButton("delete-btn", "Remove", firstName)
+        );
+        dependentList.appendChild(row);
+    });
+}
+
+// Returns one member row: avatar with the first letter, name, and a detail (email or birth year)
+function createMemberRow(name, detail) {
+    const row = makeElement("li", "member-row");
+    const avatar = makeElement("span", "avatar", name.charAt(0));
+    avatar.setAttribute("aria-hidden", "true");
+    row.append(avatar, makeElement("span", "member-name", name), makeElement("span", "member-detail", detail));
+    return row;
+}
+
+// Returns a row button like "Edit", with the person's name added for screen readers ("Edit Lucas")
+function createRowButton(className, label, name) {
+    const button = makeElement("button", className, label);
+    button.type = "button";
+    button.appendChild(makeElement("span", "visually-hidden", " " + name));
+    return button;
+}
+
 // Loads all the data, finds the current household and draws the dashboard
 async function loadData() {
     try {
@@ -280,6 +330,7 @@ async function loadData() {
         renderHeader(household);
         renderMedications(household);
         renderAppointments(household);
+        renderHousehold(household);
     } catch (error) {
         console.error(error);
     }

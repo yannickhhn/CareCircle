@@ -250,13 +250,14 @@
 /* Text buttons */
 .delete-btn {
     padding: var(--space-xs) var(--space-sm);
-    border: 1px solid var(--border);
+    border: 1px solid var(--error-text);
     border-radius: 6px;
-    background: none;
-    color: var(--error-text);
+    background-color: var(--error-text);
+    color: var(--bg-page);
+    font-weight: 600;
 }
 .delete-btn:hover {
-    background-color: var(--card-rose);
+    filter: brightness(0.9);
 }
 .btn-text {
     padding: var(--space-xs) var(--space-sm);
@@ -391,14 +392,6 @@
 .appt-card .delete-btn {
     align-self: flex-end;
     margin-top: auto;
-    border-color: var(--error-text);
-    background-color: var(--error-text);
-    color: var(--bg-page);
-    font-weight: 600;
-}
-.appt-card .delete-btn:hover {
-    background-color: var(--error-text);
-    filter: brightness(0.9);
 }
 
 /* Household members */
@@ -409,6 +402,10 @@
     gap: var(--space-sm) var(--space-md);
     padding: var(--space-sm) 0;
     border-bottom: 1px solid var(--border);
+}
+.member-row .btn-outline {
+    background: none;
+    color: var(--text-primary);
 }
 .member-name {
     font-weight: 700;
