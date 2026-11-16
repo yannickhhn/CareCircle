@@ -4,20 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Home · CareCircle</title>
-        <!-- this page is inside app/, so "../" goes up one folder to reach the shared files -->
         <link rel="icon" href="../assets/carecircle-icon.png">
         <link href="../css/style.css" rel="stylesheet">
-        <!-- auth.css: reuses the form field styles from the login and register pages -->
         <link href="../css/auth.css" rel="stylesheet">
         <link href="../css/dashboard.css" rel="stylesheet">
         <script src="../js/theme.js" defer></script>
+        <script src="../js/dashboard.js" defer></script>
     </head>
     <body class="app-page">
-        <!-- Sidebar: left side on computer, fixed bar at the bottom on phone (done in CSS).
-             Icons only; the hidden text is read by screen readers.
-             Everything is on this one page for now, so each link jumps to a section with # -->
+        <!-- Sidebar: icon links that jump to each section (bottom bar on phone) -->
         <nav class="sidebar" aria-label="Main">
-            <!-- "#top" always scrolls back to the top of the page -->
             <a href="#top" class="sidebar-logo">
                 <img src="../assets/carecircle-icon.png" alt="CareCircle, back to top" width="40" height="40">
             </a>
@@ -51,7 +47,6 @@
                         <span class="visually-hidden">Household</span>
                     </a>
                 </li>
-                <!-- TODO: doctor cards come after the demo; "hidden" keeps this link off the page until then -->
                 <li hidden>
                     <a href="#doctors">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -64,12 +59,8 @@
                 </li>
             </ul>
 
-            <!-- Bottom group, kept apart from the main links like in the wireframe -->
-            <!-- order from top to bottom: theme, settings, log out -->
             <ul class="sidebar-bottom">
-                <!-- "bar-top": on phone this moves to the top of the page instead of the bottom bar -->
                 <li class="bar-top">
-                    <!-- same light/dark button as the other pages: theme.js finds it by its class -->
                     <button type="button" class="theme-toggle" aria-label="Switch to dark mode">
                         <svg class="icon-moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
@@ -81,9 +72,7 @@
                     </button>
                 </li>
                 <li>
-                    <!-- TODO: settings.html isn't built yet -->
                     <a href="settings.html">
-                        <!-- 20px: a little smaller than the other icons -->
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="12" cy="12" r="3"/>
                             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -92,7 +81,6 @@
                     </a>
                 </li>
                 <li class="bar-top bar-top-logout">
-                    <!-- no real login yet, so Log out just goes back to the login page -->
                     <a href="../login.html">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -105,21 +93,19 @@
         </nav>
 
         <main class="app-main">
-            <!-- Header: which household we're looking at. JavaScript will fill these in from the data (sample text for now) -->
+            <!-- Header: household name, plan, member count and today's date -->
             <header class="app-header">
                 <h1 id="household-name">Brown household</h1>
                 <p class="plan-line">Familial</p>
-                <!-- TODO (Monday): only shown to managers with more than one household; switches which one is displayed -->
                 <button type="button" class="btn-outline" id="switch-household">Switch household</button>
                 <p class="member-count">5 members</p>
                 <p class="today"><time datetime="2026-11-12">Thursday, November 12</time></p>
             </header>
 
-            <!-- ===== Medications ===== -->
+            <!-- Medications: today's doses, split into Upcoming and Filled -->
             <section id="medications" class="app-section" aria-labelledby="medications-title">
                 <div class="section-head">
                     <h2 id="medications-title">Medication checklist</h2>
-                    <!-- (+) opens the Add form: always visible on computer, a pop-up on phone (later, with JS) -->
                     <button type="button" class="add-btn" aria-controls="med-form-panel">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                             <path d="M12 5v14M5 12h14"/>
@@ -131,11 +117,10 @@
                 <p class="warning-banner">Please double check before administering.</p>
 
                 <div class="section-body">
-                    <!-- Left: the lists. Sample rows for now; JavaScript will build them from the data -->
                     <div class="med-lists">
+                        <!-- Upcoming: not given yet, overdue doses first -->
                         <h3>Upcoming</h3>
                         <ul class="med-list" id="med-upcoming">
-                            <!-- overdue: its time has passed and it hasn't been given, so it goes first -->
                             <li class="med-row is-overdue">
                                 <input type="checkbox" id="dose-med2">
                                 <label for="dose-med2">
@@ -157,10 +142,10 @@
                             </li>
                         </ul>
 
+                        <!-- Filled: given today, with who gave it and when -->
                         <h3>Filled</h3>
                         <ul class="med-list" id="med-filled">
                             <li class="med-row is-filled">
-                                <!-- avatar: first letter of who the dose was for (the name is already written next to it) -->
                                 <span class="avatar" aria-hidden="true">L</span>
                                 <input type="checkbox" id="dose-med3" checked>
                                 <label for="dose-med3">
@@ -168,7 +153,6 @@
                                     <span class="med-name">Amoxicillin syrup · 5 ml</span>
                                 </label>
                                 <time datetime="2026-11-12T08:00">8:00 AM <span>Thu 12 Nov</span></time>
-                                <!-- who ticked the box and when (JavaScript will use the logged-in manager and the current time) -->
                                 <span class="given-by">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                         <circle cx="12" cy="12" r="9"/>
@@ -185,7 +169,7 @@
                         </ul>
                     </div>
 
-                    <!-- Right panel: the Add form (from the wireframe; no file upload for now) -->
+                    <!-- Add medication form: each field has its own error message spot for validation -->
                     <aside class="side-panel" id="med-form-panel" aria-labelledby="med-form-title">
                         <h3 id="med-form-title">Add a medication</h3>
                         <form id="med-form" method="post">
@@ -237,7 +221,6 @@
 
                             <div class="form-actions">
                                 <button type="submit" class="btn">Add</button>
-                                <!-- type="reset" empties the form; on phone it will also close the pop-up -->
                                 <button type="reset" class="btn-text">Cancel</button>
                             </div>
                         </form>
@@ -245,7 +228,7 @@
                 </div>
             </section>
 
-            <!-- ===== Appointments ===== -->
+            <!-- Appointments: cards split into Upcoming and Completed -->
             <section id="appointments" class="app-section" aria-labelledby="appointments-title">
                 <div class="section-head">
                     <h2 id="appointments-title">Appointments</h2>
@@ -258,8 +241,8 @@
                 </div>
 
                 <div class="section-body">
-                    <!-- Left: the cards. Sample cards for now; JavaScript will build and sort them (soonest first) -->
                     <div class="appt-lists">
+                        <!-- Upcoming: soonest first, with preparation notes -->
                         <h3>Upcoming</h3>
                         <ul class="appt-grid" id="appt-upcoming">
                             <li class="appt-card">
@@ -267,7 +250,6 @@
                                 <p class="appt-when"><time datetime="2026-11-18T13:00">Wed 18 Nov · 1:00 PM</time></p>
                                 <p class="appt-reason">Dentist</p>
                                 <p class="appt-place">Smile Dental<br>45 Oak Avenue</p>
-                                <!-- preparation notes: one bullet per line typed in the form -->
                                 <ul class="appt-notes">
                                     <li>Bring her retainer</li>
                                 </ul>
@@ -290,10 +272,10 @@
                             </li>
                         </ul>
 
+                        <!-- Completed: past visits, with the avatar of the manager who went -->
                         <h3>Completed</h3>
                         <ul class="appt-grid" id="appt-completed">
                             <li class="appt-card is-completed">
-                                <!-- avatar in the corner: the manager who went -->
                                 <span class="avatar">
                                     <span aria-hidden="true">D</span>
                                     <span class="visually-hidden">David went</span>
@@ -306,7 +288,7 @@
                         </ul>
                     </div>
 
-                    <!-- Right panel: the Add form (from the wireframe) -->
+                    <!-- Add appointment form: date and time side by side -->
                     <aside class="side-panel" id="appt-form-panel" aria-labelledby="appt-form-title">
                         <h3 id="appt-form-title">Add an appointment</h3>
                         <form id="appt-form" method="post">
@@ -328,7 +310,6 @@
                                 <p class="field-error" id="appt-reason-error" aria-live="polite"></p>
                             </div>
 
-                            <!-- date and time side by side (done in CSS) -->
                             <div class="field-row">
                                 <div class="field">
                                     <label for="appt-date">Date</label>
@@ -366,7 +347,7 @@
                 </div>
             </section>
 
-            <!-- ===== Household ===== -->
+            <!-- Household: managers, dependents and the plan limit -->
             <section id="household" class="app-section" aria-labelledby="household-title">
                 <div class="section-head">
                     <h2 id="household-title">Household</h2>
@@ -374,8 +355,8 @@
                 </div>
 
                 <div class="section-body">
-                    <!-- Left: who is in the household. Sample people for now; JavaScript will build the lists -->
                     <div class="member-lists">
+                        <!-- Managers: everyone who can see and edit this household -->
                         <h3>Managers</h3>
                         <ul class="member-list" id="manager-list">
                             <li class="member-row">
@@ -390,13 +371,13 @@
                             </li>
                         </ul>
 
+                        <!-- Dependents: the people being cared for, with Edit and Remove -->
                         <h3>Dependents</h3>
                         <ul class="member-list" id="dependent-list">
                             <li class="member-row">
                                 <span class="avatar" aria-hidden="true">L</span>
                                 <span class="member-name">Lucas</span>
                                 <span class="member-detail">Born 2012</span>
-                                <!-- the hidden name tells screen readers which person the button is for -->
                                 <button type="button" class="btn-text">Edit<span class="visually-hidden"> Lucas</span></button>
                                 <button type="button" class="delete-btn">Remove<span class="visually-hidden"> Lucas</span></button>
                             </li>
@@ -416,12 +397,12 @@
                             </li>
                         </ul>
 
-                        <!-- free-tier limit: "hidden" until JavaScript finds the household is full, then the forms get disabled -->
+                        <!-- Plan full message: shown when the free-tier limit is reached -->
                         <p class="plan-full" id="plan-full" hidden>Your plan is full (8 of 8). Upgrade to add more people.</p>
                     </div>
 
-                    <!-- Right panel: two small forms -->
                     <aside class="side-panel" aria-label="Add people to the household">
+                        <!-- Add dependent form -->
                         <h3 id="dependent-form-title">Add a dependent</h3>
                         <form id="dependent-form" method="post" aria-labelledby="dependent-form-title">
                             <div class="field">
@@ -450,8 +431,8 @@
                             </div>
                         </form>
 
+                        <!-- Invite form: adds a co-manager by email address (no email is sent) -->
                         <h3 id="invite-form-title">Invite a co-manager</h3>
-                        <!-- no email is sent: the person is added by their email address -->
                         <form id="invite-form" method="post" aria-labelledby="invite-form-title">
                             <div class="field">
                                 <label for="invite-email">Their email</label>

@@ -1,15 +1,11 @@
-/* Log in and register pages: a centred form card.
-   Loaded after style.css, so it reuses its colour, spacing and button styles */
-
-/* colours only these pages need */
 :root {
-    --error-text: #B5485F; /* deeper rose: about 5:1 on white, readable as small text */
-    --error-border: var(--accent-rose); /* the palette rose, for the field border */
-    --focus-ring: #4A5FB0; /* strong blue, easy to see around a focused field or button */
-    --submit-glow: rgba(136, 219, 200, 0.55); /* soft mint light around the main button on hover */
+    --error-text: #B5485F;
+    --error-border: var(--accent-rose);
+    --focus-ring: #4A5FB0;
+    --submit-glow: rgba(136, 219, 200, 0.55);
 }
 
-/* page: logo on top, card centred below it */
+/* Page layout */
 .auth-main {
     display: flex;
     flex-direction: column;
@@ -24,15 +20,14 @@
     height: 52px;
 }
 
-/* the card */
+/* Card */
 .auth-card {
     width: 100%;
-    max-width: 440px; /* never too wide on a computer */
+    max-width: 440px;
     padding: var(--space-lg);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     background-color: var(--bg-page);
-    /* soft gradient: white at the top fading to pale periwinkle at the bottom */
     background-image: linear-gradient(180deg, var(--bg-page) 40%, var(--card-periwinkle) 100%);
     box-shadow: 0 12px 32px var(--shadow-sm);
 }
@@ -46,7 +41,7 @@
     color: var(--text-secondary);
 }
 
-/* form: one field under the other */
+/* Form */
 #register-form {
     display: flex;
     flex-direction: column;
@@ -66,7 +61,7 @@
     color: var(--text-secondary);
 }
 
-/* inputs: 44px tall (easy to tap) and 16px text (phones don't zoom in) */
+/* Inputs */
 .field input {
     width: 100%;
     height: 44px;
@@ -82,23 +77,22 @@
     outline: 3px solid var(--focus-ring);
     outline-offset: 1px;
 }
-/* register.js sets aria-invalid="true" on a field with an error */
 .field input[aria-invalid="true"] {
     border: 2px solid var(--error-border);
 }
 
-/* password field with the Show/Hide button inside it, on the right */
+/* Password field */
 .password-wrap {
     position: relative;
 }
 .password-wrap input {
-    padding-right: 72px; /* room for the button, so text never goes under it */
+    padding-right: 72px;
 }
 .toggle-password {
     position: absolute;
     top: 50%;
     right: 6px;
-    transform: translateY(-50%); /* centred vertically in the field */
+    transform: translateY(-50%);
     height: 32px;
     padding: 0 var(--space-sm);
     border: none;
@@ -114,7 +108,7 @@
     background-color: var(--bg-surface);
 }
 
-/* error under a field: deeper rose text with a warning sign, so it doesn't rely on colour */
+/* Field errors */
 .field-error {
     margin: 0;
     font-size: 0.875rem;
@@ -125,10 +119,10 @@
     margin-right: var(--space-xs);
 }
 .field-error:empty {
-    display: none; /* hidden until register.js puts a message in it */
+    display: none;
 }
 
-/* Create account button: full width, uses .btn colours and hover lift from style.css */
+/* Submit button */
 .auth-submit {
     width: 100%;
     height: 44px;
@@ -138,18 +132,17 @@
     font-weight: 700;
     cursor: pointer;
 }
-/* hover: lifts (from style.css) with a soft light around it */
 .auth-submit:hover {
     box-shadow: 0 6px 14px var(--shadow-md), 0 0 24px var(--submit-glow);
 }
 .auth-submit:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    transform: none; /* no lift while disabled */
+    transform: none;
     box-shadow: none;
 }
 
-/* message for the whole form, for example "Looks good!" */
+/* Form message */
 .form-status {
     margin: 0;
     text-align: center;
@@ -159,7 +152,7 @@
     display: none;
 }
 
-/* "Already have an account? Log in" */
+/* Log in / sign up link */
 .auth-switch {
     margin: var(--space-lg) 0 0;
     text-align: center;
@@ -170,35 +163,32 @@
     font-weight: 700;
 }
 
-/* visible outline when moving through the page with the keyboard (Tab) */
+/* Keyboard focus */
 .auth-page a:focus-visible,
 .auth-page button:focus-visible {
     outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
 }
 
-/* light/dark button: fixed in the top right corner */
+/* Theme toggle */
 .auth-theme {
     position: fixed;
     top: var(--space-md);
     right: var(--space-md);
 }
 
-/* ---------- dark mode (the theme button puts data-theme="dark" on <html>) ---------- */
+/* Dark mode */
 :root[data-theme="dark"] {
-    --error-text: var(--card-rose-text); /* light rose: readable on the dark card */
+    --error-text: var(--card-rose-text);
     --focus-ring: var(--accent-periwinkle);
-    --submit-glow: rgba(132, 205, 188, 0.4); /* night mint */
+    --submit-glow: rgba(132, 205, 188, 0.4);
 }
-/* logo with light lettering, same as the landing page header */
 :root[data-theme="dark"] .auth-logo img {
     content: url("../assets/carecircle-logo-light-text.png");
 }
-/* the card is a periwinkle Ink card with no border; fields stay dark */
 :root[data-theme="dark"] .auth-card {
     border-color: transparent;
     background-color: var(--card-periwinkle);
-    /* periwinkle at the top fading into sky at the bottom */
     background-image: linear-gradient(160deg, var(--card-periwinkle) 30%, var(--card-sky) 100%);
     box-shadow: none;
 }
@@ -210,7 +200,7 @@
 :root[data-theme="dark"] .field input {
     border-color: var(--border);
 }
-/* the rule above is more specific than the error border, so the error needs its own dark rule */
+/* Needed because the dark input rule above is more specific */
 :root[data-theme="dark"] .field input[aria-invalid="true"] {
     border-color: var(--error-border);
 }
@@ -221,7 +211,7 @@
     background-color: var(--card-periwinkle);
 }
 
-/* computer: a bit more room inside the card */
+/* Computer */
 @media (min-width: 768px) {
     .auth-card {
         padding: var(--space-xl);

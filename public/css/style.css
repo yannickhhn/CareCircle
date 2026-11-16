@@ -1,21 +1,21 @@
-/* base: colours, font, spacing */
-/* light mode colours. Dark mode overrides the same names further down */
+/* Base */
+/* Light mode colours */
 :root {
     --bg-page: #FFFFFF;
-    --bg-surface: #F4F7FB; /* soft grey zones */
+    --bg-surface: #F4F7FB;
     --border: #D5DEE8;
     --text-primary: #1F2A37;
     --text-secondary: #5B6675;
-    --text-on-accent: #1F2A37; /* text on mint pills */
+    --text-on-accent: #1F2A37;
 
-    /* accents: buttons, icons, dots, checks, borders */
+    /* Accents */
     --accent-mint: #88DBC8;
     --accent-sky: #88C5DB;
     --accent-periwinkle: #889BDB;
     --accent-rose: #DB889B;
     --accent-sand: #DBC888;
 
-    /* coloured card backgrounds, each with its own description colour */
+    /* Card colours */
     --card-mint: #E1F6F1;
     --card-sky: #E1F0F6;
     --card-periwinkle: #E1E6F6;
@@ -27,7 +27,7 @@
     --card-rose-text: #5B6675;
     --card-sand-text: #5B6675;
 
-    /* single-purpose colours */
+    /* Other colours */
     --btn-primary-bg: var(--accent-mint);
     --btn-primary-text: var(--text-on-accent);
     --gradient-top: #FBEFF2;
@@ -39,10 +39,9 @@
     --footer-line: rgba(31, 42, 55, 0.25);
     --shadow-sm: rgba(31, 42, 55, 0.08);
     --shadow-md: rgba(31, 42, 55, 0.15);
-    --price-band: var(--bg-surface); /* behind the pricing features */
+    --price-band: var(--bg-surface);
 
-    /* "How it works" step colours: border, card fill and wheel for steps 1 to 4.
-       Dark mode only changes these values, so the animations never restart */
+    /* How it works step colours */
     --step1-border: var(--accent-mint);
     --step2-border: var(--accent-periwinkle);
     --step3-border: var(--accent-rose);
@@ -66,11 +65,10 @@
 
     --radius: 12px;
     --max-width: 1100px;
-    --space-section: 56px; /* space above and below each section (80px on computer) */
+    --space-section: 56px;
 }
 
-/* dark mode ("Ink" palette): turned on by the theme button in the header,
-   which puts data-theme="dark" on <html> (see main.js) */
+/* Dark mode colours */
 :root[data-theme="dark"] {
     --bg-page: #121418;
     --bg-surface: var(--card-periwinkle);
@@ -89,7 +87,7 @@
     --card-sky: #243A42;
     --card-periwinkle: #242B42;
     --card-rose: #42242B;
-    --card-sand: #47301F; /* trying a warmer sand (was #423B24) */
+    --card-sand: #47301F;
     --card-mint-text: #B8EADF;
     --card-sky-text: #B8DDEA;
     --card-periwinkle-text: #B8C3EA;
@@ -98,17 +96,16 @@
 
     --btn-primary-bg: var(--accent-mint);
     --btn-primary-text: var(--text-on-accent);
-    --gradient-top: var(--bg-page); /* no gradient: plain page colour */
-    --footer-bg: var(--card-sky); /* a bit blue, not black */
+    --gradient-top: var(--bg-page);
+    --footer-bg: var(--card-sky);
     --footer-text: var(--card-sky-text);
     --footer-border: var(--border);
-    --footer-logo-filter: none; /* white logo */
+    --footer-logo-filter: none;
     --footer-circle: rgba(255, 255, 255, 0.05);
     --footer-line: rgba(232, 236, 244, 0.2);
     --shadow-sm: rgba(0, 0, 0, 0.3);
     --shadow-md: rgba(0, 0, 0, 0.45);
-    --price-band: rgba(0, 0, 0, 0.2); /* a darker band inside each coloured card */
-    /* "How it works": no border, the card is filled with the step colour, the wheel is the page colour */
+    --price-band: rgba(0, 0, 0, 0.2);
     --step1-border: transparent;
     --step2-border: transparent;
     --step3-border: transparent;
@@ -121,15 +118,13 @@
     --step2-wheel: var(--bg-page);
     --step3-wheel: var(--bg-page);
     --step4-wheel: var(--bg-page);
-    --glow-mint: rgba(132, 205, 188, 0.14); /* accent mint, very faint */
-    --glow-periwinkle: rgba(132, 149, 205, 0.14); /* accent periwinkle, very faint */
-    /* glows around the cards: the accents at 25% */
+    --glow-mint: rgba(132, 205, 188, 0.14);
+    --glow-periwinkle: rgba(132, 149, 205, 0.14);
     --card-glow-mint: rgba(132, 205, 188, 0.25);
     --card-glow-sky: rgba(132, 185, 205, 0.25);
     --card-glow-periwinkle: rgba(132, 149, 205, 0.25);
 }
 
-/* the footer's Contact column: a jump link stops below the sticky header */
 #contact {
     scroll-margin-top: 96px;
 }
@@ -144,7 +139,6 @@ body {
     line-height: 1.5;
     color: var(--text-primary);
     background-color: var(--bg-page);
-    /* very light pink at the top, fading to white by the middle of the page */
     background-image: linear-gradient(180deg, var(--gradient-top) 0%, var(--bg-page) 50%);
 }
 
@@ -154,12 +148,12 @@ body {
     padding: 0 var(--space-md);
 }
 
-/* styles for phone (default) */
-/* header stays at the top of the screen while scrolling */
+/* Phone (default) */
+/* Header */
 .header {
     position: sticky;
     top: 0;
-    z-index: 100; /* above everything else on the page */
+    z-index: 100;
     padding: var(--space-sm) 0;
     background-color: var(--bg-page);
     border-bottom: 4px solid var(--accent-sky);
@@ -167,7 +161,7 @@ body {
 }
 .logo img {
     display: block;
-    height: 32px; /* 40px on computer */
+    height: 32px;
 }
 .topbar {
     display: flex;
@@ -180,11 +174,11 @@ body {
     text-decoration: none;
 }
 
-/* phone: the links are a dropdown under the header, hidden until ☰ is tapped */
+/* Nav links (phone: dropdown) */
 .nav-links {
     display: none;
     position: absolute;
-    top: 100%; /* just below the header */
+    top: 100%;
     left: 0;
     right: 0;
     flex-direction: column;
@@ -195,7 +189,7 @@ body {
     box-shadow: 0 8px 16px var(--shadow-sm);
 }
 .nav-links.open {
-    display: flex; /* main.js adds the "open" class */
+    display: flex; /* set by main.js */
 }
 .nav-links a {
     display: block;
@@ -206,16 +200,16 @@ body {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    margin-left: auto; /* pushes the buttons to the right */
+    margin-left: auto;
 }
 .btn-outline {
-    display: inline-block; /* transform (used on hover) doesn't work on inline links */
+    display: inline-block; /* transform doesn't work on inline elements */
     border: 1px solid var(--accent-periwinkle);
     border-radius: 6px;
-    padding: var(--space-xs) var(--space-sm); /* phone: slimmer so the header fits */
-    white-space: nowrap; /* "Sign Up" never breaks onto two lines */
+    padding: var(--space-xs) var(--space-sm);
+    white-space: nowrap;
 }
-/* phone: Log In is a round person icon so everything fits */
+/* Log In icon (phone) */
 .login-btn {
     display: flex;
     align-items: center;
@@ -226,15 +220,15 @@ body {
     border-radius: 50%;
 }
 .login-text {
-    display: none; /* the link's name still comes from aria-label="Log In" */
+    display: none;
 }
 
-/* theme button: moon in light mode, sun in dark mode */
+/* Theme toggle */
 .theme-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px; /* 36px on computer */
+    width: 32px;
     height: 32px;
     padding: 0;
     border: 1px solid var(--accent-periwinkle);
@@ -253,7 +247,7 @@ body {
     display: none;
 }
 
-/* hamburger: 3 thin bars that turn into an X when the menu is open */
+/* Menu button */
 .menu-toggle {
     display: flex;
     flex-direction: column;
@@ -277,8 +271,7 @@ body {
     background-color: var(--text-primary);
     transition: transform 0.25s ease, opacity 0.25s ease;
 }
-/* main.js sets aria-expanded="true" when the menu opens.
-   7px = 5px gap + 2px bar, so the top and bottom bars meet in the middle */
+/* 7px = 5px gap + 2px bar, so the bars cross in the middle */
 .menu-toggle[aria-expanded="true"] .bar:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
 }
@@ -289,7 +282,7 @@ body {
     transform: translateY(-7px) rotate(-45deg);
 }
 
-/* very small phones (under 360px): shrink the logo and ☰ a little so the header fits */
+/* Very small phones */
 @media (max-width: 359px) {
     .logo img {
         height: 24px;
@@ -300,16 +293,14 @@ body {
     }
 }
 
-/* the same space above and below every section of the page */
+/* Sections */
 main > section {
     padding: var(--space-section) 0;
-    /* when a menu link jumps here, stop 20px lower than the section's top edge:
-       the section's own top padding then sits under the sticky header,
-       so the title lands just below the header instead of after a big gap */
+    /* the section's own padding sits under the sticky header */
     scroll-margin-top: 20px;
 }
 
-/* hero: big headline and buttons, illustration under the text on phone */
+/* Hero */
 #hero {
     display: flex;
     flex-direction: column;
@@ -334,7 +325,7 @@ main > section {
     gap: var(--space-md);
     margin-top: var(--space-lg);
 }
-/* every button lifts up with a shadow on hover, like the pricing cards */
+/* Button hover */
 .btn,
 .btn-ghost,
 .btn-outline,
@@ -351,7 +342,6 @@ main > section {
     box-shadow: 0 6px 14px var(--shadow-md);
 }
 
-/* arrow on a button nudges right on hover */
 .btn-arrow span {
     display: inline-block;
     margin-left: var(--space-xs);
@@ -370,7 +360,7 @@ main > section {
     font-weight: bold;
     text-decoration: none;
 }
-/* ".hero-text" in front makes this beat the ".hero-text > p" rule above */
+/* beats the .hero-text > p rule above */
 .hero-text .hero-note {
     margin: var(--space-md) 0 0;
     font-size: 0.875rem;
@@ -379,7 +369,7 @@ main > section {
 .hero-art {
     width: 100%;
     max-width: 300px;
-    /* the SVG is wide with empty sides: show only its square middle, where the circle is */
+    /* shows only the square middle of the SVG */
     aspect-ratio: 1 / 1;
     object-fit: cover;
 }
@@ -389,6 +379,7 @@ main > section {
     flex-direction: column;
 }
 
+/* Features slider */
 .feature-slider {
     overflow: hidden;
     border-radius: var(--radius);
@@ -405,14 +396,14 @@ main > section {
     flex: 0 0 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* phone: centred text at the top */
+    justify-content: flex-start;
     align-items: center;
     text-align: center;
     gap: var(--space-md);
-    /* bottom padding keeps the picture's space empty: 120px picture + 16px gap + 16px margin */
+    /* 120px picture + 16px gap + 16px margin */
     padding: var(--space-lg) var(--space-lg) 152px;
     background-color: var(--bg-page);
-    background-size: auto 120px; /* phone: small picture at the bottom */
+    background-size: auto 120px;
     background-position: center bottom 16px;
     background-repeat: no-repeat;
 }
@@ -430,7 +421,6 @@ main > section {
     color: var(--text-secondary);
 }
 
-/* move one slide to the left about every 4 seconds, then loop */
 @keyframes feature-slide {
     0%, 12% { transform: translateX(0); }
     14.29%, 26.29% { transform: translateX(-100%); }
@@ -441,7 +431,7 @@ main > section {
     85.71%, 100% { transform: translateX(-600%); }
 }
 
-/* no animation for people who turned off motion: scroll instead */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
     .feature-track {
         animation: none;
@@ -451,14 +441,13 @@ main > section {
     }
 }
 
-/* descriptions inside a coloured slide use that card's text colour */
 .slide-1 p, .slide-6 p { color: var(--card-mint-text); }
 .slide-2 p, .slide-7 p { color: var(--card-periwinkle-text); }
 .slide-3 p { color: var(--card-rose-text); }
 .slide-4 p { color: var(--card-sand-text); }
 .slide-5 p { color: var(--card-sky-text); }
 
-/* slide backgrounds: soft colour + illustration */
+/* Slide backgrounds */
 .slide-1 { background-color: var(--card-mint); background-image: url("../assets/slides/slide-1.svg"); }
 .slide-2 { background-color: var(--card-periwinkle); background-image: url("../assets/slides/slide-2.svg"); }
 .slide-3 { background-color: var(--card-rose); background-image: url("../assets/slides/slide-3.svg"); }
@@ -477,9 +466,8 @@ main > section {
     padding: var(--space-sm) var(--space-lg);
 }
 
-/* how it works: title + intro, then a half wheel with the step number + text that moves up */
-/* phone: centred title, mint divider, paragraph in a soft mint box */
-/* section titles: bigger, with a short mint line, so each section stands out */
+/* How it works */
+/* Section titles */
 #about > h2,
 #pricing > h2,
 .tut-intro h2 {
@@ -504,13 +492,12 @@ main > section {
 .tut-intro h2 {
     margin-bottom: var(--space-sm);
 }
-/* short mint line under the title */
 .tut-intro h2::after {
     content: "";
     display: block;
     width: 48px;
     height: 4px;
-    margin: var(--space-sm) auto 0; /* auto centres it */
+    margin: var(--space-sm) auto 0;
     border-radius: 2px;
     background-color: var(--accent-mint);
 }
@@ -523,14 +510,14 @@ main > section {
     color: var(--card-mint-text);
 }
 
-/* phone: the wheel is pinned bottom-left, each step fills the whole card */
+/* Wheel card */
 .tut-card {
     position: relative;
     overflow: hidden;
     border: 2px solid var(--step1-border);
     border-radius: var(--radius);
-    background-color: var(--step1-fill); /* step 1, used when the animation is off */
-    animation: tut-card 16s infinite; /* border and fill change with each step */
+    background-color: var(--step1-fill);
+    animation: tut-card 16s infinite;
 }
 .tut-card:hover,
 .tut-card:hover .tut-wheel,
@@ -539,16 +526,16 @@ main > section {
     animation-play-state: paused;
 }
 
-/* half wheel: its centre sits on the card's left edge */
+/* Half wheel */
 .tut-wheel {
-    --num-r: 40px; /* distance from the wheel's centre to each number: about the middle of the visible half */
+    --num-r: 40px; /* distance from the centre to each number */
     position: absolute;
-    left: -80px; /* half of its width */
-    bottom: 16px; /* fully inside the card, so the number sits in the middle of the half circle */
+    left: -80px;
+    bottom: 16px;
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    background-color: var(--step1-wheel); /* step 1 colour; the animation changes it per step */
+    background-color: var(--step1-wheel);
     animation: tut-wheel 16s infinite;
 }
 .tut-wheel span {
@@ -559,19 +546,18 @@ main > section {
     font-weight: 700;
     line-height: 1;
     color: var(--text-primary);
-    animation: tut-num 16s infinite; /* only the current number is visible */
+    animation: tut-num 16s infinite;
 }
-/* place the 4 numbers a quarter turn apart around the centre */
 .tut-wheel span:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateX(var(--num-r)); }
 .tut-wheel span:nth-child(2) { transform: translate(-50%, -50%) rotate(90deg) translateX(var(--num-r)); }
 .tut-wheel span:nth-child(3) { transform: translate(-50%, -50%) rotate(180deg) translateX(var(--num-r)); }
 .tut-wheel span:nth-child(4) { transform: translate(-50%, -50%) rotate(270deg) translateX(var(--num-r)); }
-/* same fade for every number, started at a different point so each shows during its own step */
+/* same fade, offset so each number shows during its own step */
 .tut-wheel span:nth-child(2) { animation-delay: -12s; }
 .tut-wheel span:nth-child(3) { animation-delay: -8s; }
 .tut-wheel span:nth-child(4) { animation-delay: -4s; }
 
-/* the window shows one step; the track holds all 4 stacked */
+/* Steps */
 .tut-window {
     height: 360px;
     overflow: hidden;
@@ -587,14 +573,12 @@ main > section {
     height: 20%;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* phone: text centred in the top part, so short steps don't leave a gap */
-    /* bottom padding keeps the space for the picture and the wheel empty */
+    justify-content: center;
     padding: var(--space-md) var(--space-md) 180px;
     background-repeat: no-repeat;
-    background-size: auto 160px; /* bigger picture, less empty space around it */
+    background-size: auto 160px;
     background-position: center bottom 12px;
 }
-/* each step's picture lives in its own li, so it moves with its text */
 .tut-track li:nth-child(1) { background-image: url("../assets/steps/step-1.svg"); }
 .tut-track li:nth-child(2) { background-image: url("../assets/steps/step-2.svg"); }
 .tut-track li:nth-child(3) { background-image: url("../assets/steps/step-3.svg"); }
@@ -615,10 +599,8 @@ main > section {
     color: var(--text-secondary);
 }
 
-/* all last 16s: a quarter turn and one step up about every 4 seconds.
-   Each step has its own colour: mint, blue, pink, sand (like its picture) */
-/* at 100% everything rolls on to "step 1 again" (a full turn, the copied step,
-   mint), which looks exactly like 0%, so the loop restarts without a jump */
+/* 16s loop: one step about every 4s */
+/* 100% looks the same as 0%, so the loop restarts seamlessly */
 @keyframes tut-wheel {
     0%, 20% { transform: rotate(0deg); background-color: var(--step1-wheel); }
     25%, 45% { transform: rotate(-90deg); background-color: var(--step2-wheel); }
@@ -640,23 +622,20 @@ main > section {
     75%, 95% { transform: translateY(-60%); }
     100% { transform: translateY(-80%); }
 }
-/* a number is visible during its step, fades out as it turns away, fades in as it arrives */
 @keyframes tut-num {
     0%, 20% { opacity: 1; }
     25%, 95% { opacity: 0; }
     100% { opacity: 1; }
 }
 
-/* ---------- dark mode only: coloured "Ink" cards like the palette samples ---------- */
-/* page background: two soft glows at the top (mint left, periwinkle right)
-   that fade into the dark page, instead of the light-mode pink gradient */
+/* Dark mode extras */
+/* Page background */
 :root[data-theme="dark"] body {
     background-image:
         radial-gradient(900px 600px at 5% 100px, var(--glow-mint), transparent 70%),
         radial-gradient(900px 600px at 95% 100px, var(--glow-periwinkle), transparent 70%);
     background-repeat: no-repeat;
 }
-/* phone: the big glows overlapped into one blob, so use two smaller ones, one per corner */
 @media (max-width: 767px) {
     :root[data-theme="dark"] body {
         background-image:
@@ -665,17 +644,15 @@ main > section {
     }
 }
 
-/* hero picture: a copy whose sand circle is #47301F */
 :root[data-theme="dark"] .hero-art {
     content: url("../assets/hero-3-circle-of-care-dark.svg");
 }
 
-/* header logo: same colour logo, but a copy whose lettering is light (#E8ECF4) */
 :root[data-theme="dark"] .logo img {
     content: url("../assets/carecircle-logo-light-text.png");
 }
 
-/* glow on hover: buttons glow softly in their colour while they lift */
+/* Hover glow */
 :root[data-theme="dark"] .btn:hover {
     box-shadow: 0 6px 14px var(--shadow-md), 0 0 20px var(--card-glow-mint);
 }
@@ -685,13 +662,11 @@ main > section {
 :root[data-theme="dark"] .theme-toggle:hover {
     box-shadow: 0 6px 14px var(--shadow-md), 0 0 20px var(--card-glow-periwinkle);
 }
-/* the featured plan's button is mint, so it glows mint */
 :root[data-theme="dark"] .featured .price-btn:hover {
     box-shadow: 0 6px 14px var(--shadow-md), 0 0 20px var(--card-glow-mint);
 }
 
-/* no animation for people who turned off motion: scroll the steps instead.
-   This block must come after the .tut rules above, or they would override it */
+/* Reduced motion (must come after the .tut rules) */
 @media (prefers-reduced-motion: reduce) {
     .tut-card,
     .tut-wheel,
@@ -699,7 +674,6 @@ main > section {
     .tut-track {
         animation: none;
     }
-    /* without the animation, show only 01 and drop the copied step */
     .tut-wheel span:not(:first-child),
     .tut-track li:nth-child(5) {
         display: none;
@@ -717,7 +691,7 @@ main > section {
     padding: 0;
 }
 
-/* pricing cards: top zone (title, price, button) + feature zone */
+/* Pricing cards */
 .price-card {
     position: relative;
     display: flex;
@@ -727,17 +701,16 @@ main > section {
     background-color: var(--bg-page);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-/* hover: the card lifts up with a shadow. transform doesn't move anything else on the page */
 .price-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 24px var(--shadow-md);
 }
-/* Familial: slightly bigger, mint border */
+/* Featured plan */
 .price-card.featured {
     transform: scale(1.05);
     border: 2px solid var(--accent-mint);
 }
-/* a second transform would replace the scale, so the hover repeats it */
+/* repeats the scale, since a second transform replaces it */
 .price-card.featured:hover {
     transform: scale(1.05) translateY(-8px);
 }
@@ -747,7 +720,7 @@ main > section {
     border-radius: var(--radius) var(--radius) 0 0;
 }
 .featured .price-top {
-    background-color: var(--card-mint); /* pale mint */
+    background-color: var(--card-mint);
 }
 .featured .price-desc {
     color: var(--card-mint-text);
@@ -760,7 +733,7 @@ main > section {
     margin: var(--space-sm) 0 0;
     color: var(--text-secondary);
 }
-/* big number with a small $ at its top-left */
+/* Price */
 .price {
     margin: var(--space-lg) 0 0;
     line-height: 1;
@@ -774,13 +747,11 @@ main > section {
     font-size: 3.5rem;
     font-weight: 700;
 }
-/* small cents next to the top of the big number, like the $ */
 .cents {
     vertical-align: top;
     font-size: 1.25rem;
     font-weight: 700;
 }
-/* "/ month" sits on the same line as the price */
 .price-period {
     font-size: 1rem;
     color: var(--text-secondary);
@@ -802,8 +773,7 @@ main > section {
     color: var(--btn-primary-text);
 }
 
-/* feature zone: light grey, fills the rest of the card, a check before each feature.
-   On phone it folds under "What's included"; on computer it is always open (main.js) */
+/* Feature list */
 .price-details {
     flex: 1;
     border-radius: 0 0 var(--radius) var(--radius);
@@ -824,11 +794,11 @@ main > section {
     list-style: none;
 }
 .price-features li::before {
-    content: "\2713"; /* ✓ written as a code so it shows correctly in any file encoding */
+    content: "\2713"; /* ✓ */
     margin-right: var(--space-sm);
     font-weight: 700;
 }
-/* "Best option" label centred on the card's top edge */
+/* Badge */
 .badge {
     position: absolute;
     top: 0;
@@ -851,15 +821,13 @@ main > section {
     gap: 12px;
 }
 
-/* dark mode only: each plan is a coloured Ink card with no border */
+/* Dark mode pricing */
 :root[data-theme="dark"] .price-card {
     border-color: transparent;
 }
-/* glow on hover: the card lifts and glows in its own colour */
 :root[data-theme="dark"] .price-card:hover {
     box-shadow: 0 12px 24px var(--shadow-md), 0 0 48px var(--glow-color);
 }
-/* --glow-color is set per card, so one rule above works for all three */
 :root[data-theme="dark"] #pricebox > ul > li:nth-child(1) { --glow-color: var(--card-glow-sky); }
 :root[data-theme="dark"] #pricebox > ul > li:nth-child(2) { --glow-color: var(--card-glow-mint); }
 :root[data-theme="dark"] #pricebox > ul > li:nth-child(3) { --glow-color: var(--card-glow-periwinkle); }
@@ -867,25 +835,23 @@ main > section {
 :root[data-theme="dark"] #pricebox > ul > li:nth-child(2) { background-color: var(--card-mint); }
 :root[data-theme="dark"] #pricebox > ul > li:nth-child(3) { background-color: var(--card-periwinkle); }
 :root[data-theme="dark"] .price-top {
-    background-color: transparent; /* the card colour shows through */
+    background-color: transparent;
 }
 :root[data-theme="dark"] #pricebox > ul > li:nth-child(1) .price-desc { color: var(--card-sky-text); }
 :root[data-theme="dark"] #pricebox > ul > li:nth-child(3) .price-desc { color: var(--card-periwinkle-text); }
 
-/* phone only: compact pricing cards, so all 3 plans fit with little scrolling.
-   Name and price on one line, short description, slim button, features in 2 columns */
+/* Compact pricing on phone */
 @media (max-width: 767px) {
     .price-card.featured,
     .price-card.featured:hover {
         transform: none;
     }
     .price-card.featured {
-        background-color: var(--card-mint); /* pale mint behind the badge too */
+        background-color: var(--card-mint);
     }
     #pricebox > ul {
         gap: 12px;
     }
-    /* the pill sits right next to the plan name */
     .badge {
         position: static;
         transform: none;
@@ -906,7 +872,7 @@ main > section {
     }
     .price {
         grid-column: 2;
-        grid-row: 1; /* same line as the plan name */
+        grid-row: 1;
         margin: 0;
     }
     .amount {
@@ -919,7 +885,7 @@ main > section {
     }
     .price-desc,
     .price-btn {
-        grid-column: 1 / -1; /* full width under the name and price */
+        grid-column: 1 / -1;
     }
     .price-desc {
         margin-top: var(--space-xs);
@@ -938,7 +904,7 @@ main > section {
     }
 }
 
-/* "Every plan comes with": features in neat columns inside one soft strip */
+/* Included features */
 .included {
     margin-top: var(--space-xl);
 }
@@ -949,7 +915,7 @@ main > section {
 }
 .included-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* phone: 2 columns */
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-md) var(--space-lg);
     margin: 0;
     padding: var(--space-lg);
@@ -963,7 +929,6 @@ main > section {
     gap: var(--space-sm);
     font-weight: 600;
 }
-/* small mint circle with a check in it */
 .included-list li::before {
     content: "\2713"; /* ✓ */
     flex-shrink: 0;
@@ -978,7 +943,7 @@ main > section {
     font-size: 0.875rem;
 }
 
-/* closing banner under the pricing cards */
+/* Closing banner */
 .cta-banner {
     display: flex;
     flex-direction: column;
@@ -987,7 +952,7 @@ main > section {
     margin-top: var(--space-xl);
     padding: var(--space-xl) var(--space-lg);
     border-radius: var(--radius);
-    background-color: var(--card-mint); /* pale mint */
+    background-color: var(--card-mint);
     text-align: center;
 }
 .cta-title {
@@ -1003,16 +968,16 @@ main > section {
     margin-top: var(--space-sm);
 }
 
-/* footer: brand + 3 link columns, then a thin line and a small bottom row */
+/* Footer */
 .footer {
     position: relative;
-    overflow: hidden; /* clips the big circle at the footer's edges */
+    overflow: hidden;
     padding: var(--space-xl) 0 var(--space-md);
-    border-top: 1px solid var(--footer-border); /* only visible in dark mode */
-    background-color: var(--footer-bg); /* same blue as the header line */
-    color: var(--footer-text); /* dark text stays readable on the light blue */
+    border-top: 1px solid var(--footer-border);
+    background-color: var(--footer-bg);
+    color: var(--footer-text);
 }
-/* big soft circle in the background, partly off the top-right corner */
+/* Background circle */
 .footer::before {
     content: "";
     position: absolute;
@@ -1023,7 +988,6 @@ main > section {
     border-radius: 50%;
     background-color: var(--footer-circle);
 }
-/* keeps the footer content on top of the circle */
 .footer .container {
     position: relative;
 }
@@ -1040,11 +1004,11 @@ main > section {
 .footer-logo {
     align-self: flex-start;
     height: 56px;
-    filter: var(--footer-logo-filter); /* light mode: turns the white logo black. Dark mode: stays white */
+    filter: var(--footer-logo-filter); /* turns the white logo black in light mode */
 }
 .footer-motto {
     margin: 0;
-    padding-left: 8px; /* small indent so it lines up with the logo */
+    padding-left: 8px;
     font-size: 1.25rem;
     font-weight: 600;
 }
@@ -1053,7 +1017,7 @@ main > section {
     margin: 0;
     padding-left: 8px;
 }
-/* 4 small dots in the palette colours, like the dots in the illustrations */
+/* Palette dots */
 .footer-dots {
     display: flex;
     gap: var(--space-sm);
@@ -1091,11 +1055,10 @@ main > section {
     font-weight: 600;
     text-decoration: none;
 }
-/* underline only on hover, so links still look clickable */
 .footer a:hover {
     text-decoration: underline;
 }
-/* bottom row: thin line above, small text, centred on phone */
+/* Footer bottom row */
 .footer-bottom {
     display: flex;
     flex-wrap: wrap;
@@ -1119,7 +1082,7 @@ main > section {
 }
 
 
-/* styles for computer */
+/* Computer */
 @media (min-width: 768px) {
     :root {
         --space-section: 80px;
@@ -1127,7 +1090,7 @@ main > section {
     .header {
         padding: var(--space-md) 0;
     }
-    /* computer: links back in the header row, no ☰ */
+    /* Nav */
     .nav-links {
         display: flex;
         position: static;
@@ -1158,7 +1121,7 @@ main > section {
         width: 36px;
         height: 36px;
     }
-    /* computer: Log In shows its words instead of the icon */
+    /* Log In */
     .login-btn {
         display: inline-block;
         width: auto;
@@ -1179,7 +1142,7 @@ main > section {
         gap: 20px;
     }
 
-    /* computer: text on the left, illustration on the right */
+    /* Hero */
     #hero {
         flex-direction: row;
         justify-content: space-between;
@@ -1219,7 +1182,7 @@ main > section {
         font-size: 2.5rem;
     }
 
-    /* title + intro on the left, wheel card on the right */
+    /* How it works */
     #tut {
         display: flex;
         align-items: center;
@@ -1237,8 +1200,8 @@ main > section {
         margin-left: 0;
         padding: 0;
         background-color: transparent;
-        color: var(--text-secondary); /* no mint box on computer, so normal text colour */
-        text-align: justify; /* straight left and right edges */
+        color: var(--text-secondary);
+        text-align: justify;
     }
     .tut-card {
         display: flex;
@@ -1246,7 +1209,6 @@ main > section {
         flex-direction: row;
         align-items: center;
     }
-    /* computer: the wheel goes back into the row, left of the text */
     .tut-wheel {
         --num-r: 72px;
         position: relative;
@@ -1255,8 +1217,7 @@ main > section {
         flex-shrink: 0;
         width: 300px;
         height: 300px;
-        /* half wheel: -150px puts its centre on the card's edge. It is taller than the card,
-           so negative top/bottom margins stop it stretching the card (overflow: hidden trims it) */
+        /* negative margins stop the wheel stretching the card */
         margin: -20px 0 -20px -150px;
     }
     .tut-wheel span {
@@ -1266,7 +1227,6 @@ main > section {
         flex: 1;
         height: 260px;
     }
-    /* computer: picture on the right, right padding keeps its space empty */
     .tut-track li {
         justify-content: center;
         padding: var(--space-lg) 240px var(--space-lg) var(--space-lg);
@@ -1296,7 +1256,7 @@ main > section {
         padding: var(--space-lg) var(--space-xl);
     }
 
-    /* computer: brand left, the 3 columns on the right; bottom row split left/right */
+    /* Footer */
     .footer-top {
         flex-direction: row;
         justify-content: space-between;

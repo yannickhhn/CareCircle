@@ -27,6 +27,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 
 ### Mon Nov 16: interactive dashboard
 - [x] Split data into managers, households, medications, appointments, doctors JSON files (linked by ids)
+- [x] Comments cleaned up in every HTML, CSS and JS file (section labels plus short notes on tricky logic)
 - [ ] Lists drawn from sample data with JavaScript
 - [ ] Daily medication check-off
 - [ ] Side panel Add forms work (medication, appointment, dependent, invite), with validation
