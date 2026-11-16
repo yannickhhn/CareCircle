@@ -34,6 +34,126 @@ function renderHeader(household) {
     time.textContent = today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 }
 
+// Returns a new element with an optional class and plain text (textContent, so user text is never read as HTML)
+function makeElement(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text) element.textContent = text;
+    return element;
+}
+
+// Returns "07:30" as "7:30 AM"
+function formatTime(hhmm) {
+    const parts = hhmm.split(":");
+    const hour = Number(parts[0]);
+    const suffix = hour < 12 ? "AM" : "PM";
+    const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+    return hour12 + ":" + parts[1] + " " + suffix;
+}
+
+// Draws this household's medications for today: given today goes to Filled, the rest to Upcoming (sorted by time)
+function renderMedications(household) {
+    const upcomingList = document.getElementById("med-upcoming");
+    const filledList = document.getElementById("med-filled");
+    upcomingList.textContent = "";
+    filledList.textContent = "";
+
+    const now = new Date();
+    const today = toDateString(now);
+    const nowTime = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
+
+    const meds = data.medications.filter(function (med) {
+        return med.householdId === household.id;
+    });
+    meds.sort(function (a, b) {
+        return a.time.localeCompare(b.time);
+    });
+
+    meds.forEach(function (med) {
+        const isFilled = Boolean(med.givenAt) && med.givenAt.startsWith(today);
+        const isOverdue = !isFilled && med.time < nowTime;
+        const row = createMedRow(med, household, today, isFilled, isOverdue);
+        if (isFilled) {
+            filledList.appendChild(row);
+        } else {
+            upcomingList.appendChild(row);
+        }
+    });
+}
+
+// Returns one medication row: avatar if given, checkbox, who and what, Overdue badge, time, and Delete
+function createMedRow(med, household, today, isFilled, isOverdue) {
+    const dependent = household.dependents.find(function (d) {
+        return d.id === med.dependentId;
+    });
+    const firstName = dependent.name.split(" ")[0];
+
+    const row = makeElement("li", "med-row");
+    if (isOverdue) row.classList.add("is-overdue");
+    if (isFilled) row.classList.add("is-filled");
+
+    if (isFilled) {
+        const avatar = makeElement("span", "avatar", firstName.charAt(0));
+        avatar.setAttribute("aria-hidden", "true");
+        row.appendChild(avatar);
+    }
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = "dose-" + med.id;
+    checkbox.checked = isFilled;
+    row.appendChild(checkbox);
+
+    const label = document.createElement("label");
+    label.htmlFor = checkbox.id;
+    label.append(
+        makeElement("span", "med-who", firstName),
+        makeElement("span", "med-name", med.name + " · " + med.dose)
+    );
+    row.appendChild(label);
+
+    if (isOverdue) {
+        row.appendChild(makeElement("span", "badge-overdue", "Overdue"));
+    }
+
+    const time = makeElement("time", null, formatTime(med.time) + " ");
+    time.dateTime = today + "T" + med.time;
+    time.appendChild(makeElement("span", null,
+        new Date().toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })));
+    row.appendChild(time);
+
+    if (isFilled) {
+        row.appendChild(createGivenBy(med));
+    }
+
+    const deleteButton = makeElement("button", "delete-btn", "Delete");
+    deleteButton.type = "button";
+    row.appendChild(deleteButton);
+
+    return row;
+}
+
+const CHECK_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></svg>';
+
+// Returns "✓ Lisa · 8:05 AM": who gave the dose and when
+function createGivenBy(med) {
+    const manager = data.managers.find(function (m) {
+        return m.id === med.givenBy;
+    });
+
+    const givenBy = makeElement("span", "given-by");
+    givenBy.innerHTML = CHECK_ICON; // fixed icon from the code, no user data
+    givenBy.append(
+        makeElement("span", "visually-hidden", "Given by"),
+        " " + manager.firstName + " · "
+    );
+
+    const time = makeElement("time", null, formatTime(med.givenAt.slice(11, 16)));
+    time.dateTime = med.givenAt;
+    givenBy.appendChild(time);
+    return givenBy;
+}
+
 // Loads all the data, finds the current household and draws the dashboard
 async function loadData() {
     try {
@@ -47,6 +167,7 @@ async function loadData() {
             return h.id === CURRENT_HOUSEHOLD_ID;
         });
         renderHeader(household);
+        renderMedications(household);
     } catch (error) {
         console.error(error);
     }

@@ -120,53 +120,11 @@
                     <div class="med-lists">
                         <!-- Upcoming: not given yet, overdue doses first -->
                         <h3>Upcoming</h3>
-                        <ul class="med-list" id="med-upcoming">
-                            <li class="med-row is-overdue">
-                                <input type="checkbox" id="dose-med2">
-                                <label for="dose-med2">
-                                    <span class="med-who">Lucas</span>
-                                    <span class="med-name">Asthma inhaler · 2 puffs</span>
-                                </label>
-                                <span class="badge-overdue">Overdue</span>
-                                <time datetime="2026-11-12T07:30">7:30 AM <span>Thu 12 Nov</span></time>
-                                <button type="button" class="delete-btn">Delete</button>
-                            </li>
-                            <li class="med-row">
-                                <input type="checkbox" id="dose-med4">
-                                <label for="dose-med4">
-                                    <span class="med-who">Leo</span>
-                                    <span class="med-name">Amoxicillin syrup · 5 ml</span>
-                                </label>
-                                <time datetime="2026-11-12T20:00">8:00 PM <span>Thu 12 Nov</span></time>
-                                <button type="button" class="delete-btn">Delete</button>
-                            </li>
-                        </ul>
+                        <ul class="med-list" id="med-upcoming"></ul>
 
                         <!-- Filled: given today, with who gave it and when -->
                         <h3>Filled</h3>
-                        <ul class="med-list" id="med-filled">
-                            <li class="med-row is-filled">
-                                <span class="avatar" aria-hidden="true">L</span>
-                                <input type="checkbox" id="dose-med3" checked>
-                                <label for="dose-med3">
-                                    <span class="med-who">Leo</span>
-                                    <span class="med-name">Amoxicillin syrup · 5 ml</span>
-                                </label>
-                                <time datetime="2026-11-12T08:00">8:00 AM <span>Thu 12 Nov</span></time>
-                                <span class="given-by">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <circle cx="12" cy="12" r="9"/>
-                                        <path d="M8 12.5l2.7 2.7L16 9.8"/>
-                                    </svg>
-                                    <span class="visually-hidden">Given by</span>
-                                    Lisa
-                                    <span aria-hidden="true">·</span>
-                                    <span class="visually-hidden">at</span>
-                                    <time datetime="2026-11-12T08:05">8:05 AM</time>
-                                </span>
-                                <button type="button" class="delete-btn">Delete</button>
-                            </li>
-                        </ul>
+                        <ul class="med-list" id="med-filled"></ul>
                     </div>
 
                     <!-- Add medication form: each field has its own error message spot for validation -->
