@@ -269,6 +269,37 @@ function createPlace(address) {
     return place;
 }
 
+// Draws this household's doctor cards
+function renderDoctors(household) {
+    const list = document.getElementById("doctor-list");
+    list.textContent = "";
+    data.doctors.filter(function (doc) {
+        return doc.householdId === household.id;
+    }).forEach(function (doc) {
+        list.appendChild(createDoctorCard(doc, household));
+    });
+}
+
+// Returns one doctor card: who it's for, name, role, phone and email links, and address
+function createDoctorCard(doc, household) {
+    const card = makeElement("li", "doctor-card");
+    card.append(
+        makeElement("p", "doctor-for", "For " + getFirstName(household, doc.dependentId)),
+        makeElement("h4", "doctor-name", doc.name),
+        makeElement("p", "doctor-role", doc.role)
+    );
+
+    const phone = makeElement("a", null, doc.phone);
+    phone.href = "tel:" + doc.phone.replace(/[^\d+]/g, "");
+    const email = makeElement("a", null, doc.email);
+    email.href = "mailto:" + doc.email;
+    const contact = makeElement("p", "doctor-contact");
+    contact.append(phone, document.createElement("br"), email);
+
+    card.append(contact, createPlace(doc.address));
+    return card;
+}
+
 // Draws the household section: plan line, managers with their email, and dependents with Edit and Remove
 function renderHousehold(household) {
     const memberCount = household.managerIds.length + household.dependents.length;
@@ -469,6 +500,7 @@ function refreshPeople(household) {
     renderHousehold(household);
     renderMedications(household);
     renderAppointments(household);
+    renderDoctors(household);
     fillDependentSelect(document.getElementById("med-for"), household);
     fillDependentSelect(document.getElementById("appt-for"), household);
 }
@@ -647,6 +679,7 @@ async function loadData() {
         renderHeader(household);
         renderMedications(household);
         renderAppointments(household);
+        renderDoctors(household);
         renderHousehold(household);
         setUpMedForm(household);
         setUpApptForm(household);

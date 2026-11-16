@@ -215,6 +215,7 @@
 
 .med-list,
 .appt-grid,
+.doctor-grid,
 .member-list {
     margin: 0;
     padding: 0;
@@ -338,12 +339,14 @@
 }
 
 /* Appointment cards */
-.appt-grid {
+.appt-grid,
+.doctor-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: var(--space-md);
 }
-.appt-card {
+.appt-card,
+.doctor-card {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -354,7 +357,8 @@
     border-radius: var(--radius);
     background-color: var(--bg-page);
 }
-.appt-card p {
+.appt-card p,
+.doctor-card p {
     margin: 0;
 }
 .appt-who {
@@ -384,6 +388,25 @@
 .appt-card .delete-btn {
     align-self: flex-end;
     margin-top: auto;
+}
+
+/* Doctor cards */
+.doctor-card {
+    border-top-color: var(--accent-periwinkle);
+}
+.doctor-for {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+.doctor-grid {
+    margin-top: var(--space-lg);
+}
+.doctor-name {
+    margin: 0;
+    font-size: 1.125rem;
+}
+.doctor-contact a {
+    color: var(--focus-ring);
 }
 
 /* Household members */
