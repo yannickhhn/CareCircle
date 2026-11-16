@@ -28,11 +28,11 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 ### Mon Nov 16: interactive dashboard
 - [x] Split data into managers, households, medications, appointments, doctors JSON files (linked by ids)
 - [x] Comments cleaned up in every HTML, CSS and JS file (section labels plus short notes on tricky logic)
-- [ ] Lists drawn from sample data with JavaScript
-- [ ] Daily medication check-off
-- [ ] Side panel Add forms work (medication, appointment, dependent, invite), with validation
-- [ ] Data saved in localStorage
-- [ ] Free-tier limits shown in the UI
+- [x] Lists drawn from sample data with JavaScript (header, medications, appointments, household)
+- [x] Daily medication check-off (in memory until saving exists)
+- [x] Appointments: Upcoming and Overdue (past ones stay until deleted), no Completed section
+- [x] Medication Add form with validation (dropdown from the household, required, max length, time format, dependent must belong to the household)
+- [ ] Moved after the milestone: appointment, dependent and invite forms; Delete/Edit/Remove buttons; localStorage; free-tier limit message
 
 ### Tue Nov 17: Flask auth skeleton (Flask lecture Nov 17)
 - [ ] Flask server serves the pages

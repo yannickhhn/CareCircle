@@ -315,6 +315,110 @@ function createRowButton(className, label, name) {
     return button;
 }
 
+// Fills a "For who?" dropdown with a placeholder and this household's dependents
+function fillDependentSelect(select, household) {
+    select.textContent = "";
+    const placeholder = makeElement("option", null, "Choose a person");
+    placeholder.value = "";
+    select.appendChild(placeholder);
+    household.dependents.forEach(function (dependent) {
+        const option = makeElement("option", null, dependent.name);
+        option.value = dependent.id;
+        select.appendChild(option);
+    });
+}
+
+// Shows a message under a form field and marks it invalid (red border)
+function showFieldError(input, message) {
+    document.getElementById(input.id + "-error").textContent = message;
+    input.setAttribute("aria-invalid", "true");
+}
+
+// Removes a form field's message and its invalid mark
+function clearFieldError(input) {
+    document.getElementById(input.id + "-error").textContent = "";
+    input.removeAttribute("aria-invalid");
+}
+
+// Checks one medication form field, shows or clears its error, and returns true if valid
+function validateMedField(input, household) {
+    const value = input.value.trim();
+    let message = "";
+
+    if (value === "") {
+        message = "This field is required.";
+    } else if (input.id === "med-for" && !household.dependents.some(function (d) { return d.id === value; })) {
+        message = "Choose someone from this household.";
+    } else if (input.maxLength > 0 && value.length > input.maxLength) {
+        message = "Use at most " + input.maxLength + " characters.";
+    } else if (input.id === "med-time" && !/^\d{2}:\d{2}$/.test(value)) {
+        message = "Enter a time like 08:00.";
+    }
+
+    if (message === "") {
+        clearFieldError(input);
+        return true;
+    }
+    showFieldError(input, message);
+    return false;
+}
+
+// Sets up the Add medication form: fills the dropdown and handles typing, Cancel and Add
+function setUpMedForm(household) {
+    const form = document.getElementById("med-form");
+    const forSelect = document.getElementById("med-for");
+    const nameInput = document.getElementById("med-name");
+    const doseInput = document.getElementById("med-dose");
+    const timeInput = document.getElementById("med-time");
+    const fields = [forSelect, nameInput, doseInput, timeInput];
+
+    fillDependentSelect(forSelect, household);
+    form.noValidate = true;
+
+    // Re-checks a field while it is being fixed
+    form.addEventListener("input", function (event) {
+        if (event.target.getAttribute("aria-invalid") === "true") {
+            validateMedField(event.target, household);
+        }
+    });
+
+    // Cancel: clears the error messages along with the fields
+    form.addEventListener("reset", function () {
+        fields.forEach(clearFieldError);
+    });
+
+    // Add: checks every field, then saves the medication, redraws the list and empties the form
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        let firstWrong = null;
+        fields.forEach(function (input) {
+            if (!validateMedField(input, household) && firstWrong === null) {
+                firstWrong = input;
+            }
+        });
+        if (firstWrong) {
+            firstWrong.focus();
+            return;
+        }
+
+        data.medications.push({
+            id: "med" + Date.now(),
+            householdId: household.id,
+            dependentId: forSelect.value,
+            name: nameInput.value.trim(),
+            dose: doseInput.value.trim(),
+            time: timeInput.value,
+            repeat: document.getElementById("med-repeat").value,
+            note: document.getElementById("med-note").value.trim().slice(0, 200),
+            givenBy: null,
+            givenAt: null
+        });
+        renderMedications(household);
+        form.reset();
+    });
+}
+
 // Loads all the data, finds the current household and draws the dashboard
 async function loadData() {
     try {
@@ -331,6 +435,7 @@ async function loadData() {
         renderMedications(household);
         renderAppointments(household);
         renderHousehold(household);
+        setUpMedForm(household);
     } catch (error) {
         console.error(error);
     }
