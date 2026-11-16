@@ -24,7 +24,7 @@ Keeping track of a family member's care often gets split across text messages, p
 | Layer | Technology |
 | --- | --- |
 | Front end | HTML5, CSS3, vanilla JavaScript (no frameworks) |
-| Back end (planned) | Node.js |
+| Back end (planned) | Python Flask |
 | Data (planned) | JSON files on disk |
 | Authentication (planned) | JWT, with hashed passwords |
 
@@ -38,7 +38,6 @@ Pages being built:
 | Register | Create a manager account |
 | Login | Sign in to an existing account |
 | Household dashboard | Overview of the household's managers and dependents |
-| Dependent profile | One dependent's details and links to their care information |
 | Medications | Medication list with a daily check-off |
 | Appointments | Upcoming appointments, nearest date first |
 | Doctor card | Contact details for a dependent's doctor |
@@ -47,4 +46,4 @@ All pages share one stylesheet and are designed to work at phone width.
 
 ## Project status
 
-In progress: building the static front end. Setup and run instructions will be added once the Node server exists.
+In progress: building the static front end. Setup and run instructions will be added once the Flask server exists.
