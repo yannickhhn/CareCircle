@@ -186,7 +186,7 @@
                 </div>
             </section>
 
-            <!-- Appointments: cards split into Upcoming and Completed -->
+            <!-- Appointments: cards split into Upcoming and Overdue -->
             <section id="appointments" class="app-section" aria-labelledby="appointments-title">
                 <div class="section-head">
                     <h2 id="appointments-title">Appointments</h2>
@@ -202,48 +202,11 @@
                     <div class="appt-lists">
                         <!-- Upcoming: soonest first, with preparation notes -->
                         <h3>Upcoming</h3>
-                        <ul class="appt-grid" id="appt-upcoming">
-                            <li class="appt-card">
-                                <h4 class="appt-who">Mia</h4>
-                                <p class="appt-when"><time datetime="2026-11-18T13:00">Wed 18 Nov · 1:00 PM</time></p>
-                                <p class="appt-reason">Dentist</p>
-                                <p class="appt-place">Smile Dental<br>45 Oak Avenue</p>
-                                <ul class="appt-notes">
-                                    <li>Bring her retainer</li>
-                                </ul>
-                            </li>
-                            <li class="appt-card">
-                                <h4 class="appt-who">Lucas</h4>
-                                <p class="appt-when"><time datetime="2026-11-20T15:45">Fri 20 Nov · 3:45 PM</time></p>
-                                <p class="appt-reason">Lung checkup</p>
-                                <p class="appt-place">City Lung Clinic<br>200 Park Road</p>
-                                <ul class="appt-notes">
-                                    <li>Bring the inhaler</li>
-                                    <li>No sports before</li>
-                                </ul>
-                            </li>
-                            <li class="appt-card">
-                                <h4 class="appt-who">Leo</h4>
-                                <p class="appt-when"><time datetime="2026-11-23T11:00">Mon 23 Nov · 11:00 AM</time></p>
-                                <p class="appt-reason">Ear follow-up</p>
-                                <p class="appt-place">Park Kids Clinic<br>12 Lake Street</p>
-                            </li>
-                        </ul>
+                        <ul class="appt-grid" id="appt-upcoming"></ul>
 
-                        <!-- Completed: past visits, with the avatar of the manager who went -->
-                        <h3>Completed</h3>
-                        <ul class="appt-grid" id="appt-completed">
-                            <li class="appt-card is-completed">
-                                <span class="avatar">
-                                    <span aria-hidden="true">D</span>
-                                    <span class="visually-hidden">David went</span>
-                                </span>
-                                <h4 class="appt-who">Leo</h4>
-                                <p class="appt-when"><time datetime="2026-11-09T11:00">Mon 9 Nov · 11:00 AM</time></p>
-                                <p class="appt-reason">Ear infection</p>
-                                <p class="appt-place">Park Kids Clinic<br>12 Lake Street</p>
-                            </li>
-                        </ul>
+                        <!-- Overdue: date has passed, stays until a manager deletes it -->
+                        <h3>Overdue</h3>
+                        <ul class="appt-grid" id="appt-overdue"></ul>
                     </div>
 
                     <!-- Add appointment form: date and time side by side -->

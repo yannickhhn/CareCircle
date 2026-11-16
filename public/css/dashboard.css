@@ -383,15 +383,22 @@
     background-color: var(--card-sky);
     color: var(--card-sky-text);
 }
-/* Completed */
-.appt-card.is-completed {
-    border-top-color: var(--border);
+/* Overdue */
+.appt-card.is-overdue {
+    border-top-color: var(--accent-rose);
     background-color: var(--bg-surface);
 }
-.appt-card .avatar {
-    position: absolute;
-    top: var(--space-sm);
-    right: var(--space-sm);
+.appt-card .delete-btn {
+    align-self: flex-end;
+    margin-top: auto;
+    border-color: var(--error-text);
+    background-color: var(--error-text);
+    color: var(--bg-page);
+    font-weight: 600;
+}
+.appt-card .delete-btn:hover {
+    background-color: var(--error-text);
+    filter: brightness(0.9);
 }
 
 /* Household members */

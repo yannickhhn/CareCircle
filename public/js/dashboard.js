@@ -58,6 +58,21 @@ function formatTime(hhmm) {
     return hour12 + ":" + parts[1] + " " + suffix;
 }
 
+// Returns "2026-11-18" as "Wed 18 Nov" (built from its parts, since new Date("2026-11-18") is read as UTC and can be a day off)
+function formatDay(dateString) {
+    const parts = dateString.split("-");
+    const date = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    return date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+}
+
+// Returns the first name of a dependent in this household ("Lucas Brown" becomes "Lucas")
+function getFirstName(household, dependentId) {
+    const dependent = household.dependents.find(function (d) {
+        return d.id === dependentId;
+    });
+    return dependent.name.split(" ")[0];
+}
+
 // Draws this household's medications for today: given today goes to Filled, the rest to Upcoming (sorted by time)
 function renderMedications(household) {
     const upcomingList = document.getElementById("med-upcoming");
@@ -90,10 +105,7 @@ function renderMedications(household) {
 
 // Returns one medication row: avatar if given, checkbox, who and what, Overdue badge, time, and Delete
 function createMedRow(med, household, today, isFilled, isOverdue) {
-    const dependent = household.dependents.find(function (d) {
-        return d.id === med.dependentId;
-    });
-    const firstName = dependent.name.split(" ")[0];
+    const firstName = getFirstName(household, med.dependentId);
 
     const row = makeElement("li", "med-row");
     if (isOverdue) row.classList.add("is-overdue");
@@ -179,6 +191,80 @@ function toggleDose(med, household, isGiven) {
     renderMedications(household);
 }
 
+// Draws this household's appointments by date: still ahead goes to Upcoming, already past to Overdue
+function renderAppointments(household) {
+    const upcomingList = document.getElementById("appt-upcoming");
+    const overdueList = document.getElementById("appt-overdue");
+    upcomingList.textContent = "";
+    overdueList.textContent = "";
+
+    const now = new Date();
+    const nowString = toDateString(now) + "T" + toTimeString(now);
+
+    const appts = data.appointments.filter(function (appt) {
+        return appt.householdId === household.id;
+    });
+    appts.sort(function (a, b) {
+        return (a.date + "T" + a.time).localeCompare(b.date + "T" + b.time);
+    });
+
+    appts.forEach(function (appt) {
+        const isOverdue = appt.date + "T" + appt.time < nowString;
+        const card = createApptCard(appt, household, isOverdue);
+        if (isOverdue) {
+            overdueList.appendChild(card);
+        } else {
+            upcomingList.appendChild(card);
+        }
+    });
+}
+
+// Returns one appointment card: who, when, reason, place, notes and Delete
+function createApptCard(appt, household, isOverdue) {
+    const card = makeElement("li", "appt-card");
+    if (isOverdue) card.classList.add("is-overdue");
+
+    card.appendChild(makeElement("h4", "appt-who", getFirstName(household, appt.dependentId)));
+
+    const when = makeElement("p", "appt-when");
+    const time = makeElement("time", null, formatDay(appt.date) + " · " + formatTime(appt.time));
+    time.dateTime = appt.date + "T" + appt.time;
+    when.appendChild(time);
+    card.appendChild(when);
+
+    card.appendChild(makeElement("p", "appt-reason", appt.reason));
+    card.appendChild(createPlace(appt.address));
+
+    if (appt.notes.length > 0) {
+        const notes = makeElement("ul", "appt-notes");
+        appt.notes.forEach(function (note) {
+            notes.appendChild(makeElement("li", null, note));
+        });
+        card.appendChild(notes);
+    }
+
+    const deleteButton = makeElement("button", "delete-btn", "Delete");
+    deleteButton.type = "button";
+    card.appendChild(deleteButton);
+    return card;
+}
+
+// Returns the address on two lines: the place name, then the street ("Smile Dental, 45 Oak Avenue")
+function createPlace(address) {
+    const place = makeElement("p", "appt-place");
+    const commaIndex = address.indexOf(",");
+    if (commaIndex === -1) {
+        place.textContent = address;
+    } else {
+        place.append(
+            address.slice(0, commaIndex),
+            document.createElement("br"),
+            address.slice(commaIndex + 1).trim()
+        );
+    }
+    return place;
+}
+
 // Loads all the data, finds the current household and draws the dashboard
 async function loadData() {
     try {
@@ -193,6 +279,7 @@ async function loadData() {
         });
         renderHeader(household);
         renderMedications(household);
+        renderAppointments(household);
     } catch (error) {
         console.error(error);
     }
