@@ -19,6 +19,13 @@ function toDateString(date) {
     return date.getFullYear() + "-" + month + "-" + day;
 }
 
+// Returns a time as "14:05" in local time
+function toTimeString(date) {
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return hours + ":" + minutes;
+}
+
 // Fills the header with the household's name, plan, member count and today's date
 function renderHeader(household) {
     const plan = household.plan.charAt(0).toUpperCase() + household.plan.slice(1);
@@ -60,7 +67,7 @@ function renderMedications(household) {
 
     const now = new Date();
     const today = toDateString(now);
-    const nowTime = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
+    const nowTime = toTimeString(now);
 
     const meds = data.medications.filter(function (med) {
         return med.householdId === household.id;
@@ -102,6 +109,9 @@ function createMedRow(med, household, today, isFilled, isOverdue) {
     checkbox.type = "checkbox";
     checkbox.id = "dose-" + med.id;
     checkbox.checked = isFilled;
+    checkbox.addEventListener("change", function () {
+        toggleDose(med, household, checkbox.checked);
+    });
     row.appendChild(checkbox);
 
     const label = document.createElement("label");
@@ -136,13 +146,14 @@ function createMedRow(med, household, today, isFilled, isOverdue) {
 const CHECK_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></svg>';
 
 // Returns "✓ Lisa · 8:05 AM": who gave the dose and when
+// (innerHTML is only used for the fixed icon from the code, never for user data)
 function createGivenBy(med) {
     const manager = data.managers.find(function (m) {
         return m.id === med.givenBy;
     });
 
     const givenBy = makeElement("span", "given-by");
-    givenBy.innerHTML = CHECK_ICON; // fixed icon from the code, no user data
+    givenBy.innerHTML = CHECK_ICON;
     givenBy.append(
         makeElement("span", "visually-hidden", "Given by"),
         " " + manager.firstName + " · "
@@ -152,6 +163,20 @@ function createGivenBy(med) {
     time.dateTime = med.givenAt;
     givenBy.appendChild(time);
     return givenBy;
+}
+
+// Marks a dose as given now by the current manager (the household's first manager until login exists),
+// or clears it if unticked, then redraws the lists
+function toggleDose(med, household, isGiven) {
+    if (isGiven) {
+        const now = new Date();
+        med.givenAt = toDateString(now) + "T" + toTimeString(now);
+        med.givenBy = household.managerIds[0];
+    } else {
+        med.givenAt = null;
+        med.givenBy = null;
+    }
+    renderMedications(household);
 }
 
 // Loads all the data, finds the current household and draws the dashboard

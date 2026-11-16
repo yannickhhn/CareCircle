@@ -189,7 +189,8 @@ body {
     box-shadow: 0 8px 16px var(--shadow-sm);
 }
 .nav-links.open {
-    display: flex; /* set by main.js */
+    /* set by main.js */
+    display: flex;
 }
 .nav-links a {
     display: block;
@@ -203,7 +204,8 @@ body {
     margin-left: auto;
 }
 .btn-outline {
-    display: inline-block; /* transform doesn't work on inline elements */
+    /* transform doesn't work on inline elements */
+    display: inline-block;
     border: 1px solid var(--accent-periwinkle);
     border-radius: 6px;
     padding: var(--space-xs) var(--space-sm);
@@ -528,7 +530,8 @@ main > section {
 
 /* Half wheel */
 .tut-wheel {
-    --num-r: 40px; /* distance from the centre to each number */
+    /* distance from the centre to each number */
+    --num-r: 40px;
     position: absolute;
     left: -80px;
     bottom: 16px;
@@ -563,7 +566,8 @@ main > section {
     overflow: hidden;
 }
 .tut-track {
-    height: 500%; /* 4 steps + the copy of step 1 */
+    /* 4 steps + the copy of step 1 */
+    height: 500%;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -794,7 +798,8 @@ main > section {
     list-style: none;
 }
 .price-features li::before {
-    content: "\2713"; /* ✓ */
+    /* Check mark ✓ */
+    content: "\2713";
     margin-right: var(--space-sm);
     font-weight: 700;
 }
@@ -930,7 +935,8 @@ main > section {
     font-weight: 600;
 }
 .included-list li::before {
-    content: "\2713"; /* ✓ */
+    /* Check mark ✓ */
+    content: "\2713";
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -1004,7 +1010,8 @@ main > section {
 .footer-logo {
     align-self: flex-start;
     height: 56px;
-    filter: var(--footer-logo-filter); /* turns the white logo black in light mode */
+    /* turns the white logo black in light mode */
+    filter: var(--footer-logo-filter);
 }
 .footer-motto {
     margin: 0;

@@ -115,7 +115,8 @@
     color: var(--error-text);
 }
 .field-error::before {
-    content: "\26A0"; /* ⚠ */
+    /* Warning sign ⚠ */
+    content: "\26A0";
     margin-right: var(--space-xs);
 }
 .field-error:empty {

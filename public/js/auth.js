@@ -64,7 +64,8 @@ function validateField(input) {
 
 const form = document.querySelector(".auth-card form");
 const inputs = form.querySelectorAll("input");
-const confirmInput = document.getElementById("confirm-password"); // null on the login page
+// null on the login page
+const confirmInput = document.getElementById("confirm-password");
 
 // our messages replace the browser's bubbles
 form.noValidate = true;

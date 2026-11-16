@@ -112,7 +112,8 @@
 
 /* Dashboard colours */
 .app-page {
-    --gradient-top: var(--bg-page); /* turns off the page gradient */
+    /* turns off the page gradient */
+    --gradient-top: var(--bg-page);
     --header-bg: var(--card-mint);
 }
 :root[data-theme="dark"] .app-page {
@@ -127,7 +128,8 @@
     gap: var(--space-xs) var(--space-md);
     position: sticky;
     top: 0;
-    z-index: 5; /* below the sidebar (10) */
+    /* below the sidebar (10) */
+    z-index: 5;
     /* stretches the background over the padding of <main> */
     margin: 0 calc(-1 * var(--space-md));
     padding: var(--space-md);
@@ -160,7 +162,8 @@
     margin-top: var(--space-xl);
     padding-top: var(--space-lg);
     border-top: 1px solid var(--border);
-    scroll-margin-top: 160px; /* clears the sticky header */
+    /* clears the sticky header */
+    scroll-margin-top: 160px;
 }
 .app-header + .app-section {
     margin-top: var(--space-lg);
@@ -453,7 +456,8 @@
     background-color: var(--bg-page);
     color: var(--text-primary);
     font: inherit;
-    font-size: 1rem; /* 16px stops phones from zooming in */
+    /* 16px stops phones from zooming in */
+    font-size: 1rem;
 }
 .field select {
     height: 44px;
@@ -484,7 +488,8 @@
 }
 .field-row .field {
     flex: 1;
-    min-width: 0; /* lets the inputs shrink on narrow phones */
+    /* lets the inputs shrink on narrow phones */
+    min-width: 0;
 }
 
 /* Form buttons */
