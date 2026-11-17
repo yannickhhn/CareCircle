@@ -36,7 +36,10 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Appointment form, dependent Add and Edit, invite a co-manager (shared validation)
 - [x] Free-tier limit: message only when adding a dependent or inviting into a full household (Economic 4, Familial 8, Extended unlimited)
 - [x] Delete and Remove buttons hidden until saving exists
-- [ ] Still to do: doctor cards, Switch household, localStorage, back end plan (written)
+- [x] Doctor cards section (last on the page) with an Add doctor form
+- [x] Household dropdown for managers in several households (current manager: Anna, m5; ?household= ignored if not hers)
+- [ ] localStorage skipped for now: changes are lost on reload or when switching household
+- [ ] Still to do: back end plan (written), demo rehearsal
 
 ### Tue Nov 17: finish the front end
 - [ ] Every button and form on the dashboard works (front end only)
