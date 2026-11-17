@@ -93,7 +93,8 @@
 
 /* Sections */
 
-.app-main button {
+.app-main button,
+.app-main select {
     font: inherit;
     cursor: pointer;
 }
@@ -565,6 +566,9 @@
         align-items: start;
     }
     .side-panel {
+        margin-top: 0;
+    }
+    .doctor-grid {
         margin-top: 0;
     }
     .popup-panel {
