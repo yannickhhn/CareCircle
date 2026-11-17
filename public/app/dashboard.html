@@ -96,7 +96,7 @@
             <!-- Header: household name, plan, member count and today's date -->
             <header class="app-header">
                 <h1 id="household-name">Loading...</h1>
-                <button type="button" class="btn-outline" id="switch-household">Switch household</button>
+                <select class="btn-outline" id="switch-household" aria-label="Switch household"></select>
                 <p class="plan-line">Loading...</p>
                 <p class="today"><time></time></p>
             </header>
@@ -338,8 +338,58 @@
             <section id="doctors" class="app-section" aria-labelledby="doctors-title">
                 <div class="section-head">
                     <h2 id="doctors-title">Doctor cards</h2>
+                    <button type="button" class="add-btn" aria-controls="doctor-form-panel" aria-expanded="false">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        <span class="visually-hidden">Add a doctor</span>
+                    </button>
                 </div>
-                <ul class="doctor-grid" id="doctor-list"></ul>
+
+                <div class="section-body">
+                    <ul class="doctor-grid" id="doctor-list"></ul>
+
+                    <!-- Add doctor form: each field has its own error message spot for validation -->
+                    <aside class="side-panel popup-panel" id="doctor-form-panel" aria-labelledby="doctor-form-title">
+                        <h3 id="doctor-form-title">Add a doctor</h3>
+                        <form id="doctor-form" method="post">
+                            <div class="field">
+                                <label for="doc-for">For who?</label>
+                                <select id="doc-for" name="dependentId" required aria-describedby="doc-for-error"></select>
+                                <p class="field-error" id="doc-for-error" aria-live="polite"></p>
+                            </div>
+                            <div class="field">
+                                <label for="doc-name">Doctor name</label>
+                                <input type="text" id="doc-name" name="name" required maxlength="60" placeholder="e.g. Dr. Sarah Green" aria-describedby="doc-name-error">
+                                <p class="field-error" id="doc-name-error" aria-live="polite"></p>
+                            </div>
+                            <div class="field">
+                                <label for="doc-role">Role</label>
+                                <input type="text" id="doc-role" name="role" required maxlength="40" placeholder="e.g. Pediatrician" aria-describedby="doc-role-error">
+                                <p class="field-error" id="doc-role-error" aria-live="polite"></p>
+                            </div>
+                            <div class="field">
+                                <label for="doc-phone">Phone</label>
+                                <input type="tel" id="doc-phone" name="phone" required maxlength="20" placeholder="e.g. 514-555-0101" aria-describedby="doc-phone-error">
+                                <p class="field-error" id="doc-phone-error" aria-live="polite"></p>
+                            </div>
+                            <div class="field">
+                                <label for="doc-email">Email <span class="optional">(optional)</span></label>
+                                <input type="email" id="doc-email" name="email" maxlength="100" autocomplete="off" aria-describedby="doc-email-error">
+                                <p class="field-error" id="doc-email-error" aria-live="polite"></p>
+                            </div>
+                            <div class="field">
+                                <label for="doc-address">Address</label>
+                                <input type="text" id="doc-address" name="address" required maxlength="120" placeholder="e.g. Maple Family Clinic, 30 Pine Street" aria-describedby="doc-address-error">
+                                <p class="field-error" id="doc-address-error" aria-live="polite"></p>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn">Add</button>
+                                <button type="reset" class="btn-text">Cancel</button>
+                            </div>
+                        </form>
+                    </aside>
+                </div>
             </section>
         </main>
     </body>

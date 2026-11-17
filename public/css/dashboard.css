@@ -134,6 +134,9 @@
     background: none;
     color: var(--text-primary);
 }
+#switch-household[hidden] {
+    display: none;
+}
 .app-header .plan-line,
 .app-header .today {
     flex-basis: 100%;

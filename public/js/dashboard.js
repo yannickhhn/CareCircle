@@ -1,7 +1,7 @@
 // Load data: reads the 5 JSON files into one object
 const DATA_URL = "../../data/";
 const data = {};
-const CURRENT_HOUSEHOLD_ID = "h1";
+const CURRENT_MANAGER_ID = "m5";
 
 // Fetches one JSON file from data/ and returns its contents, or throws if it can't be loaded
 async function loadJSON(fileName) {
@@ -181,13 +181,13 @@ function createGivenBy(med) {
     return givenBy;
 }
 
-// Marks a dose as given now by the current manager (the household's first manager until login exists),
+// Marks a dose as given now by the current manager (CURRENT_MANAGER_ID until login exists),
 // or clears it if unticked, then redraws the lists
 function toggleDose(med, household, isGiven) {
     if (isGiven) {
         const now = new Date();
         med.givenAt = toDateString(now) + "T" + toTimeString(now);
-        med.givenBy = household.managerIds[0];
+        med.givenBy = CURRENT_MANAGER_ID;
     } else {
         med.givenAt = null;
         med.givenBy = null;
@@ -294,7 +294,10 @@ function createDoctorCard(doc, household) {
     const email = makeElement("a", null, doc.email);
     email.href = "mailto:" + doc.email;
     const contact = makeElement("p", "doctor-contact");
-    contact.append(phone, document.createElement("br"), email);
+    contact.appendChild(phone);
+    if (doc.email) {
+        contact.append(document.createElement("br"), email);
+    }
 
     card.append(contact, createPlace(doc.address));
     return card;
@@ -377,7 +380,9 @@ function validateField(input, household) {
     let message = "";
 
     if (value === "") {
-        message = "This field is required.";
+        if (input.required) {
+            message = "This field is required.";
+        }
     } else if (input.name === "dependentId" && !household.dependents.some(function (d) { return d.id === value; })) {
         message = "Choose someone from this household.";
     } else if (input.maxLength > 0 && value.length > input.maxLength) {
@@ -392,6 +397,8 @@ function validateField(input, household) {
         message = "Enter a year between " + input.min + " and " + input.max + ".";
     } else if (input.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
         message = "Enter an email like name@example.com.";
+    } else if (input.type === "tel" && !/^[\d\s()+-]{7,20}$/.test(value)) {
+        message = "Enter a phone number like 514-555-0101.";
     }
 
     if (message === "") {
@@ -503,6 +510,7 @@ function refreshPeople(household) {
     renderDoctors(household);
     fillDependentSelect(document.getElementById("med-for"), household);
     fillDependentSelect(document.getElementById("appt-for"), household);
+    fillDependentSelect(document.getElementById("doc-for"), household);
 }
 
 const PLAN_LIMITS = { economic: 4, familial: 8, extended: Infinity };
@@ -640,6 +648,23 @@ function setUpInviteForm(household) {
     });
 }
 
+// Add doctor form: saves a new doctor card for one of the household's dependents
+function setUpDoctorForm(household) {
+    setUpAddForm("doctor-form", ["doc-for", "doc-name", "doc-role", "doc-phone", "doc-email", "doc-address"], household, function () {
+        data.doctors.push({
+            id: "doc" + Date.now(),
+            householdId: household.id,
+            dependentId: fieldValue("doc-for"),
+            name: fieldValue("doc-name"),
+            role: fieldValue("doc-role"),
+            email: fieldValue("doc-email"),
+            phone: fieldValue("doc-phone"),
+            address: fieldValue("doc-address")
+        });
+        renderDoctors(household);
+    });
+}
+
 // Opens or closes an Add form pop-up and updates its (+) button for screen readers
 function setPanelOpen(button, panel, isOpen) {
     panel.classList.toggle("is-open", isOpen);
@@ -664,6 +689,41 @@ function setUpAddButtons() {
     });
 }
 
+// Returns the households this manager belongs to
+function getMyHouseholds(managerId) {
+    return data.households.filter(function (h) {
+        return h.managerIds.includes(managerId);
+    });
+}
+
+// Returns the household asked for in the address (?household=h4) if it's one of mine, otherwise my first one
+function pickHousehold(myHouseholds) {
+    const requestedId = new URLSearchParams(window.location.search).get("household");
+    const requested = myHouseholds.find(function (h) {
+        return h.id === requestedId;
+    });
+    return requested || myHouseholds[0];
+}
+
+// Fills the household dropdown with every household this manager belongs to (hidden if only one);
+// choosing one opens it
+function setUpHouseholdSelect(myHouseholds, household) {
+    const select = document.getElementById("switch-household");
+    if (myHouseholds.length < 2) {
+        select.hidden = true;
+        return;
+    }
+    myHouseholds.forEach(function (h) {
+        const option = makeElement("option", null, h.name);
+        option.value = h.id;
+        select.appendChild(option);
+    });
+    select.value = household.id;
+    select.addEventListener("change", function () {
+        window.location.search = "?household=" + encodeURIComponent(select.value);
+    });
+}
+
 // Loads all the data, finds the current household and draws the dashboard
 async function loadData() {
     try {
@@ -673,9 +733,13 @@ async function loadData() {
         data.appointments = await loadJSON("appointments.json");
         data.doctors = await loadJSON("doctors.json");
 
-        const household = data.households.find(function (h) {
-            return h.id === CURRENT_HOUSEHOLD_ID;
-        });
+        const myHouseholds = getMyHouseholds(CURRENT_MANAGER_ID);
+        const household = pickHousehold(myHouseholds);
+        if (!household) {
+            document.getElementById("household-name").textContent = "No household yet";
+            return;
+        }
+        setUpHouseholdSelect(myHouseholds, household);
         renderHeader(household);
         renderMedications(household);
         renderAppointments(household);
@@ -685,6 +749,7 @@ async function loadData() {
         setUpApptForm(household);
         setUpDependentForm(household);
         setUpInviteForm(household);
+        setUpDoctorForm(household);
         setUpAddButtons();
     } catch (error) {
         console.error(error);
