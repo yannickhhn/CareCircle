@@ -1,7 +1,7 @@
 # CareCircle progress
 
-Last updated: 2026-11-17
-Next deadline: Tuesday Nov 17, 6 pm, milestone (working front end plus authentication skeleton). Moved up from Nov 19.
+Last updated: 2026-11-21
+Next deadline: Backend 1/4, Mon Nov 23 (server and reading data)
 
 Plan for the short deadline:
 - Mon Nov 16: lists from the JSON, med check-off, medication Add form with validation
@@ -38,52 +38,65 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Delete and Remove buttons hidden until saving exists
 - [x] Doctor cards section (last on the page) with an Add doctor form
 - [x] Household dropdown for managers in several households (current manager: Anna, m5; ?household= ignored if not hers)
-- [ ] localStorage skipped for now: changes are lost on reload or when switching household
-- [ ] Still to do: back end plan (written), demo rehearsal
+- Skipped: localStorage (the Flask back end saves changes instead, see Backend 3/4)
+- [x] Back end plan (written) and demo rehearsal (done Nov 17)
 
 ### Tue Nov 17: finish the front end
-- [ ] Every button and form on the dashboard works (front end only)
-- [ ] Medication form: add duration and quantity (e.g. 3 days, 2 times a day), with validation
-- [ ] Back end skeleton: written plan of how the server, storage and login would work (no Flask code yet, Flask not taught)
-- [ ] Short progress demo rehearsed
+- [x] Every button and form on the dashboard works (front end only)
+- Moved after the demo: medication duration and quantity (not needed for the milestone, see "Cut unless time is left")
+- [x] Back end skeleton: written plan of how the server, storage and login would work (BACKEND_PLAN.md)
+- [x] Short progress demo rehearsed
 
 ### Tue Nov 17, 6 pm: Milestone, graded 5% (HARD, moved up from Nov 19)
-- [ ] Fully functional front end plus back end skeleton (plan)
+- [x] Fully functional front end plus back end skeleton (plan): 3/3
 
-### After the demo (dates to set)
-- [ ] Static pages: dependent profile, medications, appointments, doctor card
-- [ ] Add/edit/delete forms for dependents, medications, appointments
-- [ ] Appointments sorted by date
-- [ ] JSON storage module
-- [ ] REST routes for households, dependents, medications, appointments
-- [ ] Front-end uses fetch instead of localStorage
-- [ ] JWT issued at login, protected routes, secret in .env
-- [ ] Per-household authorization, tested with two managers
-- [ ] Co-manager invite by email
-- [ ] Free-tier limits enforced on the server
-- [ ] Hosting decided
+## After the demo: back end plan (Python with Flask)
 
-### Feature freeze (was Nov 20, needs a new date)
-- [ ] Server-side validation on every form
-- [ ] No crash on bad or missing input
-- [ ] User text escaped (XSS)
-- [ ] Debug mode off in production
-- [ ] Deployed and tested live
-- [ ] (If ahead) premium flag and cost split
+### Backend 1/4, Mon Nov 23: server and reading data
+- [ ] Flask set up (venv, requirements.txt)
+- [ ] Server opens the site at localhost:5000
+- [ ] JSON storage module (read and write)
+- [ ] Route: one household with its data
+- [ ] Route: a manager's households (temporary, until login)
+- [ ] Dashboard uses fetch instead of reading the JSON files
 
-### By Nov 30: report and demo ready
-- [ ] Bugs fixed
-- [ ] PDF report (4 to 6 pages) written
-- [ ] 2 or 3 slides: product, architecture, hardest problem
-- [ ] 8 to 10 minute demo rehearsed (main workflow, one edge case, one security measure)
+### Backend 2/4, Thu Nov 26: login and authorization
+- [ ] Register (password hashed)
+- [ ] Login and log out
+- [ ] Logged-in manager replaces the hard-coded Anna (m5)
+- [ ] A manager only gets their own households (403 otherwise)
+- [ ] Test: manager A can't read manager B's household
+
+### Backend 3/4, Sat Nov 28: saving changes
+- [ ] Add, edit and delete: medications, appointments, doctors, dependents
+- [ ] Med check-off saved
+- [ ] Create a household, invite a co-manager by email
+- [ ] Free-tier limits checked on the server
+- [ ] Server repeats every form check (bad input gets an error, not a crash)
+
+### Backend 4/4, Tue Dec 1: feature freeze
+- [ ] User text safe from XSS
+- [ ] Debug mode off
+- [ ] Hosting decided (ask TA about Vercel) and deployed
+- [ ] README run instructions
+- [ ] Slides and demo rehearsed (main workflow, one edge case, one security measure)
 
 ### Dec 1 to 3: Demo and oral defense, graded 10% (HARD)
 - [ ] Demo, presentation and oral defense
-- [ ] Git tag "final" pushed (Dec 3)
-- [ ] PDF report submitted (Dec 3)
+
+### Dec 3: Code freeze (HARD)
+- [ ] Bugs fixed
+- [ ] Git tag "final" pushed
+- [ ] PDF report (4 to 6 pages) submitted
+
+### Cut unless time is left
+- Separate pages (dependent profile, medications, appointments, doctor card)
+- Medication duration and quantity
+- Settings page
+- Premium flag and cost split
 
 ## Current status
-In progress: nothing (dashboard HTML and CSS finished)
+In progress: nothing
 Blockers: none
-Next step: dashboard JavaScript (lists from the JSON files, check-off, Add forms, free-tier limit). Needs Live Server to read JSON
-Decision: one dashboard page until the demo; separate pages (doctors, etc.) after
+Next step: Backend 1/4, step 1 (Flask setup)
+Decision: one dashboard page for the final version; separate pages only if time is left
