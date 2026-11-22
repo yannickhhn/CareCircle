@@ -1,13 +1,12 @@
-// Load data: reads the 5 JSON files into one object
-const DATA_URL = "../../data/";
+// Load data: asks the Flask server for the current household's data
 const data = {};
-const CURRENT_MANAGER_ID = "m5";
+const CURRENT_MANAGER_ID = "m5";   // until login exists (Section 2)
 
-// Fetches one JSON file from data/ and returns its contents, or throws if it can't be loaded
-async function loadJSON(fileName) {
-    const response = await fetch(DATA_URL + fileName);
+// Fetches JSON from one of our API routes, or throws if it can't be loaded
+async function loadJSON(url) {
+    const response = await fetch(url);
     if (!response.ok) {
-        throw new Error("Could not load " + fileName);
+        throw new Error("Could not load " + url);
     }
     return response.json();
 }
@@ -689,13 +688,6 @@ function setUpAddButtons() {
     });
 }
 
-// Returns the households this manager belongs to
-function getMyHouseholds(managerId) {
-    return data.households.filter(function (h) {
-        return h.managerIds.includes(managerId);
-    });
-}
-
 // Returns the household asked for in the address (?household=h4) if it's one of mine, otherwise my first one
 function pickHousehold(myHouseholds) {
     const requestedId = new URLSearchParams(window.location.search).get("household");
@@ -727,18 +719,20 @@ function setUpHouseholdSelect(myHouseholds, household) {
 // Loads all the data, finds the current household and draws the dashboard
 async function loadData() {
     try {
-        data.managers = await loadJSON("managers.json");
-        data.households = await loadJSON("households.json");
-        data.medications = await loadJSON("medications.json");
-        data.appointments = await loadJSON("appointments.json");
-        data.doctors = await loadJSON("doctors.json");
-
-        const myHouseholds = getMyHouseholds(CURRENT_MANAGER_ID);
-        const household = pickHousehold(myHouseholds);
-        if (!household) {
+        const myHouseholds = await loadJSON("/api/households?manager=" + CURRENT_MANAGER_ID);
+        const picked = pickHousehold(myHouseholds);
+        if (!picked) {
             document.getElementById("household-name").textContent = "No household yet";
             return;
         }
+
+        const details = await loadJSON("/api/households/" + encodeURIComponent(picked.id));
+        data.managers = details.managers;
+        data.medications = details.medications;
+        data.appointments = details.appointments;
+        data.doctors = details.doctors;
+        const household = details.household;
+
         setUpHouseholdSelect(myHouseholds, household);
         renderHeader(household);
         renderMedications(household);
@@ -753,6 +747,7 @@ async function loadData() {
         setUpAddButtons();
     } catch (error) {
         console.error(error);
+        document.getElementById("household-name").textContent = "Could not load your data. Is the server running?";
     }
 }
 
