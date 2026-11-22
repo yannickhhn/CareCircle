@@ -1,3 +1,5 @@
 .env
 node_modules/
 CLAUDE.md 
+BACKEND_PLAN.txt
+BACKEND_PLAN.md

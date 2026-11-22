@@ -1,6 +1,6 @@
 # CareCircle progress
 
-Last updated: 2026-11-16
+Last updated: 2026-11-17
 Next deadline: Tuesday Nov 17, 6 pm, milestone (working front end plus authentication skeleton). Moved up from Nov 19.
 
 Plan for the short deadline:
@@ -43,6 +43,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 
 ### Tue Nov 17: finish the front end
 - [ ] Every button and form on the dashboard works (front end only)
+- [ ] Medication form: add duration and quantity (e.g. 3 days, 2 times a day), with validation
 - [ ] Back end skeleton: written plan of how the server, storage and login would work (no Flask code yet, Flask not taught)
 - [ ] Short progress demo rehearsed
 
