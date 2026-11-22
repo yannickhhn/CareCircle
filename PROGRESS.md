@@ -1,7 +1,7 @@
 # CareCircle progress
 
 Last updated: 2026-11-21
-Next deadline: Backend 1/4, Mon Nov 23 (server and reading data)
+Next deadline: Backend 2/4, Thu Nov 26 (login and authorization)
 
 Plan for the short deadline:
 - Mon Nov 16: lists from the JSON, med check-off, medication Add form with validation
@@ -53,12 +53,12 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 ## After the demo: back end plan (Python with Flask)
 
 ### Backend 1/4, Mon Nov 23: server and reading data
-- [ ] Flask set up (venv, requirements.txt)
-- [ ] Server opens the site at localhost:5000
-- [ ] JSON storage module (read and write)
-- [ ] Route: one household with its data
-- [ ] Route: a manager's households (temporary, until login)
-- [ ] Dashboard uses fetch instead of reading the JSON files
+- [x] Flask set up (venv, requirements.txt)
+- [x] Server opens the site at localhost:5000
+- [x] JSON storage module (read and write)
+- [x] Route: one household with its data
+- [x] Route: a manager's households (temporary, until login)
+- [x] Dashboard uses fetch instead of reading the JSON files
 
 ### Backend 2/4, Thu Nov 26: login and authorization
 - [ ] Register (password hashed)
@@ -98,5 +98,5 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 ## Current status
 In progress: nothing
 Blockers: none
-Next step: Backend 1/4, step 1 (Flask setup)
+Next step: Backend 2/4 (register with a hashed password). Backend 1/4 done Nov 21, 2 days early
 Decision: one dashboard page for the final version; separate pages only if time is left

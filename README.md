@@ -24,8 +24,8 @@ Keeping track of a family member's care often gets split across text messages, p
 | Layer | Technology |
 | --- | --- |
 | Front end | HTML5, CSS3, vanilla JavaScript (no frameworks) |
-| Back end (planned) | Python Flask |
-| Data (planned) | JSON files on disk |
+| Back end | Python Flask |
+| Data | JSON files on disk |
 | Authentication (planned) | JWT, with hashed passwords |
 
 ## Front end
@@ -44,6 +44,25 @@ Pages being built:
 
 All pages share one stylesheet and are designed to work at phone width.
 
+## How to run
+
+1. Install Python 3.11 or newer.
+2. In the project folder, create and turn on a virtual environment:
+   ```
+   python -m venv venv
+   .\venv\Scripts\Activate.ps1        (Windows PowerShell)
+   source venv/bin/activate           (Mac or Linux)
+   ```
+3. Install the packages:
+   ```
+   pip install -r requirements.txt
+   ```
+4. Start the server:
+   ```
+   python server/app.py
+   ```
+5. Open http://localhost:5000
+
 ## Project status
 
-In progress: building the static front end. Setup and run instructions will be added once the Flask server exists.
+Front end done. Back end in progress: the Flask server serves the pages and the household data. Login and saving changes come next.
