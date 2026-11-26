@@ -101,7 +101,7 @@
 
 /* Dashboard colours */
 .app-page {
-    /* turns off the page gradient */
+    /* Turn off the page gradient */
     --gradient-top: var(--bg-page);
     --header-bg: var(--card-mint);
 }
@@ -117,9 +117,9 @@
     gap: var(--space-xs) var(--space-md);
     position: sticky;
     top: 0;
-    /* below the sidebar (10) */
+    /* Keep it below the sidebar (10) */
     z-index: 5;
-    /* stretches the background over the padding of <main> */
+    /* Stretch the background over the padding of <main> */
     margin: 0 calc(-1 * var(--space-md));
     padding: var(--space-md);
     background-color: var(--header-bg);
@@ -154,7 +154,7 @@
     margin-top: var(--space-xl);
     padding-top: var(--space-lg);
     border-top: 1px solid var(--border);
-    /* clears the sticky header */
+    /* Clear the sticky header */
     scroll-margin-top: 160px;
 }
 .app-header + .app-section {
@@ -252,7 +252,7 @@
 .delete-btn:hover {
     filter: brightness(0.9);
 }
-/* Hidden until saving exists (localStorage, then the server) */
+/* Hide until saving exists (Backend 3/4) */
 .delete-btn {
     display: none;
 }
@@ -498,7 +498,7 @@
     background-color: var(--bg-page);
     color: var(--text-primary);
     font: inherit;
-    /* 16px stops phones from zooming in */
+    /* Use 16px to stop phones from zooming in */
     font-size: 1rem;
 }
 .field select {
@@ -530,7 +530,7 @@
 }
 .field-row .field {
     flex: 1;
-    /* lets the inputs shrink on narrow phones */
+    /* Let the inputs shrink on narrow phones */
     min-width: 0;
 }
 
@@ -586,11 +586,11 @@
         padding: var(--space-md) var(--space-xl);
         height: 136px;
     }
-    /* Header height minus its border, so a jump lands right under it */
+    /* Use the header height minus its border, so a jump lands right under it */
     .app-section {
         scroll-margin-top: 135px;
     }
-    /* 135px + its 24px margin, same spot as on page load */
+    /* Add its 24px margin to the 135px, to land on the same spot as on page load */
     .app-header + .app-section {
         scroll-margin-top: 159px;
     }
@@ -623,7 +623,7 @@
         height: auto;
         border-top: none;
     }
-    /* .sidebar in front so these beat ".sidebar ul { margin: 0 }" */
+    /* Put .sidebar in front so these beat ".sidebar ul { margin: 0 }" */
     .sidebar .sidebar-links {
         margin-top: var(--space-lg);
     }

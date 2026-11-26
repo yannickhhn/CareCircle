@@ -61,6 +61,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Dashboard uses fetch instead of reading the JSON files
 
 ### Backend 2/4, Thu Nov 26: login and authorization
+- [x] Secret key in .env, loaded by app.py (server stops if it's missing)
 - [ ] Register (password hashed)
 - [ ] Login and log out
 - [ ] Logged-in manager replaces the hard-coded Anna (m5)

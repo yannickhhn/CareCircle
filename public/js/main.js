@@ -2,20 +2,20 @@
 const menuButton = document.querySelector(".menu-toggle");
 const navLinks = document.querySelector("#nav-links");
 
-// Opens or closes the phone menu and updates its button for screen readers
+// Open or close the phone menu and update its button for screen readers
 function setMenu(isOpen) {
     navLinks.classList.toggle("open", isOpen);
     menuButton.setAttribute("aria-expanded", isOpen);
     menuButton.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
 }
 
-// The ☰ button toggles the menu
+// Toggle the menu when the ☰ button is clicked
 menuButton.addEventListener("click", function () {
     const isOpen = navLinks.classList.contains("open");
     setMenu(!isOpen);
 });
 
-// Tapping a link closes the menu
+// Close the menu when a link is tapped
 navLinks.addEventListener("click", function (event) {
     if (event.target.tagName === "A") {
         setMenu(false);
@@ -25,7 +25,7 @@ navLinks.addEventListener("click", function (event) {
 // Pricing details: open on computer, folded on phone
 const computerScreen = window.matchMedia("(min-width: 768px)");
 
-// Opens the plan feature lists on computer and folds them on phone
+// Open the plan feature lists on computer and fold them on phone
 function openFeatureLists() {
     document.querySelectorAll(".price-details").forEach(function (details) {
         details.open = computerScreen.matches;

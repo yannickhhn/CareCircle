@@ -189,7 +189,7 @@ body {
     box-shadow: 0 8px 16px var(--shadow-sm);
 }
 .nav-links.open {
-    /* set by main.js */
+    /* Show the menu when main.js adds the open class */
     display: flex;
 }
 .nav-links a {
@@ -204,7 +204,7 @@ body {
     margin-left: auto;
 }
 .btn-outline {
-    /* transform doesn't work on inline elements */
+    /* Make it inline-block, since transform doesn't work on inline elements */
     display: inline-block;
     border: 1px solid var(--accent-periwinkle);
     border-radius: 6px;
@@ -273,7 +273,7 @@ body {
     background-color: var(--text-primary);
     transition: transform 0.25s ease, opacity 0.25s ease;
 }
-/* 7px = 5px gap + 2px bar, so the bars cross in the middle */
+/* Move each bar 7px (5px gap + 2px bar), so the bars cross in the middle */
 .menu-toggle[aria-expanded="true"] .bar:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
 }
@@ -298,7 +298,7 @@ body {
 /* Sections */
 main > section {
     padding: var(--space-section) 0;
-    /* the section's own padding sits under the sticky header */
+    /* Stop a jump 20px down, since the section's own padding sits under the sticky header */
     scroll-margin-top: 20px;
 }
 
@@ -362,7 +362,7 @@ main > section {
     font-weight: bold;
     text-decoration: none;
 }
-/* beats the .hero-text > p rule above */
+/* Beat the .hero-text > p rule above */
 .hero-text .hero-note {
     margin: var(--space-md) 0 0;
     font-size: 0.875rem;
@@ -371,7 +371,7 @@ main > section {
 .hero-art {
     width: 100%;
     max-width: 300px;
-    /* shows only the square middle of the SVG */
+    /* Show only the square middle of the SVG */
     aspect-ratio: 1 / 1;
     object-fit: cover;
 }
@@ -402,7 +402,7 @@ main > section {
     align-items: center;
     text-align: center;
     gap: var(--space-md);
-    /* 120px picture + 16px gap + 16px margin */
+    /* Leave room for the 120px picture + 16px gap + 16px margin */
     padding: var(--space-lg) var(--space-lg) 152px;
     background-color: var(--bg-page);
     background-size: auto 120px;
@@ -530,7 +530,7 @@ main > section {
 
 /* Half wheel */
 .tut-wheel {
-    /* distance from the centre to each number */
+    /* Set the distance from the centre to each number */
     --num-r: 40px;
     position: absolute;
     left: -80px;
@@ -555,7 +555,7 @@ main > section {
 .tut-wheel span:nth-child(2) { transform: translate(-50%, -50%) rotate(90deg) translateX(var(--num-r)); }
 .tut-wheel span:nth-child(3) { transform: translate(-50%, -50%) rotate(180deg) translateX(var(--num-r)); }
 .tut-wheel span:nth-child(4) { transform: translate(-50%, -50%) rotate(270deg) translateX(var(--num-r)); }
-/* same fade, offset so each number shows during its own step */
+/* Reuse the same fade, offset so each number shows during its own step */
 .tut-wheel span:nth-child(2) { animation-delay: -12s; }
 .tut-wheel span:nth-child(3) { animation-delay: -8s; }
 .tut-wheel span:nth-child(4) { animation-delay: -4s; }
@@ -566,7 +566,7 @@ main > section {
     overflow: hidden;
 }
 .tut-track {
-    /* 4 steps + the copy of step 1 */
+    /* Fit 5 steps: the 4 steps + the copy of step 1 */
     height: 500%;
     margin: 0;
     padding: 0;
@@ -603,8 +603,8 @@ main > section {
     color: var(--text-secondary);
 }
 
-/* 16s loop: one step about every 4s */
-/* 100% looks the same as 0%, so the loop restarts seamlessly */
+/* Loop every 16s: one step about every 4s */
+/* End (100%) the same as the start (0%), so the loop restarts seamlessly */
 @keyframes tut-wheel {
     0%, 20% { transform: rotate(0deg); background-color: var(--step1-wheel); }
     25%, 45% { transform: rotate(-90deg); background-color: var(--step2-wheel); }
@@ -714,7 +714,7 @@ main > section {
     transform: scale(1.05);
     border: 2px solid var(--accent-mint);
 }
-/* repeats the scale, since a second transform replaces it */
+/* Repeat the scale, since a second transform replaces it */
 .price-card.featured:hover {
     transform: scale(1.05) translateY(-8px);
 }
@@ -1010,7 +1010,7 @@ main > section {
 .footer-logo {
     align-self: flex-start;
     height: 56px;
-    /* turns the white logo black in light mode */
+    /* Turn the white logo black in light mode */
     filter: var(--footer-logo-filter);
 }
 .footer-motto {
@@ -1224,7 +1224,7 @@ main > section {
         flex-shrink: 0;
         width: 300px;
         height: 300px;
-        /* negative margins stop the wheel stretching the card */
+        /* Use negative margins to stop the wheel stretching the card */
         margin: -20px 0 -20px -150px;
     }
     .tut-wheel span {

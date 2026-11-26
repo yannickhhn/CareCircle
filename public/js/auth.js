@@ -1,7 +1,7 @@
 // Show/hide password
 const toggleButtons = document.querySelectorAll(".toggle-password");
 
-// Each Show/Hide button switches its password field between hidden and visible text
+// Switch each password field between hidden and visible text when its Show/Hide button is clicked
 toggleButtons.forEach(function (button) {
     const input = document.getElementById(button.getAttribute("aria-controls"));
 
@@ -17,27 +17,27 @@ toggleButtons.forEach(function (button) {
 
 // Form validation
 
-// Returns true if the email looks like name@site.domain
+// Return true if the email looks like name@site.domain
 function isValidEmail(email) {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(email);
 }
 
-// Shows a message under the field and marks it invalid (red border)
+// Show a message under the field and mark it invalid (red border)
 function showError(input, message) {
     const errorBox = document.getElementById(input.id + "-error");
     errorBox.textContent = message;
     input.setAttribute("aria-invalid", "true");
 }
 
-// Removes the field's message and its invalid mark
+// Remove the field's message and its invalid mark
 function clearError(input) {
     const errorBox = document.getElementById(input.id + "-error");
     errorBox.textContent = "";
     input.removeAttribute("aria-invalid");
 }
 
-// Checks one field against its rules, shows or clears its error, and returns true if valid
+// Check one field against its rules, show or clear its error, and return true if valid
 function validateField(input) {
     const value = input.value.trim();
     let message = "";
@@ -47,7 +47,7 @@ function validateField(input) {
     } else if (input.id === "email" && !isValidEmail(value)) {
         message = "Please enter a correct email";
     } else if (input.minLength > 0 && input.value.length < input.minLength) {
-        // only the register password has a minlength
+        // Check the length (only the register password has a minlength)
         message = "Use at least " + input.minLength + " characters.";
     } else if (input.id === "confirm-password" &&
                input.value !== document.getElementById("password").value) {
@@ -64,19 +64,19 @@ function validateField(input) {
 
 const form = document.querySelector(".auth-card form");
 const inputs = form.querySelectorAll("input");
-// null on the login page
+// Get the confirm field (null on the login page)
 const confirmInput = document.getElementById("confirm-password");
 
-// our messages replace the browser's bubbles
+// Turn off the browser's bubbles so our messages replace them
 form.noValidate = true;
 
 inputs.forEach(function (input) {
-    // Checks a field when the user leaves it
+    // Check a field when the user leaves it
     input.addEventListener("blur", function () {
         validateField(input);
     });
 
-    // Re-checks while typing once a field shows an error; a new password re-checks the confirm field
+    // Re-check while typing once a field shows an error; re-check the confirm field when the password changes
     input.addEventListener("input", function () {
         if (input.getAttribute("aria-invalid") === "true") {
             validateField(input);
@@ -87,9 +87,9 @@ inputs.forEach(function (input) {
     });
 });
 
-// Submit: checks every field and puts the cursor on the first wrong one
+// Submit: check every field and put the cursor on the first wrong one
 form.addEventListener("submit", function (event) {
-    // no server route yet
+    // Stop the form from sending (no server route yet)
     event.preventDefault();
 
     let firstWrong = null;

@@ -1,18 +1,30 @@
-from flask import Flask, jsonify,request
+from flask import Flask, jsonify, request
 from storage import read_data
+import os
+from dotenv import load_dotenv
 
-# public/ is one folder up from server/
-# static_url_path="" means /login.html works, not /static/login.html
+# Load the values in .env into os.environ
+load_dotenv()
+
+
+# Point Flask to public/, one folder up from server/
+# Serve the pages from the site root: /login.html, not /static/login.html
 app = Flask(__name__, static_folder="../public", static_url_path="")
 
+# Sign the session cookie with the secret key from .env
+app.secret_key = os.environ.get("SECRET_KEY")
 
-# "/" is the home page: send index.html
+# Stop the server if the key is missing, instead of running without one
+if not app.secret_key:
+    raise RuntimeError("SECRET_KEY is missing: add it to .env")
+
+# Send the landing page (index.html) for the home address "/"
 @app.route("/")
 def home():
     return app.send_static_file("index.html")
 
 
-# Every item (medication, appointment, doctor) that belongs to one household
+# Return every item (medication, appointment, doctor) that belongs to one household
 def items_for(name, household_id):
     items = []
     for item in read_data(name):
@@ -21,7 +33,7 @@ def items_for(name, household_id):
     return items
 
 
-# The household with this id, or None if there isn't one
+# Return the household with this id, or None if there isn't one
 def find_household(household_id):
     for household in read_data("households"):
         if household["id"] == household_id:
@@ -35,7 +47,7 @@ def get_household(household_id):
     if household is None:
         return jsonify({"error": "Household not found"}), 404
 
-    # Only this household's managers, and only the fields the page shows
+    # Copy only this household's managers, and only the fields the page shows
     managers = []
     for m in read_data("managers"):
         if m["id"] in household["managerIds"]:
@@ -50,8 +62,8 @@ def get_household(household_id):
     })
 
 
-# Households the manager belongs to (id and name only, for the dropdown)
-# Temporary: ?manager= is replaced by the logged-in manager in Section 2
+# Send the households the manager belongs to (id and name only, for the dropdown)
+# Temporary: read the manager from ?manager= until login replaces it in Backend 2/4
 @app.route("/api/households")
 def list_households():
     manager_id = request.args.get("manager")
@@ -62,6 +74,6 @@ def list_households():
     return jsonify(my_households)
 
 
-# Only runs when you start this file directly (python server/app.py)
+# Start the server only when this file is run directly (python server/app.py)
 if __name__ == "__main__":
-    app.run(debug=True)   # debug only on your computer; turned off in Section 4
+    app.run(debug=True)   # Keep debug on for local work only; turn it off in Backend 4/4
