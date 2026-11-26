@@ -87,9 +87,36 @@ inputs.forEach(function (input) {
     });
 });
 
+// Send the register form to the server, then go to the login page or show the server's error
+async function sendRegister(status) {
+    const body = {
+        firstName: document.getElementById("first-name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+        confirmPassword: document.getElementById("confirm-password").value
+    };
+
+    try {
+        const response = await fetch("/api/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
+        const result = await response.json();
+
+        if (response.ok) {
+            window.location.href = "login.html";
+        } else {
+            status.textContent = result.error;
+        }
+    } catch (error) {
+        status.textContent = "Could not reach the server. Try again.";
+    }
+}
+
 // Submit: check every field and put the cursor on the first wrong one
 form.addEventListener("submit", function (event) {
-    // Stop the form from sending (no server route yet)
+    // Stop the browser from sending the form itself; fetch sends it instead
     event.preventDefault();
 
     let firstWrong = null;
@@ -104,6 +131,9 @@ form.addEventListener("submit", function (event) {
     if (firstWrong) {
         status.textContent = "Please fix the fields marked above.";
         firstWrong.focus();
+    } else if (form.id === "register-form") {
+        status.textContent = "Creating your account...";
+        sendRegister(status);
     } else {
         status.textContent = "Looks good!";
     }

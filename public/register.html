@@ -33,7 +33,7 @@
                 <form id="register-form" method="post">
                     <div class="field">
                         <label for="first-name">First name</label>
-                        <input type="text" id="first-name" name="firstName"
+                        <input type="text" id="first-name" name="firstName" maxlength="50"
                                autocomplete="given-name" required
                                aria-describedby="first-name-error">
                         <p class="field-error" id="first-name-error" aria-live="polite"></p>
@@ -41,7 +41,7 @@
 
                     <div class="field">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email"
+                        <input type="email" id="email" name="email" maxlength="100"
                                autocomplete="email" required
                                aria-describedby="email-error">
                         <p class="field-error" id="email-error" aria-live="polite"></p>
@@ -51,7 +51,7 @@
                         <label for="password">Password</label>
                         <p class="field-hint" id="password-rules">At least 8 characters.</p>
                         <div class="password-wrap">
-                            <input type="password" id="password" name="password"
+                            <input type="password" id="password" name="password" maxlength="128"
                                    autocomplete="new-password" required minlength="8"
                                    aria-describedby="password-rules password-error">
                             <button type="button" class="toggle-password"
@@ -63,7 +63,7 @@
                     <div class="field">
                         <label for="confirm-password">Confirm password</label>
                         <div class="password-wrap">
-                            <input type="password" id="confirm-password" name="confirmPassword"
+                            <input type="password" id="confirm-password" name="confirmPassword" maxlength="128"
                                    autocomplete="new-password" required
                                    aria-describedby="confirm-password-error">
                             <button type="button" class="toggle-password"

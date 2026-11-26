@@ -33,11 +33,5 @@
         "id": "m7",
         "firstName": "Kate",
         "email": "kate.taylor@example.com"
-    },
-    {
-        "id": "m8",
-        "firstName": "Test",
-        "email": "test@example.com",
-        "passwordHash": "scrypt:32768:8:1$xPZT4jHVeP8AK9fT$f7f14b00dd7400c901eb4aa4fbfc3d4b751f93d6d9f35085808c9e5b0d9e2bcaaf52b6f87f026432a496a41ef88d4fa7648df93c82dbc3745a25785aa4167595"
     }
 ]
