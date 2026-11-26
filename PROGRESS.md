@@ -77,7 +77,8 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 ### Backend 4/4, Tue Dec 1: feature freeze
 - [ ] User text safe from XSS
 - [ ] Debug mode off
-- [ ] Hosting decided (ask TA about Vercel) and deployed
+- [x] Hosting decided (Nov 26): deployment not required; demo runs the Flask server locally (JSON files on disk). GitHub Pages can't run Flask.
+- [x] Demo runs on my laptop (localhost), confirmed Nov 26
 - [ ] README run instructions
 - [ ] Slides and demo rehearsed (main workflow, one edge case, one security measure)
 
