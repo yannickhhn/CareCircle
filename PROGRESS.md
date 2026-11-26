@@ -101,3 +101,4 @@ In progress: nothing
 Blockers: none
 Next step: Backend 2/4 (register with a hashed password). Backend 1/4 done Nov 21, 2 days early
 Decision: one dashboard page for the final version; separate pages only if time is left
+Decision (Nov 26): login uses Flask's session cookie
