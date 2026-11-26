@@ -1,9 +1,43 @@
 [
-    { "id": "m1", "firstName": "Mark", "email": "mark.smith@example.com" },
-    { "id": "m2", "firstName": "Julie", "email": "julie.smith@example.com" },
-    { "id": "m3", "firstName": "David", "email": "david.brown@example.com" },
-    { "id": "m4", "firstName": "Lisa", "email": "lisa.brown@example.com" },
-    { "id": "m5", "firstName": "Anna", "email": "anna.miller@example.com" },
-    { "id": "m6", "firstName": "Sam", "email": "sam.miller@example.com" },
-    { "id": "m7", "firstName": "Kate", "email": "kate.taylor@example.com" }
+    {
+        "id": "m1",
+        "firstName": "Mark",
+        "email": "mark.smith@example.com"
+    },
+    {
+        "id": "m2",
+        "firstName": "Julie",
+        "email": "julie.smith@example.com"
+    },
+    {
+        "id": "m3",
+        "firstName": "David",
+        "email": "david.brown@example.com"
+    },
+    {
+        "id": "m4",
+        "firstName": "Lisa",
+        "email": "lisa.brown@example.com"
+    },
+    {
+        "id": "m5",
+        "firstName": "Anna",
+        "email": "anna.miller@example.com"
+    },
+    {
+        "id": "m6",
+        "firstName": "Sam",
+        "email": "sam.miller@example.com"
+    },
+    {
+        "id": "m7",
+        "firstName": "Kate",
+        "email": "kate.taylor@example.com"
+    },
+    {
+        "id": "m8",
+        "firstName": "Test",
+        "email": "test@example.com",
+        "passwordHash": "scrypt:32768:8:1$xPZT4jHVeP8AK9fT$f7f14b00dd7400c901eb4aa4fbfc3d4b751f93d6d9f35085808c9e5b0d9e2bcaaf52b6f87f026432a496a41ef88d4fa7648df93c82dbc3745a25785aa4167595"
+    }
 ]

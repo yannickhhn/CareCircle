@@ -62,7 +62,8 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 
 ### Backend 2/4, Thu Nov 26: login and authorization
 - [x] Secret key in .env, loaded by app.py (server stops if it's missing)
-- [ ] Register (password hashed)
+- [x] Register route on the server (POST /api/register: checks every field, refuses a used email, saves only the hash)
+- [ ] Register form sends to the server (auth.js)
 - [ ] Login and log out
 - [ ] Logged-in manager replaces the hard-coded Anna (m5)
 - [ ] A manager only gets their own households (403 otherwise)
