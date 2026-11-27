@@ -490,10 +490,21 @@
 .side-panel form + h3 {
     margin-top: var(--space-xl);
 }
-.side-panel form {
+.side-panel form,
+#create-household-form {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
+}
+/* Drop the divider: the create form is the only section */
+#create-household {
+    margin-top: var(--space-lg);
+    padding-top: 0;
+    border-top: none;
+}
+/* Keep the create form narrow on computer */
+#create-household-form {
+    max-width: 400px;
 }
 
 /* Dropdowns and text boxes */
