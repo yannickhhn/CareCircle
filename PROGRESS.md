@@ -70,7 +70,10 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Create a household (moved up from Backend 3/4): one per person unless Extended, checked on the server
 - Skipped: demo passwords for the sample managers (I register my own test accounts instead)
 - [x] A manager only gets their own households (403 otherwise): is_member() in get_household
-- [ ] Test: manager A can't read manager B's household (two accounts I register, each with a household)
+- [ ] Test: manager A can't read manager B's household (moved to the live demo; server check already tested with Mark: own h1 200, Rose's h4 403, h99 404)
+  - How: register A, create Household A, log out. Register B, create Household B.
+  - As B, open localhost:5000/api/households/<A's id> (see data/households.json, likely h5)
+  - Expect: {"error": "You don't have access to this household"} (403). Screenshot it for the report
 
 ### Backend 3/4, Sat Nov 28: saving changes
 - [ ] Add, edit and delete: medications, appointments, doctors, dependents
@@ -79,6 +82,12 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [ ] Free-tier limits checked on the server
 - [ ] Server repeats every form check (bad input gets an error, not a crash)
 
+### Settings page (after Backend 3/4, before Dec 1)
+- [ ] Change the household name
+- [ ] Change my first name
+- [ ] Change my password (asks for the current one first)
+- [ ] Leave a household (decide: what happens if the last manager leaves?)
+
 ### Backend 4/4, Tue Dec 1: feature freeze
 - [ ] User text safe from XSS
 - [ ] Debug mode off
@@ -86,7 +95,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Demo runs on my laptop (localhost), confirmed Nov 26
 - [ ] Bonus (optional): deploy on Oracle Cloud (always-on server with a disk, so JSON files are kept). Launching earns a bonus point. Only after Backend 3/4 works; the laptop demo stays the backup
 - [ ] README run instructions
-- [ ] Slides and demo rehearsed (main workflow, one edge case, one security measure)
+- [ ] Demo rehearsed, no slides needed (main workflow, one edge case, one security measure: the step 7 test above)
 
 ### Dec 1 to 3: Demo and oral defense, graded 10% (HARD)
 - [ ] Demo, presentation and oral defense
@@ -99,8 +108,8 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 ### Cut unless time is left
 - Separate pages (dependent profile, medications, appointments, doctor card)
 - Medication duration and quantity
-- Settings page
-- Premium flag and cost split
+- Premium flag and cost split (changing plan, no real payment)
+- "New household" option for Extended managers (the server already allows it; needs the premium flag first, since every new household starts on Economic)
 
 ## Current status
 In progress: nothing
