@@ -1,10 +1,15 @@
 // Load data from the Flask server
 const data = {};
-const CURRENT_MANAGER_ID = "m5";   // Use Anna until login exists
+let currentManagerId = null;   // Set from /api/me
 
 // Fetch JSON from an API route, or throw on error
 async function loadJSON(url) {
     const response = await fetch(url);
+    // Send a logged-out visitor to the login page
+    if (response.status === 401) {
+        window.location.href = "../login.html";
+        throw new Error("Not logged in");
+    }
     if (!response.ok) {
         throw new Error("Could not load " + url);
     }
@@ -185,7 +190,7 @@ function toggleDose(med, household, isGiven) {
     if (isGiven) {
         const now = new Date();
         med.givenAt = toDateString(now) + "T" + toTimeString(now);
-        med.givenBy = CURRENT_MANAGER_ID;
+        med.givenBy = currentManagerId;
     } else {
         med.givenAt = null;
         med.givenBy = null;
@@ -714,13 +719,54 @@ function setUpHouseholdSelect(myHouseholds, household) {
     });
 }
 
+// Show only the create form, for a manager with no household
+function showCreateHousehold() {
+    document.querySelectorAll(".app-section").forEach(function (section) {
+        section.hidden = section.id !== "create-household";
+    });
+    document.getElementById("household-name").textContent = "Welcome to CareCircle";
+    document.querySelector(".app-header .plan-line").textContent = "Create your household to get started.";
+    document.getElementById("switch-household").hidden = true;
+
+    const form = document.getElementById("create-household-form");
+    const input = document.getElementById("new-household-name");
+    form.noValidate = true;
+
+    // Check the name, send it, then reload into the new household
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        if (!validateField(input, null)) {
+            input.focus();
+            return;
+        }
+        try {
+            const response = await fetch("/api/households", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: input.value })
+            });
+            const result = await response.json();
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                showFieldError(input, result.error);
+            }
+        } catch (error) {
+            showFieldError(input, "Could not reach the server. Try again.");
+        }
+    });
+}
+
 // Load my households and the chosen one, then draw
 async function loadData() {
     try {
-        const myHouseholds = await loadJSON("/api/households?manager=" + CURRENT_MANAGER_ID);
+        const me = await loadJSON("/api/me");
+        currentManagerId = me.id;
+
+        const myHouseholds = await loadJSON("/api/households");
         const picked = pickHousehold(myHouseholds);
         if (!picked) {
-            document.getElementById("household-name").textContent = "No household yet";
+            showCreateHousehold();
             return;
         }
 

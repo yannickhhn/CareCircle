@@ -391,6 +391,20 @@
                     </aside>
                 </div>
             </section>
+
+            <!-- Create household: only shown to a manager with no household -->
+            <section id="create-household" class="app-section" aria-labelledby="create-title" hidden>
+                <h2 id="create-title">Create your household</h2>
+                <form id="create-household-form">
+                    <div class="field">
+                        <label for="new-household-name">Household name</label>
+                        <input type="text" id="new-household-name" required maxlength="50"
+                               aria-describedby="new-household-name-error">
+                        <p class="field-error" id="new-household-name-error" aria-live="polite"></p>
+                    </div>
+                    <button type="submit" class="btn">Create</button>
+                </form>
+            </section>
         </main>
     </body>
 </html>

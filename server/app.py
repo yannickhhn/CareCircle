@@ -47,8 +47,28 @@ def find_household(household_id):
     return None
 
 
+# Return the logged-in manager's id, or None
+def current_manager_id():
+    return session.get("manager_id")
+
+
+# Send the logged-in manager's id and first name
+@app.route("/api/me")
+def me():
+    manager_id = current_manager_id()
+    for m in read_data("managers"):
+        if m["id"] == manager_id:
+            return jsonify({"id": m["id"], "firstName": m["firstName"]})
+    return jsonify({"error": "Log in first"}), 401
+
+
+# Send one household with its managers, medications, appointments and doctors
 @app.route("/api/households/<household_id>")
 def get_household(household_id):
+    manager_id = current_manager_id()
+    if manager_id is None:
+        return jsonify({"error": "Log in first"}), 401
+
     household = find_household(household_id)
     if household is None:
         return jsonify({"error": "Household not found"}), 404
@@ -68,11 +88,13 @@ def get_household(household_id):
     })
 
 
-# Send the manager's households (id and name only)
-# Temporary: read ?manager= until login replaces it
+# Send the logged-in manager's households (id and name only)
 @app.route("/api/households")
 def list_households():
-    manager_id = request.args.get("manager")
+    manager_id = current_manager_id()
+    if manager_id is None:
+        return jsonify({"error": "Log in first"}), 401
+
     my_households = []
     for h in read_data("households"):
         if manager_id in h["managerIds"]:
@@ -92,14 +114,14 @@ def text_field(body, name):
     return value.strip()
 
 
-# Return the next free manager id ("m8" when the highest is "m7")
-def next_manager_id(managers):
+# Return the next free id ("m8" when the highest is "m7")
+def next_id(items, prefix):
     highest = 0
-    for m in managers:
-        number = int(m["id"][1:])
+    for item in items:
+        number = int(item["id"][len(prefix):])
         if number > highest:
             highest = number
-    return "m" + str(highest + 1)
+    return prefix + str(highest + 1)
 
 
 # Create a manager account with a hashed password
@@ -133,7 +155,7 @@ def register():
 
     # Save only the hash, never the password itself
     new_manager = {
-        "id": next_manager_id(managers),
+        "id": next_id(managers, "m"),
         "firstName": first_name,
         "email": email,
         "passwordHash": generate_password_hash(password),
@@ -180,6 +202,40 @@ def login():
 def logout():
     session.clear()
     return jsonify({"message": "Logged out"})
+
+
+# Create a household with the logged-in manager in it
+@app.route("/api/households", methods=["POST"])
+def create_household():
+    manager_id = current_manager_id()
+    if manager_id is None:
+        return jsonify({"error": "Log in first"}), 401
+
+    # Refuse a body that isn't JSON, instead of crashing
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"error": "Send the form as JSON"}), 400
+
+    name = text_field(body, "name")
+    if name == "" or len(name) > 50:
+        return jsonify({"error": "Enter a household name (50 characters max)"}), 400
+
+    # Allow one household, unless you're on the Extended plan
+    households = read_data("households")
+    for h in households:
+        if manager_id in h["managerIds"] and h["plan"] != "extended":
+            return jsonify({"error": "Your plan includes one household"}), 403
+
+    new_household = {
+        "id": next_id(households, "h"),
+        "name": name,
+        "plan": "economic",
+        "managerIds": [manager_id],
+        "dependents": [],
+    }
+    households.append(new_household)
+    write_data("households", households)
+    return jsonify({"id": new_household["id"], "name": name}), 201
 
 
 # Start the server only when this file is run directly

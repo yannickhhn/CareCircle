@@ -66,8 +66,8 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Register form sends to the server (auth.js), with matching maxlength in the HTML
 - [x] Login and logout routes on the server (session cookie, 8-hour limit, clear error messages)
 - [x] Login form and Log out button send to the server
-- [ ] Logged-in manager replaces the hard-coded Anna (m5)
-- [ ] Create a household (moved up from Backend 3/4, since a new account starts with none)
+- [x] Logged-in manager replaces the hard-coded Anna (m5): /api/me, 401 sends you to login
+- [x] Create a household (moved up from Backend 3/4): one per person unless Extended, checked on the server
 - Skipped: demo passwords for the sample managers (I register my own test accounts instead)
 - [ ] A manager only gets their own households (403 otherwise)
 - [ ] Test: manager A can't read manager B's household (two accounts I register, each with a household)
