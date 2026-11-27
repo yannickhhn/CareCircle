@@ -3,38 +3,80 @@
         "id": "h1",
         "name": "Smith household",
         "plan": "economic",
-        "managerIds": ["m1", "m2"],
+        "managerIds": [
+            "m1",
+            "m2"
+        ],
         "dependents": [
-            { "id": "d1", "name": "Emma Smith", "birthYear": 2019, "notes": "Allergic to peanuts." }
+            {
+                "id": "d1",
+                "name": "Emma Smith",
+                "birthYear": 2019,
+                "notes": "Allergic to peanuts."
+            }
         ]
     },
     {
         "id": "h2",
         "name": "Brown household",
         "plan": "familial",
-        "managerIds": ["m3", "m4"],
+        "managerIds": [
+            "m3",
+            "m4"
+        ],
         "dependents": [
-            { "id": "d2", "name": "Lucas Brown", "birthYear": 2012, "notes": "Uses an inhaler before sports." },
-            { "id": "d3", "name": "Mia Brown", "birthYear": 2016, "notes": "" },
-            { "id": "d4", "name": "Leo Brown", "birthYear": 2021, "notes": "Ear infection, finishing antibiotics." }
+            {
+                "id": "d2",
+                "name": "Lucas Brown",
+                "birthYear": 2012,
+                "notes": "Uses an inhaler before sports."
+            },
+            {
+                "id": "d3",
+                "name": "Mia Brown",
+                "birthYear": 2016,
+                "notes": ""
+            },
+            {
+                "id": "d4",
+                "name": "Leo Brown",
+                "birthYear": 2021,
+                "notes": "Ear infection, finishing antibiotics."
+            }
         ]
     },
     {
         "id": "h3",
         "name": "Miller household",
         "plan": "extended",
-        "managerIds": ["m5", "m6"],
+        "managerIds": [
+            "m5",
+            "m6"
+        ],
         "dependents": [
-            { "id": "d5", "name": "Lily Miller", "birthYear": 2018, "notes": "Wears glasses." }
+            {
+                "id": "d5",
+                "name": "Lily Miller",
+                "birthYear": 2018,
+                "notes": "Wears glasses."
+            }
         ]
     },
     {
         "id": "h4",
         "name": "Grandma Rose's household",
         "plan": "extended",
-        "managerIds": ["m5", "m7"],
+        "managerIds": [
+            "m5",
+            "m7"
+        ],
         "dependents": [
-            { "id": "d6", "name": "Rose Taylor", "birthYear": 1948, "notes": "Prefers morning appointments. Hard of hearing on the left side." }
+            {
+                "id": "d6",
+                "name": "Rose Taylor",
+                "birthYear": 1948,
+                "notes": "Prefers morning appointments. Hard of hearing on the left side."
+            }
         ]
     }
 ]

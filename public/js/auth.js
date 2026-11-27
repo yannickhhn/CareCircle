@@ -142,7 +142,7 @@ form.addEventListener("submit", function (event) {
             confirmPassword: document.getElementById("confirm-password").value
         }, "login.html", status);
     } else {
-        showStatus(status, "Logging in...", false);
+        showStatus(status, "", false);
         sendForm("/api/login", {
             email: document.getElementById("email").value,
             password: document.getElementById("password").value
