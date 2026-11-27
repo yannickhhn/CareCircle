@@ -703,7 +703,8 @@ function setUpHouseholdSelect(myHouseholds, household) {
         return;
     }
     myHouseholds.forEach(function (h) {
-        const option = makeElement("option", null, h.name);
+        // Drop a trailing "household" ("Miller household" becomes "Miller")
+        const option = makeElement("option", null, h.name.replace(/ household$/i, ""));
         option.value = h.id;
         select.appendChild(option);
     });
