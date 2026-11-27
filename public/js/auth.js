@@ -78,6 +78,9 @@ inputs.forEach(function (input) {
 
     // Re-check while fixing an error, and confirm when the password changes
     input.addEventListener("input", function () {
+        // Clear the old message under the button
+        showStatus(document.getElementById("form-status"), "", false);
+
         if (input.getAttribute("aria-invalid") === "true") {
             validateField(input);
         }
@@ -86,6 +89,12 @@ inputs.forEach(function (input) {
         }
     });
 });
+
+// Show a message under the button, styled like field errors if it's an error
+function showStatus(status, message, isError) {
+    status.textContent = message;
+    status.classList.toggle("is-error", isError);
+}
 
 // Send a form to the server, then go to the next page or show the error
 async function sendForm(url, body, nextPage, status) {
@@ -100,10 +109,10 @@ async function sendForm(url, body, nextPage, status) {
         if (response.ok) {
             window.location.href = nextPage;
         } else {
-            status.textContent = result.error;
+            showStatus(status, result.error, true);
         }
     } catch (error) {
-        status.textContent = "Could not reach the server. Try again.";
+        showStatus(status, "Could not reach the server. Try again.", true);
     }
 }
 
@@ -122,10 +131,10 @@ form.addEventListener("submit", function (event) {
 
     const status = document.getElementById("form-status");
     if (firstWrong) {
-        status.textContent = "Please fix the fields marked above.";
+        showStatus(status, "Please fix the fields marked above.", true);
         firstWrong.focus();
     } else if (form.id === "register-form") {
-        status.textContent = "Creating your account...";
+        showStatus(status, "Creating your account...", false);
         sendForm("/api/register", {
             firstName: document.getElementById("first-name").value,
             email: document.getElementById("email").value,
@@ -133,7 +142,7 @@ form.addEventListener("submit", function (event) {
             confirmPassword: document.getElementById("confirm-password").value
         }, "login.html", status);
     } else {
-        status.textContent = "Logging in...";
+        showStatus(status, "Logging in...", false);
         sendForm("/api/login", {
             email: document.getElementById("email").value,
             password: document.getElementById("password").value

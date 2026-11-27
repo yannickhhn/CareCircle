@@ -108,13 +108,15 @@
     background-color: var(--bg-surface);
 }
 
-/* Field errors */
-.field-error {
+/* Field errors (and error messages under the button) */
+.field-error,
+.form-status.is-error {
     margin: 0;
     font-size: 0.875rem;
     color: var(--error-text);
 }
-.field-error::before {
+.field-error::before,
+.form-status.is-error::before {
     /* Warning sign ⚠ */
     content: "\26A0";
     margin-right: var(--space-xs);
@@ -151,6 +153,10 @@
 }
 .form-status:empty {
     display: none;
+}
+.form-status.is-error {
+    text-align: left;
+    font-weight: normal;
 }
 
 /* Log in / sign up link */
