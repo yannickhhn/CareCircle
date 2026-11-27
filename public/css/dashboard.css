@@ -12,7 +12,7 @@
     border: 0;
 }
 
-/* Sidebar (phone: top strip with logo and settings, bottom bar with the sections) */
+/* Sidebar (phone: top strip and bottom bar) */
 .sidebar {
     display: flex;
     align-items: center;
@@ -154,7 +154,7 @@
     margin-top: var(--space-xl);
     padding-top: var(--space-lg);
     border-top: 1px solid var(--border);
-    /* Clear the sticky header */
+    /* Stop a jump below the sticky header */
     scroll-margin-top: 160px;
 }
 .app-header + .app-section {
@@ -586,11 +586,11 @@
         padding: var(--space-md) var(--space-xl);
         height: 136px;
     }
-    /* Use the header height minus its border, so a jump lands right under it */
+    /* Land a jump right under the header */
     .app-section {
         scroll-margin-top: 135px;
     }
-    /* Add its 24px margin to the 135px, to land on the same spot as on page load */
+    /* Add its 24px margin (135 + 24) */
     .app-header + .app-section {
         scroll-margin-top: 159px;
     }
@@ -623,7 +623,7 @@
         height: auto;
         border-top: none;
     }
-    /* Put .sidebar in front so these beat ".sidebar ul { margin: 0 }" */
+    /* Beat ".sidebar ul { margin: 0 }" */
     .sidebar .sidebar-links {
         margin-top: var(--space-lg);
     }

@@ -1,8 +1,8 @@
-// Load data: ask the Flask server for the current household's data
+// Load data from the Flask server
 const data = {};
-const CURRENT_MANAGER_ID = "m5";   // Use Anna until login exists (Backend 2/4)
+const CURRENT_MANAGER_ID = "m5";   // Use Anna until login exists
 
-// Fetch JSON from one of our API routes, or throw if it can't be loaded
+// Fetch JSON from an API route, or throw on error
 async function loadJSON(url) {
     const response = await fetch(url);
     if (!response.ok) {
@@ -11,7 +11,7 @@ async function loadJSON(url) {
     return response.json();
 }
 
-// Return a date as "2026-11-16" in local time (toISOString uses UTC and can be a day off)
+// Return a local date like "2026-11-16" (toISOString uses UTC)
 function toDateString(date) {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
@@ -25,12 +25,12 @@ function toTimeString(date) {
     return hours + ":" + minutes;
 }
 
-// Return text with its first letter in capitals ("familial" becomes "Familial")
+// Return text with a capital first letter
 function capitalize(text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-// Fill the header with the household's name, plan, member count and today's date
+// Fill the header: name, plan, member count, today's date
 function renderHeader(household) {
     const plan = capitalize(household.plan);
     const memberCount = household.managerIds.length + household.dependents.length;
@@ -44,7 +44,7 @@ function renderHeader(household) {
     time.textContent = today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 }
 
-// Return a new element with an optional class and plain text (textContent, so user text is never read as HTML)
+// Return a new element with plain text (textContent, never HTML)
 function makeElement(tag, className, text) {
     const element = document.createElement(tag);
     if (className) element.className = className;
@@ -61,14 +61,14 @@ function formatTime(hhmm) {
     return hour12 + ":" + parts[1] + " " + suffix;
 }
 
-// Return "2026-11-18" as "Wed 18 Nov" (built from its parts, since new Date("2026-11-18") is read as UTC and can be a day off)
+// Return "2026-11-18" as "Wed 18 Nov" (local time, not UTC)
 function formatDay(dateString) {
     const parts = dateString.split("-");
     const date = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
     return date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
 }
 
-// Return the first name of a dependent in this household ("Lucas Brown" becomes "Lucas")
+// Return a dependent's first name
 function getFirstName(household, dependentId) {
     const dependent = household.dependents.find(function (d) {
         return d.id === dependentId;
@@ -76,7 +76,7 @@ function getFirstName(household, dependentId) {
     return dependent.name.split(" ")[0];
 }
 
-// Draw this household's medications for today: given today goes to Filled, the rest to Upcoming (sorted by time)
+// Draw today's medications: given in Filled, the rest in Upcoming
 function renderMedications(household) {
     const upcomingList = document.getElementById("med-upcoming");
     const filledList = document.getElementById("med-filled");
@@ -106,7 +106,7 @@ function renderMedications(household) {
     });
 }
 
-// Return one medication row: avatar if given, checkbox, who and what, Overdue badge, time, and Delete
+// Return one medication row
 function createMedRow(med, household, today, isFilled, isOverdue) {
     const firstName = getFirstName(household, med.dependentId);
 
@@ -161,7 +161,7 @@ function createMedRow(med, household, today, isFilled, isOverdue) {
 const CHECK_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></svg>';
 
 // Return "✓ Lisa · 8:05 AM": who gave the dose and when
-// (use innerHTML only for the fixed icon from the code, never for user data)
+// (innerHTML only for the fixed icon, never user data)
 function createGivenBy(med) {
     const manager = data.managers.find(function (m) {
         return m.id === med.givenBy;
@@ -180,8 +180,7 @@ function createGivenBy(med) {
     return givenBy;
 }
 
-// Mark a dose as given now by the current manager (CURRENT_MANAGER_ID until login exists),
-// or clear it if unticked, then redraw the lists
+// Mark a dose given now, or clear it (page only until Backend 3/4)
 function toggleDose(med, household, isGiven) {
     if (isGiven) {
         const now = new Date();
@@ -194,7 +193,7 @@ function toggleDose(med, household, isGiven) {
     renderMedications(household);
 }
 
-// Draw this household's appointments by date: still ahead goes to Upcoming, already past to Overdue
+// Draw appointments by date: future in Upcoming, past in Overdue
 function renderAppointments(household) {
     const upcomingList = document.getElementById("appt-upcoming");
     const overdueList = document.getElementById("appt-overdue");
@@ -222,7 +221,7 @@ function renderAppointments(household) {
     });
 }
 
-// Return one appointment card: who, when, reason, place, notes and Delete
+// Return one appointment card
 function createApptCard(appt, household, isOverdue) {
     const card = makeElement("li", "appt-card");
     if (isOverdue) card.classList.add("is-overdue");
@@ -252,7 +251,7 @@ function createApptCard(appt, household, isOverdue) {
     return card;
 }
 
-// Return the address on two lines: the place name, then the street ("Smile Dental, 45 Oak Avenue")
+// Return the address on two lines: place, then street
 function createPlace(address) {
     const place = makeElement("p", "appt-place");
     const commaIndex = address.indexOf(",");
@@ -279,7 +278,7 @@ function renderDoctors(household) {
     });
 }
 
-// Return one doctor card: who it's for, name, role, phone and email links, and address
+// Return one doctor card
 function createDoctorCard(doc, household) {
     const card = makeElement("li", "doctor-card");
     card.append(
@@ -302,7 +301,7 @@ function createDoctorCard(doc, household) {
     return card;
 }
 
-// Draw the household section: plan line, managers with their email, and dependents with Edit and Remove
+// Draw the household section: plan, managers, dependents
 function renderHousehold(household) {
     const memberCount = household.managerIds.length + household.dependents.length;
     document.querySelector("#household .plan-line").textContent =
@@ -331,7 +330,7 @@ function renderHousehold(household) {
     });
 }
 
-// Return one member row: avatar with the first letter, name, and a detail (email or birth year)
+// Return one member row: avatar, name, detail
 function createMemberRow(name, detail) {
     const row = makeElement("li", "member-row");
     const avatar = makeElement("span", "avatar", name.charAt(0));
@@ -340,7 +339,7 @@ function createMemberRow(name, detail) {
     return row;
 }
 
-// Return a row button like "Edit", with the person's name added for screen readers ("Edit Lucas")
+// Return a row button with the person's name for screen readers
 function createRowButton(className, label, name) {
     const button = makeElement("button", className, label);
     button.type = "button";
@@ -348,7 +347,7 @@ function createRowButton(className, label, name) {
     return button;
 }
 
-// Fill a "For who?" dropdown with a placeholder and this household's dependents
+// Fill a "For who?" dropdown with the dependents
 function fillDependentSelect(select, household) {
     select.textContent = "";
     const placeholder = makeElement("option", null, "Choose a person");
@@ -361,7 +360,7 @@ function fillDependentSelect(select, household) {
     });
 }
 
-// Show a message under a form field and mark it invalid (red border)
+// Show the field's error and mark it invalid
 function showFieldError(input, message) {
     document.getElementById(input.id + "-error").textContent = message;
     input.setAttribute("aria-invalid", "true");
@@ -373,7 +372,7 @@ function clearFieldError(input) {
     input.removeAttribute("aria-invalid");
 }
 
-// Check one form field, show or clear its error, and return true if valid
+// Check one field, show its error, return true if valid
 function validateField(input, household) {
     const value = input.value.trim();
     let message = "";
@@ -413,8 +412,7 @@ function fieldValue(id) {
     return document.getElementById(id).value.trim();
 }
 
-// Set up an Add form (its first field is the "For who?" dropdown): re-check fields while they are fixed,
-// clear errors on Cancel, and on Add call save() only if every field is valid, then empty the form
+// Set up an Add form: live re-checks, save() only if all fields are valid
 function setUpAddForm(formId, fieldIds, household, save) {
     const form = document.getElementById(formId);
     const fields = fieldIds.map(function (id) {
@@ -431,7 +429,7 @@ function setUpAddForm(formId, fieldIds, household, save) {
         }
     });
 
-    // Cancel: clear the error messages along with the fields
+    // On reset (Cancel or after Add): clear the errors
     form.addEventListener("reset", function () {
         fields.forEach(clearFieldError);
     });
@@ -456,7 +454,7 @@ function setUpAddForm(formId, fieldIds, household, save) {
     });
 }
 
-// Add medication form: save a new medication that hasn't been given yet
+// Add medication form (page only until Backend 3/4)
 function setUpMedForm(household) {
     setUpAddForm("med-form", ["med-for", "med-name", "med-dose", "med-time"], household, function () {
         data.medications.push({
@@ -475,7 +473,7 @@ function setUpMedForm(household) {
     });
 }
 
-// Add appointment form: save a new appointment, with one note per non-empty line
+// Add appointment form, one note per line (page only until Backend 3/4)
 function setUpApptForm(household) {
     setUpAddForm("appt-form", ["appt-for", "appt-reason", "appt-date", "appt-time", "appt-address"], household, function () {
         const notes = fieldValue("appt-notes").slice(0, 300).split("\n")
@@ -500,7 +498,7 @@ function setUpApptForm(household) {
     });
 }
 
-// Redraw everything that shows the household's people: header count, lists, rows, cards and both dropdowns
+// Redraw everything that shows the household's people
 function refreshPeople(household) {
     renderHeader(household);
     renderHousehold(household);
@@ -514,7 +512,7 @@ function refreshPeople(household) {
 
 const PLAN_LIMITS = { economic: 4, familial: 8, extended: Infinity };
 
-// Return true if the household has reached its plan's member limit (managers + dependents)
+// Return true if the household is at its plan's member limit
 function isHouseholdFull(household) {
     const memberCount = household.managerIds.length + household.dependents.length;
     return memberCount >= PLAN_LIMITS[household.plan];
@@ -528,7 +526,7 @@ function planFullMessage(household) {
 
 let editingDependent = null;
 
-// Dependent form: add a new dependent, or save changes to the one being edited
+// Dependent form: add or edit (page only until Backend 3/4)
 function setUpDependentForm(household) {
     const form = document.getElementById("dependent-form");
     const title = document.getElementById("dependent-form-title");
@@ -544,7 +542,7 @@ function setUpDependentForm(household) {
         }
     });
 
-    // Cancel: clear the errors and go back to "Add a dependent"
+    // On reset (Cancel or after Save): clear errors, back to "Add"
     form.addEventListener("reset", function () {
         fields.forEach(clearFieldError);
         document.getElementById("plan-full").hidden = true;
@@ -553,7 +551,7 @@ function setUpDependentForm(household) {
         submitButton.textContent = "Add";
     });
 
-    // Add or Save: block adding to a full household, check every field, then add or update the dependent and redraw
+    // Add or Save: block a full household, check fields, save, redraw
     form.addEventListener("submit", function (event) {
         event.preventDefault();
         if (!editingDependent && isHouseholdFull(household)) {
@@ -584,7 +582,7 @@ function setUpDependentForm(household) {
     });
 }
 
-// Edit button: fill the dependent form with this person, switch it to "Save" and open it on phone
+// Edit button: fill the form with this person, switch to "Save"
 function startEditDependent(dependent) {
     editingDependent = dependent;
     document.getElementById("dep-name").value = dependent.name;
@@ -597,7 +595,7 @@ function startEditDependent(dependent) {
     document.getElementById("dep-name").focus();
 }
 
-// Invite form: add a manager to this household by email, creating their manager entry if they're new
+// Invite form: add a manager by email (page only until Backend 3/4)
 function setUpInviteForm(household) {
     const form = document.getElementById("invite-form");
     const emailInput = document.getElementById("invite-email");
@@ -610,12 +608,12 @@ function setUpInviteForm(household) {
         }
     });
 
-    // Cancel: clear the error along with the field
+    // On reset (Cancel or after Invite): clear the error
     form.addEventListener("reset", function () {
         clearFieldError(emailInput);
     });
 
-    // Invite: block a full household, check the email, then find or create the manager and add them to the household
+    // Invite: block a full household, check the email, add the manager
     form.addEventListener("submit", function (event) {
         event.preventDefault();
         if (isHouseholdFull(household)) {
@@ -647,7 +645,7 @@ function setUpInviteForm(household) {
     });
 }
 
-// Add doctor form: save a new doctor card for one of the household's dependents
+// Add doctor form (page only until Backend 3/4)
 function setUpDoctorForm(household) {
     setUpAddForm("doctor-form", ["doc-for", "doc-name", "doc-role", "doc-phone", "doc-email", "doc-address"], household, function () {
         data.doctors.push({
@@ -664,7 +662,7 @@ function setUpDoctorForm(household) {
     });
 }
 
-// Open or close an Add form pop-up and update its (+) button for screen readers
+// Open or close an Add pop-up and update its (+) button
 function setPanelOpen(button, panel, isOpen) {
     panel.classList.toggle("is-open", isOpen);
     button.setAttribute("aria-expanded", isOpen);
@@ -673,7 +671,7 @@ function setPanelOpen(button, panel, isOpen) {
     }
 }
 
-// Open each (+) button's panel; close it on Cancel or a successful Add in any of its forms (both reset the form)
+// Open each (+) panel; close it when its form resets
 function setUpAddButtons() {
     document.querySelectorAll(".add-btn").forEach(function (button) {
         const panel = document.getElementById(button.getAttribute("aria-controls"));
@@ -688,7 +686,7 @@ function setUpAddButtons() {
     });
 }
 
-// Return the household asked for in the address (?household=h4) if it's one of mine, otherwise my first one
+// Return the ?household= one if it's mine, else my first
 function pickHousehold(myHouseholds) {
     const requestedId = new URLSearchParams(window.location.search).get("household");
     const requested = myHouseholds.find(function (h) {
@@ -697,8 +695,7 @@ function pickHousehold(myHouseholds) {
     return requested || myHouseholds[0];
 }
 
-// Fill the household dropdown with every household this manager belongs to (hidden if only one);
-// open the one that is chosen
+// Fill the household dropdown (hidden if only one); open the chosen one
 function setUpHouseholdSelect(myHouseholds, household) {
     const select = document.getElementById("switch-household");
     if (myHouseholds.length < 2) {
@@ -716,7 +713,7 @@ function setUpHouseholdSelect(myHouseholds, household) {
     });
 }
 
-// Load all the data, find the current household and draw the dashboard
+// Load my households and the chosen one, then draw
 async function loadData() {
     try {
         const myHouseholds = await loadJSON("/api/households?manager=" + CURRENT_MANAGER_ID);

@@ -2,7 +2,7 @@
 const menuButton = document.querySelector(".menu-toggle");
 const navLinks = document.querySelector("#nav-links");
 
-// Open or close the phone menu and update its button for screen readers
+// Open or close the phone menu
 function setMenu(isOpen) {
     navLinks.classList.toggle("open", isOpen);
     menuButton.setAttribute("aria-expanded", isOpen);

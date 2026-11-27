@@ -19,7 +19,7 @@ def read_data(name):
         with open(file_path(name), "r", encoding="utf-8") as file:
             return json.load(file)
     except FileNotFoundError:
-        return []   # Return an empty list when the file doesn't exist yet
+        return []   # Return [] if the file doesn't exist yet
 
 
 def write_data(name, data):

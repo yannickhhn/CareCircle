@@ -204,7 +204,7 @@ body {
     margin-left: auto;
 }
 .btn-outline {
-    /* Make it inline-block, since transform doesn't work on inline elements */
+    /* Allow transform (not on inline elements) */
     display: inline-block;
     border: 1px solid var(--accent-periwinkle);
     border-radius: 6px;
@@ -273,7 +273,7 @@ body {
     background-color: var(--text-primary);
     transition: transform 0.25s ease, opacity 0.25s ease;
 }
-/* Move each bar 7px (5px gap + 2px bar), so the bars cross in the middle */
+/* Move bars 7px (gap + bar) so they cross */
 .menu-toggle[aria-expanded="true"] .bar:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
 }
@@ -298,7 +298,7 @@ body {
 /* Sections */
 main > section {
     padding: var(--space-section) 0;
-    /* Stop a jump 20px down, since the section's own padding sits under the sticky header */
+    /* Stop a jump 20px from the top */
     scroll-margin-top: 20px;
 }
 
@@ -555,7 +555,7 @@ main > section {
 .tut-wheel span:nth-child(2) { transform: translate(-50%, -50%) rotate(90deg) translateX(var(--num-r)); }
 .tut-wheel span:nth-child(3) { transform: translate(-50%, -50%) rotate(180deg) translateX(var(--num-r)); }
 .tut-wheel span:nth-child(4) { transform: translate(-50%, -50%) rotate(270deg) translateX(var(--num-r)); }
-/* Reuse the same fade, offset so each number shows during its own step */
+/* Offset the fade so each number shows in its step */
 .tut-wheel span:nth-child(2) { animation-delay: -12s; }
 .tut-wheel span:nth-child(3) { animation-delay: -8s; }
 .tut-wheel span:nth-child(4) { animation-delay: -4s; }
@@ -604,7 +604,7 @@ main > section {
 }
 
 /* Loop every 16s: one step about every 4s */
-/* End (100%) the same as the start (0%), so the loop restarts seamlessly */
+/* End like the start, so the loop restarts seamlessly */
 @keyframes tut-wheel {
     0%, 20% { transform: rotate(0deg); background-color: var(--step1-wheel); }
     25%, 45% { transform: rotate(-90deg); background-color: var(--step2-wheel); }

@@ -201,7 +201,7 @@
 :root[data-theme="dark"] .field input {
     border-color: var(--border);
 }
-/* Repeat the red border, because the dark input rule above is more specific */
+/* Repeat the red border (the dark rule above wins otherwise) */
 :root[data-theme="dark"] .field input[aria-invalid="true"] {
     border-color: var(--error-border);
 }

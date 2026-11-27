@@ -64,7 +64,8 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Secret key in .env, loaded by app.py (server stops if it's missing)
 - [x] Register route on the server (POST /api/register: checks every field, refuses a used email, saves only the hash)
 - [x] Register form sends to the server (auth.js), with matching maxlength in the HTML
-- [ ] Login and log out
+- [x] Login and logout routes on the server (session cookie, 8-hour limit, clear error messages)
+- [ ] Login form and Log out button send to the server
 - [ ] Logged-in manager replaces the hard-coded Anna (m5)
 - [ ] Create a household (moved up from Backend 3/4, since a new account starts with none)
 - Skipped: demo passwords for the sample managers (I register my own test accounts instead)
@@ -83,6 +84,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [ ] Debug mode off
 - [x] Hosting decided (Nov 26): deployment not required; demo runs the Flask server locally (JSON files on disk). GitHub Pages can't run Flask.
 - [x] Demo runs on my laptop (localhost), confirmed Nov 26
+- [ ] Bonus (optional): deploy on Oracle Cloud (always-on server with a disk, so JSON files are kept). Launching earns a bonus point. Only after Backend 3/4 works; the laptop demo stays the backup
 - [ ] README run instructions
 - [ ] Slides and demo rehearsed (main workflow, one edge case, one security measure)
 

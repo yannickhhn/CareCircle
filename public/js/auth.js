@@ -1,7 +1,7 @@
 // Show/hide password
 const toggleButtons = document.querySelectorAll(".toggle-password");
 
-// Switch each password field between hidden and visible text when its Show/Hide button is clicked
+// Show or hide the password when Show/Hide is clicked
 toggleButtons.forEach(function (button) {
     const input = document.getElementById(button.getAttribute("aria-controls"));
 
@@ -23,7 +23,7 @@ function isValidEmail(email) {
     return pattern.test(email);
 }
 
-// Show a message under the field and mark it invalid (red border)
+// Show the field's error and mark it invalid
 function showError(input, message) {
     const errorBox = document.getElementById(input.id + "-error");
     errorBox.textContent = message;
@@ -37,7 +37,7 @@ function clearError(input) {
     input.removeAttribute("aria-invalid");
 }
 
-// Check one field against its rules, show or clear its error, and return true if valid
+// Check one field, show its error, return true if valid
 function validateField(input) {
     const value = input.value.trim();
     let message = "";
@@ -76,7 +76,7 @@ inputs.forEach(function (input) {
         validateField(input);
     });
 
-    // Re-check while typing once a field shows an error; re-check the confirm field when the password changes
+    // Re-check while fixing an error, and confirm when the password changes
     input.addEventListener("input", function () {
         if (input.getAttribute("aria-invalid") === "true") {
             validateField(input);
@@ -87,7 +87,7 @@ inputs.forEach(function (input) {
     });
 });
 
-// Send the register form to the server, then go to the login page or show the server's error
+// Send the register form, then go to login or show the error
 async function sendRegister(status) {
     const body = {
         firstName: document.getElementById("first-name").value,
@@ -114,9 +114,9 @@ async function sendRegister(status) {
     }
 }
 
-// Submit: check every field and put the cursor on the first wrong one
+// Submit: check every field, focus the first wrong one
 form.addEventListener("submit", function (event) {
-    // Stop the browser from sending the form itself; fetch sends it instead
+    // Stop the browser's own sending (register uses fetch)
     event.preventDefault();
 
     let firstWrong = null;
