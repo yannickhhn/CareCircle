@@ -748,4 +748,15 @@ async function loadData() {
     }
 }
 
+// Log out on the server, then go to the login page
+document.getElementById("logout-link").addEventListener("click", async function (event) {
+    event.preventDefault();
+    try {
+        await fetch("/api/logout", { method: "POST" });
+    } catch (error) {
+        // Go to login even if the server is off
+    }
+    window.location.href = "../login.html";
+});
+
 loadData();

@@ -87,17 +87,10 @@ inputs.forEach(function (input) {
     });
 });
 
-// Send the register form, then go to login or show the error
-async function sendRegister(status) {
-    const body = {
-        firstName: document.getElementById("first-name").value,
-        email: document.getElementById("email").value,
-        password: document.getElementById("password").value,
-        confirmPassword: document.getElementById("confirm-password").value
-    };
-
+// Send a form to the server, then go to the next page or show the error
+async function sendForm(url, body, nextPage, status) {
     try {
-        const response = await fetch("/api/register", {
+        const response = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
@@ -105,7 +98,7 @@ async function sendRegister(status) {
         const result = await response.json();
 
         if (response.ok) {
-            window.location.href = "login.html";
+            window.location.href = nextPage;
         } else {
             status.textContent = result.error;
         }
@@ -116,7 +109,7 @@ async function sendRegister(status) {
 
 // Submit: check every field, focus the first wrong one
 form.addEventListener("submit", function (event) {
-    // Stop the browser's own sending (register uses fetch)
+    // Stop the browser's own sending (fetch sends it)
     event.preventDefault();
 
     let firstWrong = null;
@@ -133,8 +126,17 @@ form.addEventListener("submit", function (event) {
         firstWrong.focus();
     } else if (form.id === "register-form") {
         status.textContent = "Creating your account...";
-        sendRegister(status);
+        sendForm("/api/register", {
+            firstName: document.getElementById("first-name").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+            confirmPassword: document.getElementById("confirm-password").value
+        }, "login.html", status);
     } else {
-        status.textContent = "Looks good!";
+        status.textContent = "Logging in...";
+        sendForm("/api/login", {
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value
+        }, "app/dashboard.html", status);
     }
 });

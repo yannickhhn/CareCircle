@@ -65,7 +65,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Register route on the server (POST /api/register: checks every field, refuses a used email, saves only the hash)
 - [x] Register form sends to the server (auth.js), with matching maxlength in the HTML
 - [x] Login and logout routes on the server (session cookie, 8-hour limit, clear error messages)
-- [ ] Login form and Log out button send to the server
+- [x] Login form and Log out button send to the server
 - [ ] Logged-in manager replaces the hard-coded Anna (m5)
 - [ ] Create a household (moved up from Backend 3/4, since a new account starts with none)
 - Skipped: demo passwords for the sample managers (I register my own test accounts instead)
