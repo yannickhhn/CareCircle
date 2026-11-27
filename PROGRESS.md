@@ -69,7 +69,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Logged-in manager replaces the hard-coded Anna (m5): /api/me, 401 sends you to login
 - [x] Create a household (moved up from Backend 3/4): one per person unless Extended, checked on the server
 - Skipped: demo passwords for the sample managers (I register my own test accounts instead)
-- [ ] A manager only gets their own households (403 otherwise)
+- [x] A manager only gets their own households (403 otherwise): is_member() in get_household
 - [ ] Test: manager A can't read manager B's household (two accounts I register, each with a household)
 
 ### Backend 3/4, Sat Nov 28: saving changes
@@ -105,6 +105,6 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 ## Current status
 In progress: nothing
 Blockers: none
-Next step: Backend 2/4 (register with a hashed password). Backend 1/4 done Nov 21, 2 days early
+Next step: Backend 2/4 step 7, test two accounts I register (A can't open B's household), then Backend 3/4 (Sat Nov 28)
 Decision: one dashboard page for the final version; separate pages only if time is left
 Decision (Nov 26): login uses Flask's session cookie
