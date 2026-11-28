@@ -110,7 +110,7 @@ function renderMedications(household) {
         return med.householdId === household.id;
     });
     meds.sort(function (a, b) {
-        return a.time.localeCompare(b.time);
+        return a.times[0].localeCompare(b.times[0]);
     });
 
     meds.forEach(function (med) {
@@ -118,9 +118,12 @@ function renderMedications(household) {
         if (med.endDate && med.endDate < today) {
             return;
         }
-        const isFilled = Boolean(med.givenAt) && med.givenAt.startsWith(today);
-        const isOverdue = !isFilled && med.time < nowTime;
-        const row = createMedRow(med, household, today, isFilled, isOverdue);
+        // Show the next dose of today, or the last one once all are given
+        const doses = givenToday(med, today);
+        const isFilled = doses.length >= med.times.length;
+        const shownTime = isFilled ? med.times[med.times.length - 1] : med.times[doses.length];
+        const isOverdue = !isFilled && shownTime < nowTime;
+        const row = createMedRow(med, household, today, doses, shownTime, isFilled, isOverdue);
         if (isFilled) {
             filledList.appendChild(row);
         } else {
@@ -129,8 +132,15 @@ function renderMedications(household) {
     });
 }
 
+// Return today's given doses of a medication
+function givenToday(med, today) {
+    return med.given.filter(function (dose) {
+        return dose.date === today;
+    });
+}
+
 // Return one medication row
-function createMedRow(med, household, today, isFilled, isOverdue) {
+function createMedRow(med, household, today, doses, shownTime, isFilled, isOverdue) {
     const firstName = getFirstName(household, med.dependentId);
 
     const row = makeElement("li", "med-row");
@@ -148,7 +158,7 @@ function createMedRow(med, household, today, isFilled, isOverdue) {
     checkbox.id = "dose-" + med.id;
     checkbox.checked = isFilled;
     checkbox.addEventListener("change", function () {
-        toggleDose(med, household, checkbox.checked);
+        toggleDose(med, household, checkbox.checked, shownTime);
     });
     row.appendChild(checkbox);
 
@@ -165,14 +175,17 @@ function createMedRow(med, household, today, isFilled, isOverdue) {
         row.appendChild(makeElement("span", "badge-overdue", "Overdue"));
     }
 
-    const time = makeElement("time", null, formatTime(med.time) + " ");
-    time.dateTime = today + "T" + med.time;
-    time.appendChild(makeElement("span", null,
-        new Date().toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })));
+    // Show "2 of 3 today" under the time, or today's date for a once-a-day medication
+    const time = makeElement("time", null, formatTime(shownTime) + " ");
+    time.dateTime = today + "T" + shownTime;
+    const detail = med.times.length > 1
+        ? Math.min(doses.length + 1, med.times.length) + " of " + med.times.length + " today"
+        : new Date().toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+    time.appendChild(makeElement("span", null, detail));
     row.appendChild(time);
 
-    if (isFilled) {
-        row.appendChild(createGivenBy(med));
+    if (doses.length > 0) {
+        row.appendChild(createGivenBy(doses[doses.length - 1]));
     }
 
     const deleteButton = makeElement("button", "delete-btn", "Delete");
@@ -199,35 +212,34 @@ function createMedRow(med, household, today, isFilled, isOverdue) {
 
 const CHECK_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></svg>';
 
-// Return "✓ Lisa · 8:05 AM": who gave the dose and when
+// Return "✓ Lisa · 8:05 AM": who gave the last dose and when
 // (innerHTML only for the fixed icon, never user data)
-function createGivenBy(med) {
+function createGivenBy(dose) {
     const manager = data.managers.find(function (m) {
-        return m.id === med.givenBy;
+        return m.id === dose.by;
     });
 
     const givenBy = makeElement("span", "given-by");
     givenBy.innerHTML = CHECK_ICON;
     givenBy.append(
         makeElement("span", "visually-hidden", "Given by"),
-        " " + manager.firstName + " · "
+        " " + (manager ? manager.firstName : "A former manager") + " · "
     );
 
-    const time = makeElement("time", null, formatTime(med.givenAt.slice(11, 16)));
-    time.dateTime = med.givenAt;
+    const time = makeElement("time", null, formatTime(dose.at));
+    time.dateTime = dose.date + "T" + dose.at;
     givenBy.appendChild(time);
     return givenBy;
 }
 
-// Mark a dose given now, or clear it (page only until Backend 3/4)
-function toggleDose(med, household, isGiven) {
-    if (isGiven) {
-        const now = new Date();
-        med.givenAt = toDateString(now) + "T" + toTimeString(now);
-        med.givenBy = currentManagerId;
-    } else {
-        med.givenAt = null;
-        med.givenBy = null;
+// Give the next dose or undo the last one on the server, then redraw
+async function toggleDose(med, household, isGiven, shownTime) {
+    const url = "/api/households/" + household.id + "/medications/" + med.id + "/given";
+    try {
+        const saved = await sendJSON(isGiven ? "POST" : "DELETE", url, { time: shownTime });
+        med.given = saved.given;
+    } catch (error) {
+        alert(error.message);
     }
     renderMedications(household);
 }
@@ -364,7 +376,11 @@ function renderHousehold(household) {
         editButton.addEventListener("click", function () {
             startEditDependent(dependent);
         });
-        row.append(editButton, createRowButton("delete-btn", "Remove", firstName));
+        const removeButton = createRowButton("delete-btn", "Remove", firstName);
+        removeButton.addEventListener("click", function () {
+            removeDependent(household, dependent);
+        });
+        row.append(editButton, removeButton);
         dependentList.appendChild(row);
     });
 }
@@ -500,18 +516,49 @@ function setUpAddForm(formId, fieldIds, household, save) {
 
 // Add medication form: save on the server, then redraw
 function setUpMedForm(household) {
-    setUpAddForm("med-form", ["med-for", "med-name", "med-dose", "med-time", "med-end"], household, async function () {
+    const timeIds = ["med-time", "med-time-2", "med-time-3", "med-time-4"];
+    setUpTimeCount(timeIds);
+
+    setUpAddForm("med-form", ["med-for", "med-name", "med-dose"].concat(timeIds, ["med-end"]), household, async function () {
+        // Send only the time fields that are shown
+        const count = Number(fieldValue("med-count"));
+        const times = timeIds.slice(0, count).map(fieldValue);
+
         const med = await sendJSON("POST", "/api/households/" + household.id + "/medications", {
             dependentId: fieldValue("med-for"),
             name: fieldValue("med-name"),
             dose: fieldValue("med-dose"),
-            time: fieldValue("med-time"),
+            times: times,
             repeat: fieldValue("med-repeat"),
             endDate: fieldValue("med-end"),
             note: fieldValue("med-note")
         });
         data.medications.push(med);
         renderMedications(household);
+    });
+}
+
+// Show as many time fields as "Times a day" asks for, and require only those
+function setUpTimeCount(timeIds) {
+    const countSelect = document.getElementById("med-count");
+
+    function showTimes(count) {
+        timeIds.forEach(function (id, index) {
+            const input = document.getElementById(id);
+            input.required = index < count;
+            input.closest(".field").hidden = index >= count;
+            if (index >= count) {
+                clearFieldError(input);
+            }
+        });
+    }
+
+    countSelect.addEventListener("change", function () {
+        showTimes(Number(countSelect.value));
+    });
+    // Go back to one time field when the form resets
+    document.getElementById("med-form").addEventListener("reset", function () {
+        showTimes(1);
     });
 }
 
@@ -568,7 +615,7 @@ function planFullMessage(household) {
 
 let editingDependent = null;
 
-// Dependent form: add or edit (page only until Backend 3/4)
+// Dependent form: add or edit on the server
 function setUpDependentForm(household) {
     const form = document.getElementById("dependent-form");
     const title = document.getElementById("dependent-form-title");
@@ -593,8 +640,8 @@ function setUpDependentForm(household) {
         submitButton.textContent = "Add";
     });
 
-    // Add or Save: block a full household, check fields, save, redraw
-    form.addEventListener("submit", function (event) {
+    // Add or Save: block a full household, check fields, save on the server, redraw
+    form.addEventListener("submit", async function (event) {
         event.preventDefault();
         if (!editingDependent && isHouseholdFull(household)) {
             const planFull = document.getElementById("plan-full");
@@ -612,16 +659,43 @@ function setUpDependentForm(household) {
             return;
         }
 
-        const person = editingDependent || { id: "d" + Date.now() };
-        person.name = fieldValue("dep-name");
-        person.birthYear = Number(fieldValue("dep-birth-year"));
-        person.notes = fieldValue("dep-notes").slice(0, 200);
-        if (!editingDependent) {
-            household.dependents.push(person);
+        const body = {
+            name: fieldValue("dep-name"),
+            birthYear: fieldValue("dep-birth-year"),
+            notes: fieldValue("dep-notes")
+        };
+        const url = "/api/households/" + household.id + "/dependents";
+
+        // Show the server's error under the name, and keep the form
+        try {
+            if (editingDependent) {
+                const saved = await sendJSON("PUT", url + "/" + editingDependent.id, body);
+                Object.assign(editingDependent, saved);
+            } else {
+                household.dependents.push(await sendJSON("POST", url, body));
+            }
+            form.reset();
+            refreshPeople(household);
+        } catch (error) {
+            showFieldError(fields[0], error.message);
         }
-        form.reset();
-        refreshPeople(household);
     });
+}
+
+// Remove a dependent on the server after a confirm, then redraw
+async function removeDependent(household, dependent) {
+    if (!confirm("Remove " + dependent.name + "?")) {
+        return;
+    }
+    try {
+        await sendJSON("DELETE", "/api/households/" + household.id + "/dependents/" + dependent.id);
+        household.dependents = household.dependents.filter(function (d) {
+            return d.id !== dependent.id;
+        });
+        refreshPeople(household);
+    } catch (error) {
+        alert(error.message);
+    }
 }
 
 // Edit button: fill the form with this person, switch to "Save"

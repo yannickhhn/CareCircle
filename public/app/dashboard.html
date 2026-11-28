@@ -151,10 +151,41 @@
                             </div>
 
                             <div class="field">
+                                <label for="med-count">Times a day</label>
+                                <select id="med-count" name="count">
+                                    <option value="1">Once</option>
+                                    <option value="2">2 times</option>
+                                    <option value="3">3 times</option>
+                                    <option value="4">4 times</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
                                 <label for="med-time">Time</label>
                                 <input type="time" id="med-time" name="time" required
                                        aria-describedby="med-time-error">
                                 <p class="field-error" id="med-time-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="field med-extra-time" hidden>
+                                <label for="med-time-2">Time 2</label>
+                                <input type="time" id="med-time-2" name="time2"
+                                       aria-describedby="med-time-2-error">
+                                <p class="field-error" id="med-time-2-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="field med-extra-time" hidden>
+                                <label for="med-time-3">Time 3</label>
+                                <input type="time" id="med-time-3" name="time3"
+                                       aria-describedby="med-time-3-error">
+                                <p class="field-error" id="med-time-3-error" aria-live="polite"></p>
+                            </div>
+
+                            <div class="field med-extra-time" hidden>
+                                <label for="med-time-4">Time 4</label>
+                                <input type="time" id="med-time-4" name="time4"
+                                       aria-describedby="med-time-4-error">
+                                <p class="field-error" id="med-time-4-error" aria-live="polite"></p>
                             </div>
 
                             <div class="field">

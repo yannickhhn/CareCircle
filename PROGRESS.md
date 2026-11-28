@@ -78,8 +78,10 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 ### Backend 3/4, Sat Nov 28: saving changes
 - [x] Shared check helper load_my_household (401 logged out, 404 unknown, 403 not a member), used by get_household
 - [x] Medications: add and delete saved on the server, optional end date (ended ones are hidden)
+- [x] Dependents: add, edit, remove saved on the server; member limit on the server; remove is blocked while they still have medications, appointments or doctors
+- [x] Medications can have 1 to 4 times a day (one row shows the next dose, "2 of 3 today"); medications.json converted to times + given log
 - [ ] Add, edit and delete: medications, appointments, doctors, dependents
-- [ ] Med check-off saved
+- [x] Med check-off saved (given log on the server, "by" from the session, 409 if another manager already gave that dose, undo the last dose)
 - [ ] Invite a co-manager by email
 - [ ] Free-tier limits checked on the server
 - [ ] Server repeats every form check (bad input gets an error, not a crash)

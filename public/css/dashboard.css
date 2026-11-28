@@ -259,9 +259,8 @@
 .delete-btn:hover {
     filter: brightness(0.9);
 }
-/* Hide until saving exists (Backend 3/4); medication Delete works */
-.appt-card .delete-btn,
-.member-row .delete-btn {
+/* Hide until saving exists (Backend 3/4); medication and dependent buttons work */
+.appt-card .delete-btn {
     display: none;
 }
 .btn-text {
@@ -540,6 +539,11 @@
     font-weight: 400;
     font-size: 0.875rem;
     color: var(--text-secondary);
+}
+
+/* Hide the extra time fields until they're chosen */
+.field[hidden] {
+    display: none;
 }
 
 /* Date and time row */

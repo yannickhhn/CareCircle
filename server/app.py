@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, session
 from storage import read_data, write_data
 import os
 import re
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -287,7 +287,7 @@ def add_medication(household_id):
     dependent_id = text_field(body, "dependentId")
     name = text_field(body, "name")
     dose = text_field(body, "dose")
-    time = text_field(body, "time")
+    times = body.get("times")
     repeat = text_field(body, "repeat")
     end_date = text_field(body, "endDate")
     note = text_field(body, "note")
@@ -299,8 +299,14 @@ def add_medication(household_id):
         return jsonify({"error": "Enter a medication name (60 characters max)"}), 400
     if dose == "" or len(dose) > 30:
         return jsonify({"error": "Enter a dose (30 characters max)"}), 400
-    if not re.match(TIME_PATTERN, time):
-        return jsonify({"error": "Enter a time like 08:00"}), 400
+    # Allow 1 to 4 different times a day, each like 08:00
+    if not isinstance(times, list) or len(times) < 1 or len(times) > 4:
+        return jsonify({"error": "Choose 1 to 4 times a day"}), 400
+    for t in times:
+        if not isinstance(t, str) or not re.match(TIME_PATTERN, t):
+            return jsonify({"error": "Enter times like 08:00"}), 400
+    if len(set(times)) != len(times):
+        return jsonify({"error": "Use a different time for each dose"}), 400
     if repeat not in REPEATS:
         return jsonify({"error": "Choose how often it repeats"}), 400
     # Allow no end date, or a real date from today on
@@ -316,12 +322,11 @@ def add_medication(household_id):
         "dependentId": dependent_id,
         "name": name,
         "dose": dose,
-        "time": time,
+        "times": sorted(times),
         "repeat": repeat,
         "endDate": end_date or None,
         "note": note,
-        "givenBy": None,
-        "givenAt": None,
+        "given": [],
     }
     medications.append(new_med)
     write_data("medications", medications)
@@ -349,6 +354,203 @@ def delete_medication(household_id, med_id):
         return jsonify({"error": "Medication not found"}), 404
     write_data("medications", kept)
     return jsonify({"message": "Deleted"})
+
+
+# Return this household's medication from the list, or None
+def find_medication(medications, household_id, med_id):
+    for med in medications:
+        if med["id"] == med_id and med["householdId"] == household_id:
+            return med
+    return None
+
+
+# Return the doses of a medication given today
+def given_today(med, today):
+    doses = []
+    for dose in med["given"]:
+        if dose["date"] == today:
+            doses.append(dose)
+    return doses
+
+
+# Give the next dose of today, recorded as the logged-in manager
+@app.route("/api/households/<household_id>/medications/<med_id>/given", methods=["POST"])
+def give_dose(household_id, med_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    medications = read_data("medications")
+    med = find_medication(medications, household_id, med_id)
+    if med is None:
+        return jsonify({"error": "Medication not found"}), 404
+
+    # Refuse a body that isn't JSON, instead of crashing
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"error": "Send the form as JSON"}), 400
+
+    now = datetime.now()
+    today = now.date().isoformat()
+    doses = given_today(med, today)
+
+    # Refuse if this isn't the next dose (another manager may have just given it)
+    if len(doses) >= len(med["times"]) or text_field(body, "time") != med["times"][len(doses)]:
+        return jsonify({"error": "This dose was already given. Reload to see the latest."}), 409
+
+    med["given"].append({
+        "date": today,
+        "time": med["times"][len(doses)],
+        "by": current_manager_id(),
+        "at": now.strftime("%H:%M"),
+    })
+    write_data("medications", medications)
+    return jsonify(med)
+
+
+# Undo the last dose given today
+@app.route("/api/households/<household_id>/medications/<med_id>/given", methods=["DELETE"])
+def undo_dose(household_id, med_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    medications = read_data("medications")
+    med = find_medication(medications, household_id, med_id)
+    if med is None:
+        return jsonify({"error": "Medication not found"}), 404
+
+    # Refuse if there's nothing to undo today
+    doses = given_today(med, date.today().isoformat())
+    if len(doses) == 0:
+        return jsonify({"error": "No dose to undo today"}), 409
+
+    med["given"].remove(doses[-1])
+    write_data("medications", medications)
+    return jsonify(med)
+
+
+PLAN_LIMITS = {"economic": 4, "familial": 8, "extended": None}
+
+
+# Replace this household in households.json with the updated copy
+def save_household(household):
+    households = read_data("households")
+    for i in range(len(households)):
+        if households[i]["id"] == household["id"]:
+            households[i] = household
+    write_data("households", households)
+
+
+# Return a dependent of this household, or None
+def find_dependent(household, dependent_id):
+    for d in household["dependents"]:
+        if d["id"] == dependent_id:
+            return d
+    return None
+
+
+# Return the dependent's fields from the request, or an error message
+def read_dependent(body):
+    name = text_field(body, "name")
+    year = text_field(body, "birthYear")
+    notes = text_field(body, "notes")
+    this_year = date.today().year
+    if name == "" or len(name) > 40:
+        return None, "Enter a name (40 characters max)"
+    if not year.isdigit() or int(year) < 1900 or int(year) > this_year:
+        return None, "Enter a birth year between 1900 and " + str(this_year)
+    if len(notes) > 200:
+        return None, "Keep the notes under 200 characters"
+    return {"name": name, "birthYear": int(year), "notes": notes}, None
+
+
+# Add a dependent to the household, within the plan's member limit
+@app.route("/api/households/<household_id>/dependents", methods=["POST"])
+def add_dependent(household_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    # Refuse a body that isn't JSON, instead of crashing
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"error": "Send the form as JSON"}), 400
+
+    fields, message = read_dependent(body)
+    if message:
+        return jsonify({"error": message}), 400
+
+    # Refuse a new member if the plan is full
+    limit = PLAN_LIMITS[household["plan"]]
+    members = len(household["managerIds"]) + len(household["dependents"])
+    if limit is not None and members >= limit:
+        return jsonify({"error": "Your plan is full (" + str(limit) + " members)"}), 403
+
+    # Number dependents across all households, since their ids are unique app-wide
+    all_dependents = []
+    for h in read_data("households"):
+        all_dependents.extend(h["dependents"])
+
+    dependent = {"id": next_id(all_dependents, "d")}
+    dependent.update(fields)
+    household["dependents"].append(dependent)
+    save_household(household)
+    return jsonify(dependent), 201
+
+
+# Change one of the household's dependents
+@app.route("/api/households/<household_id>/dependents/<dependent_id>", methods=["PUT"])
+def edit_dependent(household_id, dependent_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    dependent = find_dependent(household, dependent_id)
+    if dependent is None:
+        return jsonify({"error": "Dependent not found"}), 404
+
+    # Refuse a body that isn't JSON, instead of crashing
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"error": "Send the form as JSON"}), 400
+
+    fields, message = read_dependent(body)
+    if message:
+        return jsonify({"error": message}), 400
+
+    dependent.update(fields)
+    save_household(household)
+    return jsonify(dependent)
+
+
+# Return True if any medication, appointment or doctor belongs to this dependent
+def has_items(dependent_id):
+    for name in ["medications", "appointments", "doctors"]:
+        for item in read_data(name):
+            if item["dependentId"] == dependent_id:
+                return True
+    return False
+
+
+# Remove a dependent, only once they have no items left
+@app.route("/api/households/<household_id>/dependents/<dependent_id>", methods=["DELETE"])
+def remove_dependent(household_id, dependent_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    dependent = find_dependent(household, dependent_id)
+    if dependent is None:
+        return jsonify({"error": "Dependent not found"}), 404
+
+    # Block the removal so no medication, appointment or doctor is lost by accident
+    if has_items(dependent_id):
+        return jsonify({"error": "Delete their medications, appointments and doctors first"}), 409
+
+    household["dependents"].remove(dependent)
+    save_household(household)
+    return jsonify({"message": "Removed"})
 
 
 # Start the server only when this file is run directly

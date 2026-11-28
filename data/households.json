@@ -86,6 +86,13 @@
         "managerIds": [
             "m8"
         ],
-        "dependents": []
+        "dependents": [
+            {
+                "id": "d7",
+                "name": "user33",
+                "birthYear": 2009,
+                "notes": "eee"
+            }
+        ]
     }
 ]
