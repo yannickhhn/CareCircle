@@ -259,8 +259,9 @@
 .delete-btn:hover {
     filter: brightness(0.9);
 }
-/* Hide until saving exists (Backend 3/4) */
-.delete-btn {
+/* Hide until saving exists (Backend 3/4); medication Delete works */
+.appt-card .delete-btn,
+.member-row .delete-btn {
     display: none;
 }
 .btn-text {

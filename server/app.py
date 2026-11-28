@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, session
 from storage import read_data, write_data
 import os
 import re
-from datetime import timedelta
+from datetime import date, timedelta
 from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -253,6 +253,102 @@ def create_household():
     households.append(new_household)
     write_data("households", households)
     return jsonify({"id": new_household["id"], "name": name}), 201
+
+
+# Match a 24-hour time like "08:00" or "21:30"
+TIME_PATTERN = r"^([01]\d|2[0-3]):[0-5]\d$"
+
+# Match a date like "2026-12-01"
+DATE_PATTERN = r"^\d{4}-\d{2}-\d{2}$"
+
+REPEATS = ["daily", "weekly", "none"]
+
+
+# Return True if the dependent belongs to this household
+def has_dependent(household, dependent_id):
+    for d in household["dependents"]:
+        if d["id"] == dependent_id:
+            return True
+    return False
+
+
+# Add a medication for one of the household's dependents
+@app.route("/api/households/<household_id>/medications", methods=["POST"])
+def add_medication(household_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    # Refuse a body that isn't JSON, instead of crashing
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"error": "Send the form as JSON"}), 400
+
+    dependent_id = text_field(body, "dependentId")
+    name = text_field(body, "name")
+    dose = text_field(body, "dose")
+    time = text_field(body, "time")
+    repeat = text_field(body, "repeat")
+    end_date = text_field(body, "endDate")
+    note = text_field(body, "note")
+
+    # Repeat the front-end checks (requests can skip the browser)
+    if not has_dependent(household, dependent_id):
+        return jsonify({"error": "Choose someone from this household"}), 400
+    if name == "" or len(name) > 60:
+        return jsonify({"error": "Enter a medication name (60 characters max)"}), 400
+    if dose == "" or len(dose) > 30:
+        return jsonify({"error": "Enter a dose (30 characters max)"}), 400
+    if not re.match(TIME_PATTERN, time):
+        return jsonify({"error": "Enter a time like 08:00"}), 400
+    if repeat not in REPEATS:
+        return jsonify({"error": "Choose how often it repeats"}), 400
+    # Allow no end date, or a real date from today on
+    if end_date != "" and (not re.match(DATE_PATTERN, end_date) or end_date < date.today().isoformat()):
+        return jsonify({"error": "Choose an end date from today on"}), 400
+    if len(note) > 200:
+        return jsonify({"error": "Keep the note under 200 characters"}), 400
+
+    medications = read_data("medications")
+    new_med = {
+        "id": next_id(medications, "med"),
+        "householdId": household_id,
+        "dependentId": dependent_id,
+        "name": name,
+        "dose": dose,
+        "time": time,
+        "repeat": repeat,
+        "endDate": end_date or None,
+        "note": note,
+        "givenBy": None,
+        "givenAt": None,
+    }
+    medications.append(new_med)
+    write_data("medications", medications)
+    return jsonify(new_med), 201
+
+
+# Delete one of the household's medications
+@app.route("/api/households/<household_id>/medications/<med_id>", methods=["DELETE"])
+def delete_medication(household_id, med_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    # Keep every medication except this one, only if it's in this household
+    medications = read_data("medications")
+    kept = []
+    found = False
+    for med in medications:
+        if med["id"] == med_id and med["householdId"] == household_id:
+            found = True
+        else:
+            kept.append(med)
+
+    if not found:
+        return jsonify({"error": "Medication not found"}), 404
+    write_data("medications", kept)
+    return jsonify({"message": "Deleted"})
 
 
 # Start the server only when this file is run directly

@@ -16,6 +16,20 @@ async function loadJSON(url) {
     return response.json();
 }
 
+// Send JSON to an API route and return the reply, or throw the server's error
+async function sendJSON(method, url, body) {
+    const response = await fetch(url, {
+        method: method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body || {})
+    });
+    const result = await response.json();
+    if (!response.ok) {
+        throw new Error(result.error);
+    }
+    return result;
+}
+
 // Return a local date like "2026-11-16" (toISOString uses UTC)
 function toDateString(date) {
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -100,6 +114,10 @@ function renderMedications(household) {
     });
 
     meds.forEach(function (med) {
+        // Skip medications whose end date has passed
+        if (med.endDate && med.endDate < today) {
+            return;
+        }
         const isFilled = Boolean(med.givenAt) && med.givenAt.startsWith(today);
         const isOverdue = !isFilled && med.time < nowTime;
         const row = createMedRow(med, household, today, isFilled, isOverdue);
@@ -138,7 +156,8 @@ function createMedRow(med, household, today, isFilled, isOverdue) {
     label.htmlFor = checkbox.id;
     label.append(
         makeElement("span", "med-who", firstName),
-        makeElement("span", "med-name", med.name + " · " + med.dose)
+        makeElement("span", "med-name", med.name + " · " + med.dose +
+            (med.endDate ? " · until " + formatDay(med.endDate) : ""))
     );
     row.appendChild(label);
 
@@ -158,6 +177,21 @@ function createMedRow(med, household, today, isFilled, isOverdue) {
 
     const deleteButton = makeElement("button", "delete-btn", "Delete");
     deleteButton.type = "button";
+    // Delete on the server after a confirm, then redraw
+    deleteButton.addEventListener("click", async function () {
+        if (!confirm("Delete " + med.name + "?")) {
+            return;
+        }
+        try {
+            await sendJSON("DELETE", "/api/households/" + household.id + "/medications/" + med.id);
+            data.medications = data.medications.filter(function (m) {
+                return m.id !== med.id;
+            });
+            renderMedications(household);
+        } catch (error) {
+            alert(error.message);
+        }
+    });
     row.appendChild(deleteButton);
 
     return row;
@@ -440,7 +474,7 @@ function setUpAddForm(formId, fieldIds, household, save) {
     });
 
     // Add: check every field, then save and empty the form
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
         let firstWrong = null;
@@ -454,26 +488,29 @@ function setUpAddForm(formId, fieldIds, household, save) {
             return;
         }
 
-        save();
-        form.reset();
+        // Show the server's error under the first field, and keep the form
+        try {
+            await save();
+            form.reset();
+        } catch (error) {
+            showFieldError(fields[0], error.message);
+        }
     });
 }
 
-// Add medication form (page only until Backend 3/4)
+// Add medication form: save on the server, then redraw
 function setUpMedForm(household) {
-    setUpAddForm("med-form", ["med-for", "med-name", "med-dose", "med-time"], household, function () {
-        data.medications.push({
-            id: "med" + Date.now(),
-            householdId: household.id,
+    setUpAddForm("med-form", ["med-for", "med-name", "med-dose", "med-time", "med-end"], household, async function () {
+        const med = await sendJSON("POST", "/api/households/" + household.id + "/medications", {
             dependentId: fieldValue("med-for"),
             name: fieldValue("med-name"),
             dose: fieldValue("med-dose"),
             time: fieldValue("med-time"),
             repeat: fieldValue("med-repeat"),
-            note: fieldValue("med-note").slice(0, 200),
-            givenBy: null,
-            givenAt: null
+            endDate: fieldValue("med-end"),
+            note: fieldValue("med-note")
         });
+        data.medications.push(med);
         renderMedications(household);
     });
 }

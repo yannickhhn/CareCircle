@@ -77,6 +77,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 
 ### Backend 3/4, Sat Nov 28: saving changes
 - [x] Shared check helper load_my_household (401 logged out, 404 unknown, 403 not a member), used by get_household
+- [x] Medications: add and delete saved on the server, optional end date (ended ones are hidden)
 - [ ] Add, edit and delete: medications, appointments, doctors, dependents
 - [ ] Med check-off saved
 - [ ] Invite a co-manager by email
@@ -108,7 +109,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 
 ### Cut unless time is left
 - Separate pages (dependent profile, medications, appointments, doctor card)
-- Medication duration and quantity
+- Medication dose count (chose an end date instead, Nov 27)
 - Premium flag and cost split (changing plan, no real payment)
 - "New household" option for Extended managers (the server already allows it; needs the premium flag first, since every new household starts on Economic)
 
