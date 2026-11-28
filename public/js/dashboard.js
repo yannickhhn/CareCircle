@@ -95,7 +95,7 @@ function getFirstName(household, dependentId) {
     return dependent.name.split(" ")[0];
 }
 
-// Draw today's medications: given in Filled, the rest in Upcoming
+// Draw today's medications: each given dose in Filled, the next dose in Upcoming
 function renderMedications(household) {
     const upcomingList = document.getElementById("med-upcoming");
     const filledList = document.getElementById("med-filled");
@@ -118,16 +118,33 @@ function renderMedications(household) {
         if (med.endDate && med.endDate < today) {
             return;
         }
-        // Show the next dose of today, or the last one once all are given
         const doses = givenToday(med, today);
-        const isFilled = doses.length >= med.times.length;
-        const shownTime = isFilled ? med.times[med.times.length - 1] : med.times[doses.length];
-        const isOverdue = !isFilled && shownTime < nowTime;
-        const row = createMedRow(med, household, today, doses, shownTime, isFilled, isOverdue);
-        if (isFilled) {
-            filledList.appendChild(row);
-        } else {
-            upcomingList.appendChild(row);
+        const allGiven = doses.length >= med.times.length;
+
+        // One Filled row per dose given today; only the latest can be undone
+        doses.forEach(function (dose, index) {
+            const isLatest = index === doses.length - 1;
+            filledList.appendChild(createMedRow(med, household, {
+                time: dose.time,
+                step: index + 1,
+                dose: dose,
+                canToggle: isLatest,
+                showDelete: allGiven && isLatest,
+                isOverdue: false
+            }));
+        });
+
+        // One Upcoming row for the next dose
+        if (!allGiven) {
+            const nextTime = med.times[doses.length];
+            upcomingList.appendChild(createMedRow(med, household, {
+                time: nextTime,
+                step: doses.length + 1,
+                dose: null,
+                canToggle: true,
+                showDelete: true,
+                isOverdue: nextTime < nowTime
+            }));
         }
     });
 }
@@ -139,26 +156,30 @@ function givenToday(med, today) {
     });
 }
 
-// Return one medication row
-function createMedRow(med, household, today, doses, shownTime, isFilled, isOverdue) {
+// Return one medication row for one dose (given when options.dose is set)
+function createMedRow(med, household, options) {
     const firstName = getFirstName(household, med.dependentId);
+    const today = toDateString(new Date());
+    const isGiven = options.dose !== null;
 
     const row = makeElement("li", "med-row");
-    if (isOverdue) row.classList.add("is-overdue");
-    if (isFilled) row.classList.add("is-filled");
+    if (options.isOverdue) row.classList.add("is-overdue");
+    if (isGiven) row.classList.add("is-filled");
 
-    if (isFilled) {
+    if (isGiven) {
         const avatar = makeElement("span", "avatar", firstName.charAt(0));
         avatar.setAttribute("aria-hidden", "true");
         row.appendChild(avatar);
     }
 
+    // Lock older doses so only the latest one can be undone
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.id = "dose-" + med.id;
-    checkbox.checked = isFilled;
+    checkbox.id = "dose-" + med.id + "-" + options.step;
+    checkbox.checked = isGiven;
+    checkbox.disabled = !options.canToggle;
     checkbox.addEventListener("change", function () {
-        toggleDose(med, household, checkbox.checked, shownTime);
+        toggleDose(med, household, checkbox.checked, options.time);
     });
     row.appendChild(checkbox);
 
@@ -171,26 +192,33 @@ function createMedRow(med, household, today, doses, shownTime, isFilled, isOverd
     );
     row.appendChild(label);
 
-    if (isOverdue) {
+    if (options.isOverdue) {
         row.appendChild(makeElement("span", "badge-overdue", "Overdue"));
     }
 
     // Show "2 of 3 today" under the time, or today's date for a once-a-day medication
-    const time = makeElement("time", null, formatTime(shownTime) + " ");
-    time.dateTime = today + "T" + shownTime;
+    const time = makeElement("time", null, formatTime(options.time) + " ");
+    time.dateTime = today + "T" + options.time;
     const detail = med.times.length > 1
-        ? Math.min(doses.length + 1, med.times.length) + " of " + med.times.length + " today"
+        ? options.step + " of " + med.times.length + " today"
         : new Date().toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
     time.appendChild(makeElement("span", null, detail));
     row.appendChild(time);
 
-    if (doses.length > 0) {
-        row.appendChild(createGivenBy(doses[doses.length - 1]));
+    if (isGiven) {
+        row.appendChild(createGivenBy(options.dose));
     }
 
+    if (options.showDelete) {
+        row.appendChild(createMedDeleteButton(med, household));
+    }
+    return row;
+}
+
+// Return a Delete button that deletes the medication on the server after a confirm
+function createMedDeleteButton(med, household) {
     const deleteButton = makeElement("button", "delete-btn", "Delete");
     deleteButton.type = "button";
-    // Delete on the server after a confirm, then redraw
     deleteButton.addEventListener("click", async function () {
         if (!confirm("Delete " + med.name + "?")) {
             return;
@@ -205,9 +233,7 @@ function createMedRow(med, household, today, doses, shownTime, isFilled, isOverd
             alert(error.message);
         }
     });
-    row.appendChild(deleteButton);
-
-    return row;
+    return deleteButton;
 }
 
 const CHECK_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></svg>';
@@ -895,6 +921,26 @@ function showCreateHousehold() {
     });
 }
 
+// Reload this household from the server and redraw the lists (not the forms)
+async function refreshData(household) {
+    try {
+        const details = await loadJSON("/api/households/" + encodeURIComponent(household.id));
+        // Update the same household object, so the forms keep working with it
+        Object.assign(household, details.household);
+        data.managers = details.managers;
+        data.medications = details.medications;
+        data.appointments = details.appointments;
+        data.doctors = details.doctors;
+        renderHeader(household);
+        renderMedications(household);
+        renderAppointments(household);
+        renderDoctors(household);
+        renderHousehold(household);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 // Load my households and the chosen one, then draw
 async function loadData() {
     try {
@@ -927,6 +973,11 @@ async function loadData() {
         setUpInviteForm(household);
         setUpDoctorForm(household);
         setUpAddButtons();
+
+        // Refresh the lists every 30 seconds to show other managers' changes
+        setInterval(function () {
+            refreshData(household);
+        }, 30000);
     } catch (error) {
         console.error(error);
         document.getElementById("household-name").textContent = "Could not load your data. Is the server running?";

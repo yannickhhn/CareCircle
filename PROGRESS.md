@@ -84,6 +84,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Doctors: add and delete saved on the server (phone and optional email checked); Delete button added to the cards
 - [ ] Add, edit and delete: medications, appointments, doctors, dependents
 - [x] Med check-off saved (given log on the server, "by" from the session, 409 if another manager already gave that dose, undo the last dose)
+- [x] Filled shows one row per dose given today with who gave it (only the latest can be undone); the dashboard refreshes every 30 seconds to show other managers' changes
 - [x] Invite a co-manager by email: an existing account is added now; otherwise the email is kept as a pending invite and joins when they register (pending invites count toward the limit)
 - [x] Free-tier limits checked on the server (built into every route)
 - [x] Server repeats every form check (bad input gets an error, not a crash) (built into every route)
