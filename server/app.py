@@ -180,6 +180,15 @@ def register():
     managers.append(new_manager)
     write_data("managers", managers)
 
+    # Join any household that invited this email before the account existed
+    households = read_data("households")
+    for h in households:
+        invited = h.get("invitedEmails", [])
+        if email in invited and can_join_another(new_manager["id"], households):
+            invited.remove(email)
+            h["managerIds"].append(new_manager["id"])
+    write_data("households", households)
+
     return jsonify({"id": new_manager["id"], "firstName": first_name}), 201
 
 
@@ -239,9 +248,8 @@ def create_household():
 
     # Allow one household, unless you're on the Extended plan
     households = read_data("households")
-    for h in households:
-        if manager_id in h["managerIds"] and h["plan"] != "extended":
-            return jsonify({"error": "Your plan includes one household"}), 403
+    if not can_join_another(manager_id, households):
+        return jsonify({"error": "Your plan includes one household"}), 403
 
     new_household = {
         "id": next_id(households, "h"),
@@ -570,6 +578,63 @@ def delete_doctor(household_id, doctor_id):
 PLAN_LIMITS = {"economic": 4, "familial": 8, "extended": None}
 
 
+# Return True if the household has reached its plan's limit (pending invites count too)
+def is_full(household):
+    limit = PLAN_LIMITS[household["plan"]]
+    members = len(household["managerIds"]) + len(household["dependents"]) + len(household.get("invitedEmails", []))
+    return limit is not None and members >= limit
+
+
+# Return True if this manager may join one more household (only on the Extended plan)
+def can_join_another(manager_id, households):
+    for h in households:
+        if manager_id in h["managerIds"] and h["plan"] != "extended":
+            return False
+    return True
+
+
+# Invite by email: add an existing account now, or keep the email until they register
+@app.route("/api/households/<household_id>/managers", methods=["POST"])
+def invite_manager(household_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    # Refuse a body that isn't JSON, instead of crashing
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"error": "Send the form as JSON"}), 400
+
+    email = text_field(body, "email").lower()
+    if not re.match(EMAIL_PATTERN, email) or len(email) > 100:
+        return jsonify({"error": "Enter an email like name@example.com"}), 400
+
+    # Find the account with this email, if there is one
+    manager = None
+    for m in read_data("managers"):
+        if m["email"].lower() == email:
+            manager = m
+
+    invited = household.setdefault("invitedEmails", [])
+    if (manager and manager["id"] in household["managerIds"]) or email in invited:
+        return jsonify({"error": "This person is already in or invited to this household"}), 409
+    if is_full(household):
+        return jsonify({"error": "Your plan is full"}), 403
+
+    # Keep the email until they register
+    if manager is None:
+        invited.append(email)
+        save_household(household)
+        return jsonify({"pending": True, "email": email}), 201
+
+    if not can_join_another(manager["id"], read_data("households")):
+        return jsonify({"error": "They already have a household on their plan"}), 403
+
+    household["managerIds"].append(manager["id"])
+    save_household(household)
+    return jsonify({"id": manager["id"], "firstName": manager["firstName"], "email": manager["email"]}), 201
+
+
 # Replace this household in households.json with the updated copy
 def save_household(household):
     households = read_data("households")
@@ -619,10 +684,8 @@ def add_dependent(household_id):
         return jsonify({"error": message}), 400
 
     # Refuse a new member if the plan is full
-    limit = PLAN_LIMITS[household["plan"]]
-    members = len(household["managerIds"]) + len(household["dependents"])
-    if limit is not None and members >= limit:
-        return jsonify({"error": "Your plan is full (" + str(limit) + " members)"}), 403
+    if is_full(household):
+        return jsonify({"error": "Your plan is full"}), 403
 
     # Number dependents across all households, since their ids are unique app-wide
     all_dependents = []

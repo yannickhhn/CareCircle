@@ -399,6 +399,10 @@ function renderHousehold(household) {
         });
         managerList.appendChild(createMemberRow(manager.firstName, manager.email));
     });
+    // Show invited emails that haven't registered yet
+    (household.invitedEmails || []).forEach(function (email) {
+        managerList.appendChild(createMemberRow(email, "Invited · waiting for sign-up"));
+    });
 
     const dependentList = document.getElementById("dependent-list");
     dependentList.textContent = "";
@@ -627,7 +631,8 @@ const PLAN_LIMITS = { economic: 4, familial: 8, extended: Infinity };
 
 // Return true if the household is at its plan's member limit
 function isHouseholdFull(household) {
-    const memberCount = household.managerIds.length + household.dependents.length;
+    const invitedCount = (household.invitedEmails || []).length;
+    const memberCount = household.managerIds.length + household.dependents.length + invitedCount;
     return memberCount >= PLAN_LIMITS[household.plan];
 }
 
@@ -735,7 +740,7 @@ function startEditDependent(dependent) {
     document.getElementById("dep-name").focus();
 }
 
-// Invite form: add a manager by email (page only until Backend 3/4)
+// Invite form: add an existing account, or invite an email until they register
 function setUpInviteForm(household) {
     const form = document.getElementById("invite-form");
     const emailInput = document.getElementById("invite-email");
@@ -753,8 +758,8 @@ function setUpInviteForm(household) {
         clearFieldError(emailInput);
     });
 
-    // Invite: block a full household, check the email, add the manager
-    form.addEventListener("submit", function (event) {
+    // Invite: block a full household, check the email, then add or invite on the server
+    form.addEventListener("submit", async function (event) {
         event.preventDefault();
         if (isHouseholdFull(household)) {
             showFieldError(emailInput, planFullMessage(household));
@@ -766,22 +771,21 @@ function setUpInviteForm(household) {
             return;
         }
 
-        const email = fieldValue("invite-email").toLowerCase();
-        let manager = data.managers.find(function (m) {
-            return m.email.toLowerCase() === email;
-        });
-        if (manager && household.managerIds.includes(manager.id)) {
-            showFieldError(emailInput, "This person is already a manager of this household.");
+        try {
+            const result = await sendJSON("POST", "/api/households/" + household.id + "/managers",
+                { email: fieldValue("invite-email") });
+            if (result.pending) {
+                household.invitedEmails = (household.invitedEmails || []).concat(result.email);
+            } else {
+                data.managers.push(result);
+                household.managerIds.push(result.id);
+            }
+            form.reset();
+            refreshPeople(household);
+        } catch (error) {
+            showFieldError(emailInput, error.message);
             emailInput.focus();
-            return;
         }
-        if (!manager) {
-            manager = { id: "m" + Date.now(), firstName: email.split("@")[0], email: email };
-            data.managers.push(manager);
-        }
-        household.managerIds.push(manager.id);
-        form.reset();
-        refreshPeople(household);
     });
 }
 

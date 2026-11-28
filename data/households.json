@@ -84,7 +84,8 @@
         "name": "aaaa",
         "plan": "economic",
         "managerIds": [
-            "m8"
+            "m8",
+            "m9"
         ],
         "dependents": [
             {
@@ -93,6 +94,7 @@
                 "birthYear": 2009,
                 "notes": "eee"
             }
-        ]
+        ],
+        "invitedEmails": []
     }
 ]

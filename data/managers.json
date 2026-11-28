@@ -39,5 +39,11 @@
         "firstName": "Anna",
         "email": "anna@gmail.com",
         "passwordHash": "scrypt:32768:8:1$DN4v1yl0p48XaFDE$4890a5cb4ddcbc8e210eccf46e991902870c395cab5e115b01fe938fc08ee56eb5b543935ca63776a4b182bd75e06f8c694475be5f6b855bc1465cafbaaede0a"
+    },
+    {
+        "id": "m9",
+        "firstName": "bob",
+        "email": "bob@gmail.com",
+        "passwordHash": "scrypt:32768:8:1$zdKnOmBHxIJKdpQY$9639bf6613bed128a39bc2d86dcf1e573e68a94d7b8dbec94d1dafffda4c8735d7e90525e7472d70f3bcf480a43913759f71246defea10bb22ed7b68b1b2cf27"
     }
 ]
