@@ -501,6 +501,72 @@ def undo_dose(household_id, med_id):
     return jsonify(med)
 
 
+# Match a phone number like "514-555-0101" or "+1 (514) 555 0101"
+PHONE_PATTERN = r"^[\d\s()+-]{7,20}$"
+
+
+# Add a doctor card for one of the household's dependents
+@app.route("/api/households/<household_id>/doctors", methods=["POST"])
+def add_doctor(household_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    # Refuse a body that isn't JSON, instead of crashing
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"error": "Send the form as JSON"}), 400
+
+    dependent_id = text_field(body, "dependentId")
+    name = text_field(body, "name")
+    role = text_field(body, "role")
+    phone = text_field(body, "phone")
+    email = text_field(body, "email").lower()
+    address = text_field(body, "address")
+
+    # Repeat the front-end checks (requests can skip the browser)
+    if not has_dependent(household, dependent_id):
+        return jsonify({"error": "Choose someone from this household"}), 400
+    if name == "" or len(name) > 60:
+        return jsonify({"error": "Enter the doctor's name (60 characters max)"}), 400
+    if role == "" or len(role) > 40:
+        return jsonify({"error": "Enter their role (40 characters max)"}), 400
+    if not re.match(PHONE_PATTERN, phone):
+        return jsonify({"error": "Enter a phone number like 514-555-0101"}), 400
+    # Allow no email, or a real one
+    if email != "" and (not re.match(EMAIL_PATTERN, email) or len(email) > 100):
+        return jsonify({"error": "Enter an email like name@example.com"}), 400
+    if address == "" or len(address) > 120:
+        return jsonify({"error": "Enter an address (120 characters max)"}), 400
+
+    doctors = read_data("doctors")
+    new_doctor = {
+        "id": next_id(doctors, "doc"),
+        "householdId": household_id,
+        "dependentId": dependent_id,
+        "name": name,
+        "role": role,
+        "email": email,
+        "phone": phone,
+        "address": address,
+    }
+    doctors.append(new_doctor)
+    write_data("doctors", doctors)
+    return jsonify(new_doctor), 201
+
+
+# Delete one of the household's doctor cards
+@app.route("/api/households/<household_id>/doctors/<doctor_id>", methods=["DELETE"])
+def delete_doctor(household_id, doctor_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    if not remove_item("doctors", household_id, doctor_id):
+        return jsonify({"error": "Doctor not found"}), 404
+    return jsonify({"message": "Deleted"})
+
+
 PLAN_LIMITS = {"economic": 4, "familial": 8, "extended": None}
 
 

@@ -363,7 +363,25 @@ function createDoctorCard(doc, household) {
         contact.append(document.createElement("br"), email);
     }
 
-    card.append(contact, createPlace(doc.address));
+    const deleteButton = makeElement("button", "delete-btn", "Delete");
+    deleteButton.type = "button";
+    // Delete on the server after a confirm, then redraw
+    deleteButton.addEventListener("click", async function () {
+        if (!confirm("Delete " + doc.name + "'s card?")) {
+            return;
+        }
+        try {
+            await sendJSON("DELETE", "/api/households/" + household.id + "/doctors/" + doc.id);
+            data.doctors = data.doctors.filter(function (d) {
+                return d.id !== doc.id;
+            });
+            renderDoctors(household);
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+
+    card.append(contact, createPlace(doc.address), deleteButton);
     return card;
 }
 
@@ -767,19 +785,18 @@ function setUpInviteForm(household) {
     });
 }
 
-// Add doctor form (page only until Backend 3/4)
+// Add doctor form: save on the server, then redraw
 function setUpDoctorForm(household) {
-    setUpAddForm("doctor-form", ["doc-for", "doc-name", "doc-role", "doc-phone", "doc-email", "doc-address"], household, function () {
-        data.doctors.push({
-            id: "doc" + Date.now(),
-            householdId: household.id,
+    setUpAddForm("doctor-form", ["doc-for", "doc-name", "doc-role", "doc-phone", "doc-email", "doc-address"], household, async function () {
+        const doctor = await sendJSON("POST", "/api/households/" + household.id + "/doctors", {
             dependentId: fieldValue("doc-for"),
             name: fieldValue("doc-name"),
             role: fieldValue("doc-role"),
-            email: fieldValue("doc-email"),
             phone: fieldValue("doc-phone"),
+            email: fieldValue("doc-email"),
             address: fieldValue("doc-address")
         });
+        data.doctors.push(doctor);
         renderDoctors(household);
     });
 }

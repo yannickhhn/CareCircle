@@ -392,7 +392,8 @@
     border-top-color: var(--accent-rose);
     background-color: var(--bg-surface);
 }
-.appt-card .delete-btn {
+.appt-card .delete-btn,
+.doctor-card .delete-btn {
     align-self: flex-end;
     margin-top: auto;
 }
@@ -414,6 +415,8 @@
 }
 .doctor-contact a {
     color: var(--focus-ring);
+    /* Break long emails so they stay inside the card */
+    overflow-wrap: anywhere;
 }
 
 /* Household members */
