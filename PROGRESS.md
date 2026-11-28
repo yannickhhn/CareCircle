@@ -76,6 +76,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
   - Expect: {"error": "You don't have access to this household"} (403). Screenshot it for the report
 
 ### Backend 3/4, Sat Nov 28: saving changes
+- [x] Shared check helper load_my_household (401 logged out, 404 unknown, 403 not a member), used by get_household
 - [ ] Add, edit and delete: medications, appointments, doctors, dependents
 - [ ] Med check-off saved
 - [ ] Invite a co-manager by email

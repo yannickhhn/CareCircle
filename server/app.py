@@ -67,20 +67,28 @@ def is_member(household, manager_id):
     return manager_id in household["managerIds"]
 
 
-# Send one household with its managers, medications, appointments and doctors
-@app.route("/api/households/<household_id>")
-def get_household(household_id):
+# Return the household if the logged-in manager belongs to it, or an error response
+def load_my_household(household_id):
     manager_id = current_manager_id()
     if manager_id is None:
-        return jsonify({"error": "Log in first"}), 401
+        return None, (jsonify({"error": "Log in first"}), 401)
 
     household = find_household(household_id)
     if household is None:
-        return jsonify({"error": "Household not found"}), 404
+        return None, (jsonify({"error": "Household not found"}), 404)
 
-    # Refuse a household this manager doesn't belong to
     if not is_member(household, manager_id):
-        return jsonify({"error": "You don't have access to this household"}), 403
+        return None, (jsonify({"error": "You don't have access to this household"}), 403)
+
+    return household, None
+
+
+# Send one household with its managers, medications, appointments and doctors
+@app.route("/api/households/<household_id>")
+def get_household(household_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
 
     # Copy only safe fields (never the password hash)
     managers = []
