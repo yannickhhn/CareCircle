@@ -90,10 +90,10 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Server repeats every form check (bad input gets an error, not a crash) (built into every route)
 
 ### Settings page (after Backend 3/4, before Dec 1)
-- [ ] Change the household name
-- [ ] Change my first name
-- [ ] Change my password (asks for the current one first)
-- [ ] Leave a household (decide: what happens if the last manager leaves?)
+- [x] Change the household name
+- [x] Change my first name
+- [x] Change my password (asks for the current one first)
+- [x] Leave a household (blocked for the last manager, like removing a dependent with records)
 
 ### Backend 4/4, Tue Dec 1: feature freeze
 - [ ] User text safe from XSS

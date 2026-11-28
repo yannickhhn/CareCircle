@@ -80,9 +80,16 @@
 .sidebar-logo img {
     display: block;
 }
+/* Make the theme button look like the other sidebar icons */
 .sidebar .theme-toggle {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+}
+.sidebar .theme-toggle:hover {
+    background-color: var(--bg-surface);
 }
 
 /* Main area */
@@ -567,6 +574,32 @@
 }
 .form-actions .btn-text {
     text-decoration: none;
+}
+
+/* Settings page: panels side by side on computer, stacked on phone */
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+    max-width: 900px;
+}
+.settings-grid .side-panel {
+    margin-top: 0;
+}
+.settings-grid form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+.settings-grid h3 {
+    margin: 0 0 var(--space-md);
+    font-size: 1.125rem;
+}
+/* Give Leave the same size as Rename */
+.settings-grid .delete-btn {
+    padding: var(--space-sm) var(--space-lg);
+    font-size: 1rem;
 }
 
 /* Dark mode */

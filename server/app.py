@@ -753,6 +753,102 @@ def remove_dependent(household_id, dependent_id):
     return jsonify({"message": "Removed"})
 
 
+# Change the logged-in manager's first name
+@app.route("/api/me", methods=["PUT"])
+def change_name():
+    manager_id = current_manager_id()
+    if manager_id is None:
+        return jsonify({"error": "Log in first"}), 401
+
+    # Refuse a body that isn't JSON, instead of crashing
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"error": "Send the form as JSON"}), 400
+
+    first_name = text_field(body, "firstName")
+    if first_name == "" or len(first_name) > 50:
+        return jsonify({"error": "Enter a first name (50 characters max)"}), 400
+
+    managers = read_data("managers")
+    for m in managers:
+        if m["id"] == manager_id:
+            m["firstName"] = first_name
+            write_data("managers", managers)
+            return jsonify({"id": m["id"], "firstName": first_name})
+    return jsonify({"error": "Log in first"}), 401
+
+
+# Change the logged-in manager's password, after checking the current one
+@app.route("/api/me/password", methods=["PUT"])
+def change_password():
+    manager_id = current_manager_id()
+    if manager_id is None:
+        return jsonify({"error": "Log in first"}), 401
+
+    # Refuse a body that isn't JSON, instead of crashing
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"error": "Send the form as JSON"}), 400
+
+    current = body.get("currentPassword")
+    new = body.get("newPassword")
+    confirm = body.get("confirmPassword")
+    if not isinstance(current, str) or current == "":
+        return jsonify({"error": "Enter your current password"}), 400
+    if not isinstance(new, str) or len(new) < 8 or len(new) > 128:
+        return jsonify({"error": "Use a new password of 8 to 128 characters"}), 400
+    if new != confirm:
+        return jsonify({"error": "The new passwords don't match"}), 400
+
+    managers = read_data("managers")
+    for m in managers:
+        if m["id"] == manager_id:
+            # Ask for the current password, so someone at an unlocked computer can't change it
+            if not check_password_hash(m["passwordHash"], current):
+                return jsonify({"error": "Your current password is wrong"}), 403
+            m["passwordHash"] = generate_password_hash(new)
+            write_data("managers", managers)
+            return jsonify({"message": "Password changed"})
+    return jsonify({"error": "Log in first"}), 401
+
+
+# Rename one of the manager's households
+@app.route("/api/households/<household_id>", methods=["PUT"])
+def rename_household(household_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    # Refuse a body that isn't JSON, instead of crashing
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"error": "Send the form as JSON"}), 400
+
+    name = text_field(body, "name")
+    if name == "" or len(name) > 50:
+        return jsonify({"error": "Enter a household name (50 characters max)"}), 400
+
+    household["name"] = name
+    save_household(household)
+    return jsonify({"id": household["id"], "name": name})
+
+
+# Leave a household, unless you're its last manager
+@app.route("/api/households/<household_id>/leave", methods=["POST"])
+def leave_household(household_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    # Block leaving it with nobody to look after it
+    if len(household["managerIds"]) == 1:
+        return jsonify({"error": "You're the last manager. Invite someone before you leave."}), 409
+
+    household["managerIds"].remove(current_manager_id())
+    save_household(household)
+    return jsonify({"message": "Left the household"})
+
+
 # Start the server only when this file is run directly
 if __name__ == "__main__":
     app.run(debug=True)   # Debug on for local work only (off in Backend 4/4)
