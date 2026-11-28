@@ -259,10 +259,6 @@
 .delete-btn:hover {
     filter: brightness(0.9);
 }
-/* Hide until saving exists (Backend 3/4); medication and dependent buttons work */
-.appt-card .delete-btn {
-    display: none;
-}
 .btn-text {
     padding: var(--space-xs) var(--space-sm);
     border: none;

@@ -298,6 +298,21 @@ function createApptCard(appt, household, isOverdue) {
 
     const deleteButton = makeElement("button", "delete-btn", "Delete");
     deleteButton.type = "button";
+    // Delete on the server after a confirm, then redraw
+    deleteButton.addEventListener("click", async function () {
+        if (!confirm("Delete the appointment \"" + appt.reason + "\"?")) {
+            return;
+        }
+        try {
+            await sendJSON("DELETE", "/api/households/" + household.id + "/appointments/" + appt.id);
+            data.appointments = data.appointments.filter(function (a) {
+                return a.id !== appt.id;
+            });
+            renderAppointments(household);
+        } catch (error) {
+            alert(error.message);
+        }
+    });
     card.appendChild(deleteButton);
     return card;
 }
@@ -562,27 +577,18 @@ function setUpTimeCount(timeIds) {
     });
 }
 
-// Add appointment form, one note per line (page only until Backend 3/4)
+// Add appointment form: save on the server (it splits the notes by line), then redraw
 function setUpApptForm(household) {
-    setUpAddForm("appt-form", ["appt-for", "appt-reason", "appt-date", "appt-time", "appt-address"], household, function () {
-        const notes = fieldValue("appt-notes").slice(0, 300).split("\n")
-            .map(function (line) {
-                return line.trim();
-            })
-            .filter(function (line) {
-                return line !== "";
-            });
-
-        data.appointments.push({
-            id: "a" + Date.now(),
-            householdId: household.id,
+    setUpAddForm("appt-form", ["appt-for", "appt-reason", "appt-date", "appt-time", "appt-address"], household, async function () {
+        const appt = await sendJSON("POST", "/api/households/" + household.id + "/appointments", {
             dependentId: fieldValue("appt-for"),
             reason: fieldValue("appt-reason"),
             date: fieldValue("appt-date"),
             time: fieldValue("appt-time"),
             address: fieldValue("appt-address"),
-            notes: notes
+            notes: fieldValue("appt-notes")
         });
+        data.appointments.push(appt);
         renderAppointments(household);
     });
 }

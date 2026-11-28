@@ -340,19 +340,90 @@ def delete_medication(household_id, med_id):
     if error:
         return error
 
-    # Keep every medication except this one, only if it's in this household
-    medications = read_data("medications")
+    if not remove_item("medications", household_id, med_id):
+        return jsonify({"error": "Medication not found"}), 404
+    return jsonify({"message": "Deleted"})
+
+
+# Remove an item from a data file, only if it's in this household; return True if removed
+def remove_item(name, household_id, item_id):
+    items = read_data(name)
     kept = []
     found = False
-    for med in medications:
-        if med["id"] == med_id and med["householdId"] == household_id:
+    for item in items:
+        if item["id"] == item_id and item["householdId"] == household_id:
             found = True
         else:
-            kept.append(med)
+            kept.append(item)
+    if found:
+        write_data(name, kept)
+    return found
 
-    if not found:
-        return jsonify({"error": "Medication not found"}), 404
-    write_data("medications", kept)
+
+# Add an appointment for one of the household's dependents
+@app.route("/api/households/<household_id>/appointments", methods=["POST"])
+def add_appointment(household_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    # Refuse a body that isn't JSON, instead of crashing
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"error": "Send the form as JSON"}), 400
+
+    dependent_id = text_field(body, "dependentId")
+    reason = text_field(body, "reason")
+    day = text_field(body, "date")
+    time = text_field(body, "time")
+    address = text_field(body, "address")
+    notes_text = text_field(body, "notes")
+
+    # Repeat the front-end checks (requests can skip the browser)
+    if not has_dependent(household, dependent_id):
+        return jsonify({"error": "Choose someone from this household"}), 400
+    if reason == "" or len(reason) > 60:
+        return jsonify({"error": "Enter a reason (60 characters max)"}), 400
+    if not re.match(DATE_PATTERN, day) or day < date.today().isoformat():
+        return jsonify({"error": "Choose a date from today on"}), 400
+    if not re.match(TIME_PATTERN, time):
+        return jsonify({"error": "Enter a time like 08:00"}), 400
+    if address == "" or len(address) > 120:
+        return jsonify({"error": "Enter an address (120 characters max)"}), 400
+    if len(notes_text) > 300:
+        return jsonify({"error": "Keep the notes under 300 characters"}), 400
+
+    # Turn the notes into one item per non-empty line
+    notes = []
+    for line in notes_text.split("\n"):
+        if line.strip() != "":
+            notes.append(line.strip())
+
+    appointments = read_data("appointments")
+    new_appt = {
+        "id": next_id(appointments, "a"),
+        "householdId": household_id,
+        "dependentId": dependent_id,
+        "reason": reason,
+        "date": day,
+        "time": time,
+        "address": address,
+        "notes": notes,
+    }
+    appointments.append(new_appt)
+    write_data("appointments", appointments)
+    return jsonify(new_appt), 201
+
+
+# Delete one of the household's appointments
+@app.route("/api/households/<household_id>/appointments/<appt_id>", methods=["DELETE"])
+def delete_appointment(household_id, appt_id):
+    household, error = load_my_household(household_id)
+    if error:
+        return error
+
+    if not remove_item("appointments", household_id, appt_id):
+        return jsonify({"error": "Appointment not found"}), 404
     return jsonify({"message": "Deleted"})
 
 

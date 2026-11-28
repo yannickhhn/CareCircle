@@ -80,6 +80,7 @@ Work days before the demo: Thu Nov 12, Mon Nov 16, probably Tue Nov 17 (busy Fri
 - [x] Medications: add and delete saved on the server, optional end date (ended ones are hidden)
 - [x] Dependents: add, edit, remove saved on the server; member limit on the server; remove is blocked while they still have medications, appointments or doctors
 - [x] Medications can have 1 to 4 times a day (one row shows the next dose, "2 of 3 today"); medications.json converted to times + given log
+- [x] Appointments: add and delete saved on the server (date from today on, notes split by line on the server); Delete buttons shown
 - [ ] Add, edit and delete: medications, appointments, doctors, dependents
 - [x] Med check-off saved (given log on the server, "by" from the session, 409 if another manager already gave that dose, undo the last dose)
 - [ ] Invite a co-manager by email
